@@ -43,6 +43,7 @@ const Nav = (props) => {
                 height: 150,
                 minWidth: 1024,
                 backgroundColor: "#FFFFFF",
+                borderBottom: '1px #EDEDED solid'
             }}>
                 <Box sx={{
                     display: "flex",

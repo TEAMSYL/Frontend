@@ -5,8 +5,9 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import Menu from './components/Menu';
 import "./App.css";
 import { Route, Routes } from 'react-router-dom';
-import {Products, RegistProduct, ManageProducts} from './components/Products';
-import Test from './components/Test';
+import Products from './components/Product/Products';
+import Footer from './components/Footer';
+import Signup from './components/Signup';
 
 const theme = createTheme({
   typography: {
@@ -24,12 +25,11 @@ function App() {
       <div style={{paddingTop: "190px"}}>
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/products" element={<Products/>}>
-            <Route path='regist' element={<RegistProduct />} />
-            <Route path="manage" element={<ManageProducts />} />
-          </Route>
+          <Route path="/products" element={<Products/>} />
+          <Route path="/signup" element={<Signup/>} />
         </Routes>
       </div>
+      <Footer></Footer>
       <LoginModal open={openLoginModal} closeModal={handleOpenLoginModalClose}/>
     </ThemeProvider>
   );
