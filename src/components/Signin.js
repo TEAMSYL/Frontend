@@ -57,14 +57,14 @@ const Signin = () => {
                 email: String(id),
                 password: String(password),
             }
-        ).then((data) => {
-            console.log(data);
-            if (data.data == '가입 되지 않은 이메일 입니다.') {
-                setResultText(resultTexts[3]);
-            } else {
+        ).then((response) => {
+            console.log(response);
+            if (response.status == 200) {
                 console.log('login 성공!');
                 dispatch({type: 'LOGIN'});
                 navigate('/');
+            } else {
+                setResultText(resultTexts[3]);
             }
         })
 

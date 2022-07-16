@@ -42,7 +42,7 @@ async function SignIn(data) {
     );
     return response;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 }
 async function SignOut() {
