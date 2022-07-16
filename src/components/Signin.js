@@ -60,7 +60,6 @@ const Signin = () => {
         ).then((response) => {
             console.log(response);
             if (response.status == 200) {
-                console.log('login 성공!');
                 dispatch({type: 'LOGIN'});
                 navigate('/');
             } else {
