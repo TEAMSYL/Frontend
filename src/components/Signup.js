@@ -2,6 +2,8 @@ import React from 'react';
 import Auth from "../api/Auth";
 import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import { Box, Button, Grid, Stack, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import ApiAuth from '../api/Auth';
 
 const theme = createTheme({
     palette: {
@@ -50,6 +52,8 @@ const Signup = () => {
 
     const [ privateKey, setPrivateKey ] = React.useState('');
 
+    const navigate = useNavigate();
+
     const elemRef = [
         React.useRef(null),
         React.useRef(null),
@@ -67,12 +71,14 @@ const Signup = () => {
             console.log('형식 오류')
             return;
         } else { // 서버로 중복확인 요청
-            let isDuplicated = id === 'minkyu4626'; // 이부분 작성 필요
-            if (isDuplicated) {
-                setIdStateText('이미 존재하는 아이디입니다!');
-                setIdError(true);
-                return;
-            }
+            ApiAuth.EmailDuplicateCheck(id)
+            .then((response) => {
+                if (response == false) {
+                    setIdStateText('이미 존재하는 아이디입니다!');
+                    setIdError(true);
+                    return;
+                }
+            });
         }
         setIdStateText('사용 가능한 아이디입니다!')
         setIdError(false);
@@ -112,17 +118,24 @@ const Signup = () => {
 
     const handleNickNameCheckButton = () => {
         // 중복체크 확인
-        const testNickName = 'minkyu';
         if (!isValidNickNameFormat){
             setNickNameError(true);
-            return;
-        } else if (nickName == testNickName) {
-            setIsDuplicatedNickName(true);
-            setNickNameError(true);
+            setIsValidNickNameFormat(true);
             return;
         } else {
-            setIsDuplicatedNickName(false);
-            setNickNameError(false);
+            console.log('hello ' + nickName);
+            ApiAuth.NickDuplicateCheck(nickName)
+            .then((response) => {
+                console.log(response);
+                if (response == true) {
+                    setIsDuplicatedNickName(false);
+                    setNickNameError(false);
+                    
+                } else {
+                    setIsDuplicatedNickName(true);
+                    setNickNameError(true);
+                }
+            })
         }
     };
 
@@ -171,7 +184,20 @@ const Signup = () => {
         Auth.SignUp({
             nick: nickName,
             email: id,
-            password: password
+            password: password,
+            walletAddress: walletAddress,
+            privatekey: privateKey
+        }).then((response) => {
+            if (response.data == '회원 가입 성공') {
+                if (window.confirm("회원가입이 완료됐습니다.\n확인버튼을 누르면 로그인 화면으로 이동합니다.\n(취소는 홈화면으로 이동)")) {
+                    navigate('/signin');
+                } else {
+                    navigate('/');
+                }
+                
+            }else {
+                alert('가입에 실패했습니다. 다시 시도해주세요.');
+            }
         })
     };
 

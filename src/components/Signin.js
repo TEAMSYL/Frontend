@@ -107,8 +107,9 @@ const Signin = () => {
                             justifyContent='center'
                         >
                             <Box
-                                width='30vw'
+                                width='25vw'
                                 display='flex'
+                                minWidth='450px'
                                 flexDirection='column'
                                 alignItems='center'
                                 padding='5vw 0 15vw'
