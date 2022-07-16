@@ -1,4 +1,4 @@
-import { Table, TextField, IconButton, ImageList, ImageListItem, AppBar, Box, Button, createTheme, Grid, Stack, Tab, Tabs, ThemeProvider, Typography, TableContainer, TableHead, TableRow, TableCell, TableBody, TablePagination } from '@mui/material';
+import { Table, AppBar, Box, Button, createTheme, Grid, Stack, Tab, Tabs, ThemeProvider, Typography, TableContainer, TableHead, TableRow, TableCell, TableBody, TablePagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import {  ProductImg, ProductName, ProductCategory, ProductPrice, ProductDescription} from './RegistTabComponents';

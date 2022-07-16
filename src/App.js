@@ -8,6 +8,10 @@ import { Route, Routes } from 'react-router-dom';
 import Products from './components/Product/Products';
 import Footer from './components/Footer';
 import Signup from './components/Signup';
+import Signin from './components/Signin';
+import PrivateRoute from './routers/PrivateRoute';
+import PublicRoute from './routers/PublicRoute';
+import { useSelector } from 'react-redux';
 
 const theme = createTheme({
   typography: {
@@ -18,15 +22,38 @@ const theme = createTheme({
 function App() {
   const [ openLoginModal, setOpenLoginModal] = React.useState(false);
   const handleOpenLoginModalOpen = () => setOpenLoginModal(true);
-  const handleOpenLoginModalClose = () => setOpenLoginModal(false); 
+  const handleOpenLoginModalClose = () => setOpenLoginModal(false);
+  const { isLogin } = useSelector(state => state.isLogin);
+  
   return (
     <ThemeProvider theme={theme}>
       <Menu openModal={handleOpenLoginModalOpen}/>
       <div style={{paddingTop: "190px"}}>
         <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/products" element={<Products/>} />
-          <Route path="/signup" element={<Signup/>} />
+          <Route exact path="/" element={<Main />} />
+          <Route 
+            exact path="/products" 
+            element={
+              <PrivateRoute isLogin={isLogin}>
+                <Products/>
+              </PrivateRoute>} 
+          />
+          <Route 
+            exact path="/signup" 
+            element={
+                <PublicRoute isLogin={isLogin}>
+                  <Signup />
+                </PublicRoute>
+              }
+          />
+          <Route 
+            exact path="/signin" 
+            element={
+                <PublicRoute isLogin={isLogin}>
+                  <Signin/>
+                </PublicRoute>
+              }
+          />
         </Routes>
       </div>
       <Footer></Footer>

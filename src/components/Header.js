@@ -3,7 +3,10 @@ import DownloadIcon from '@mui/icons-material/Download';
 import StarIcon from '@mui/icons-material/Star';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from "react";
-import sessionApi from '../api/session.js';
+import { useSelector } from 'react-redux';
+import ApiAuth from '../api/Auth';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const theme = createTheme({
     typography: {
@@ -33,17 +36,27 @@ const theme = createTheme({
 
 
 const Header = (props) => {
-    const [ isLogin, setIsLogin] = React.useState(sessionApi.isLogin());
+    //const [ isLogin, setIsLogin] = React.useState(sessionApi.isLogin());
+    const { isLogin } = useSelector(state => state.isLogin);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    React.useEffect(() => {
-        if (sessionApi.isLogin()) {
-            console.log('isLogin : true');
-            setIsLogin(true);
-        } else {
-            console.log('isLogin : false');
-            setIsLogin(false);
-        }
-    })
+    // React.useEffect(() => {
+    //     if (sessionApi.isLogin()) {
+    //         console.log('isLogin : true');
+    //         setIsLogin(true);
+    //     } else {
+    //         console.log('isLogin : false');
+    //         setIsLogin(false);
+    //     }
+    // })
+
+    const handleLogout = () => {
+        ApiAuth.SignOut().then((data) => {
+            dispatch({type: 'LOGOUT'});
+            navigate('/');
+        })
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -80,7 +93,7 @@ const Header = (props) => {
                 </ButtonGroup>
                 <ButtonGroup>
                     {isLogin ?
-                        <Button onClick={()=>console.log("로그아웃!")}>로그아웃</Button>:
+                        <Button onClick={handleLogout}>로그아웃</Button>:
                         <Button onClick={props.openModal}>로그인/회원가입</Button>
                     }
                     <Button

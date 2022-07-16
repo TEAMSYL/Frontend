@@ -53,5 +53,16 @@ async function SignOut() {
   }
 }
 
-const AuthApi = { KakaoSignIn, SignUp, SignIn, SignOut };
+async function LoginCheck() {
+  try {
+    const response = await axios.get(`http://localhost:8001/auth/logincheck`, {
+      withCredentials: true,
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const AuthApi = { KakaoSignIn, SignUp, SignIn, SignOut, LoginCheck };
 export default AuthApi;

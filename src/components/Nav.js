@@ -6,6 +6,8 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import ChatIcon from '@mui/icons-material/Chat';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const searchBoxDefaultValue = "상품명 or 상점이름으로 검색하세요!";
 const SERVICE_NAME = "블록마켓";
@@ -34,6 +36,9 @@ const theme = createTheme({
 });
 
 const Nav = (props) => {
+    const { isLogin } = useSelector(state => state.isLogin);
+    const navigate = useNavigate();
+
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{
@@ -59,7 +64,13 @@ const Nav = (props) => {
                             height: "40px",
                             justifyContent: 'space-between', 
                             alignItem: "center"}}>
-                            <Button href="/" sx={{color: "#D80C18", fontSize: "30px", fontWeight: 700}}startIcon={<CurrencyBitcoinIcon/>} disableTouchRipple>{SERVICE_NAME}</Button>
+                            <Button  
+                                sx={{color: "#D80C18", fontSize: "30px", fontWeight: 700}}
+                                startIcon={<CurrencyBitcoinIcon/>}
+                                onClick={() => navigate('/')}
+                                disableTouchRipple
+                            >{SERVICE_NAME}
+                            </Button>
                             <Input 
                                 endAdornment={<SearchIcon sx={{color: "#F72F33", ":hover":{cursor:"pointer"}}} onClick={()=>{}}/>} 
                                 placeholder={searchBoxDefaultValue} disableTouchRipple
@@ -71,9 +82,37 @@ const Nav = (props) => {
                                     fontSize: "14px",
                                 }} disableUnderline/>
                             <ButtonGroup>
-                                <Button onClick={props.openModal} startIcon={<ArrowUpwardIcon />}>상품 등록</Button>
-                                <Button onClick={props.openModal} startIcon={<StorefrontIcon />}>내 상점</Button>
-                                <Button onClick={props.openModal} startIcon={<ChatIcon />}>채팅</Button>
+                                <Button 
+                                    onClick={() => {
+                                        if (isLogin == true) {
+                                            navigate('/products');
+                                        } else {
+                                            props.openModal();
+                                        }
+                                    }}
+                                    startIcon={<ArrowUpwardIcon/>}
+                                >
+                                    상품 등록</Button>
+                                <Button 
+                                    onClick={() => {
+                                        if (isLogin == true) {
+                                        } else {
+                                            props.openModal();
+                                        }
+                                    }}
+                                    startIcon={<StorefrontIcon />}
+                                >
+                                    내 상점</Button>
+                                <Button 
+                                    onClick={() => {
+                                        if (isLogin == true) {
+                                        } else {
+                                            props.openModal();
+                                        }
+                                    }}
+                                    startIcon={<ChatIcon />}
+                                >
+                                    채팅</Button>
                             </ButtonGroup>
                         </Box>
                         <Box>

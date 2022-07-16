@@ -157,7 +157,14 @@ const LoginModal = (props) => {
                             >
                                 <Button><img src={"/images/kakao_login.png"}/></Button>
                                 <Button><img src={"/images/naver_login.png"}/></Button>
-                                <Button onClick={() => setIsLoginPage(true)} sx={{width:'300px', backgroundColor:'#D80C18', color: '#FFFFFF'}}>블록마켓으로 시작하기</Button>
+
+                                <Button 
+                                    onClick={() => {
+                                        navigate('/signin');
+                                        props.closeModal();
+                                    }} 
+                                    sx={{width:'300px', height: '40px', backgroundColor:'#D80C18', color: '#FFFFFF'}}
+                                >블록마켓으로 시작하기</Button>
                             </Stack>
                         </Stack>
                     }
