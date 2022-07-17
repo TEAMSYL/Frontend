@@ -10,6 +10,7 @@ export interface ISetProduct {
   content: string;
   price: number;
   category: string;
+  imgUrls: Array<string>;
 }
 export interface ITransactionRequest {
   productId: number;
