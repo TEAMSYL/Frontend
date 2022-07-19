@@ -12,6 +12,8 @@ import Signin from './components/Signin';
 import PrivateRoute from './routers/PrivateRoute';
 import PublicRoute from './routers/PublicRoute';
 import { useSelector } from 'react-redux';
+import Test from './components/Test';
+import Demo from './components/Demo';
 
 const theme = createTheme({
   typography: {
@@ -30,6 +32,7 @@ function App() {
       <Menu openModal={handleOpenLoginModalOpen}/>
       <div style={{paddingTop: "190px"}}>
         <Routes>
+          <Route path='/test' element={<Demo/>}/>
           <Route exact path="/" element={<Main />} />
           <Route 
             exact path="/products" 

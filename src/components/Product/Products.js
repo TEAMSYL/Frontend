@@ -5,6 +5,7 @@ import {  ProductImg, ProductName, ProductCategory, ProductPrice, ProductDescrip
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import imageCompression from 'browser-image-compression';
 import ClearIcon from '@mui/icons-material/Clear';
+import productApi from '../../api/Product';
 
 const theme = createTheme({
     palette: {
@@ -266,10 +267,18 @@ const Products = () => {
             }
 
             // 모든 입력을 완료한 경우 api를 통해 product data를 서버로 전달
-            console.log(name);
-            console.log(price);
-            console.log(description);
-            console.log(imgFiles);
+            const imgUrls = [];
+            for (let i = 0; i < imgFiles.length; i++) {
+                imgUrls.push(imgFiles[i].file);
+            }
+            console.log(imgUrls);
+            productApi.setProducts({
+                productName: name,
+                content: description,
+                category: category,
+                price: price,
+                imgUrls: imgUrls
+            });
         };
 
         return (

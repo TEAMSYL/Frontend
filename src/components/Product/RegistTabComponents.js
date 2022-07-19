@@ -15,15 +15,18 @@ const ProductImg = (props) => {
 
     const handleAddImages = async (e) => {
         const addedImgs = e.target.files;
-        
         try {
             for (let i = 0; i < addedImgs.length; i++) {
                 const compressedImg = await getCompressedImg(addedImgs[i]);
+                const compressedImgFile = new File([compressedImg], compressedImg.name, {
+                    type: compressedImg.type,
+                });
                 const compressedUrl = await imageCompression.getDataUrlFromFile(compressedImg);
-                const resultFile = { file: compressedImg, url: compressedUrl, id: i};
+                const resultFile = { file: compressedImgFile, url: compressedUrl, id: i};
                 //setImages(((Images) => [...Images, resultFile]);
                 props.setImgFiles((Images) => [...Images, resultFile]);
             }
+            
         } catch (err) {
             console.log(err);
         }
