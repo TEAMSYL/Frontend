@@ -1,0 +1,28 @@
+* {
+    font-size: 13px;
+    color: #666666;
+    font-weight: 500;
+}
+
+.header {
+    width: 100vw;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #554040;
+}
+
+.header_content {
+    width: 1024px;
+    display: flex;
+    min-width: 1024px;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.Link_download {
+    align-items: center;
+    text-decoration: none;
+}
