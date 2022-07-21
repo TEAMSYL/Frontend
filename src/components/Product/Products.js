@@ -31,7 +31,7 @@ import imageCompression from "browser-image-compression";
 import ClearIcon from "@mui/icons-material/Clear";
 import productApi from "../../api/Product.tsx";
 import RequestsDialog from './RequestsDialog';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -515,7 +515,7 @@ const RegistTabContent = (props) => {
 
 export const Products = () => {
   const navigate = useNavigate();
-
+  console.log('location:',  useLocation());
   return (
     <ThemeProvider theme={theme}>
       <Stack
@@ -545,6 +545,7 @@ export const Products = () => {
               }}
               sx={{
                 fontWeight: '400',
+                color: `${useLocation().pathname == '/products/regist' ? '#FF50558' : '#212121'}`,
                 '&:hover': {
                   backgroundColor: 'transparent',
                 }
@@ -559,6 +560,7 @@ export const Products = () => {
               sx={{
                 fontWeight: '400',
                 marginLeft: '30px',
+                color: `${useLocation().pathname == '/products/manage' ? '#FF50558' : '#212121'}`,
                 '&:hover': {
                   backgroundColor: 'transparent',
                 }
