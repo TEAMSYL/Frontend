@@ -99,7 +99,7 @@ const Nav = (props) => {
                                 <Button 
                                     onClick={() => {
                                         if (isLogin == true) {
-                                            navigate('/products');
+                                            navigate('/products/regist');
                                         } else {
                                             props.openModal();
                                         }

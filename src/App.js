@@ -5,7 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import Menu from './components/Menu';
 import "./App.css";
 import { Route, Routes } from 'react-router-dom';
-import Products from './components/Product/Products';
+import { Products, ManageTab, RegistTab }from './components/Product/Products';
 import Footer from './components/Footer';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
@@ -39,7 +39,11 @@ function App() {
               <PrivateRoute isLogin={isLogin}>
                 <Products/>
               </PrivateRoute>} 
-          />
+          >
+            <Route path='regist' element={<RegistTab/>}/>
+            <Route path='manage' element={<ManageTab/>}/>
+          </Route>
+          
           <Route 
             exact path="/signup" 
             element={

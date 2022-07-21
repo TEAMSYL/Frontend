@@ -31,7 +31,7 @@ import imageCompression from "browser-image-compression";
 import ClearIcon from "@mui/icons-material/Clear";
 import productApi from "../../api/Product.tsx";
 import RequestsDialog from './RequestsDialog';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -51,7 +51,7 @@ const StyledBox = styled(Box)`
   border-bottom: 1px solid #dcdbe4;
 `;
 
-const ManageTab = (props) => {
+export const ManageTab = (props) => {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -324,255 +324,255 @@ const ManageTab = (props) => {
   );
 };
 
-const Products = () => {
-  const RegistTab = (props) => {
-    const formdata = new FormData();
-    const navigate = useNavigate();
-    const [imgFiles, setImgFiles] = React.useState([]); // 업로드한 이미지 파일들
-    let name = "";
-    const setName = (_name) => {
-      name = _name;
-    };
-    const [category, setCategory] = React.useState("noraml"); // 카테고리
-    let price = ""; // 가격
-    const setPrice = (_price) => {
-      price = _price;
-    };
-    let description = ""; // 설명
-    const setDescription = (_description) => {
-      description = _description;
-    };
-
-    const handleSubmit = async () => {
-      // 등록하기 버튼 누를 경우 실행되는 함수
-      if (imgFiles.length < 1) {
-        // 이미지 파일 등록 안된 경우
-        // 이미지 파일 등록하는 component로 화면 이동하고 등록하라고 알림
-        alert("이미지를 입력하세요!");
-        return;
-      }
-      if (name === "") {
-        // 제목 안적은 경우
-        alert("제목을 입력하세요!");
-        return;
-      }
-      if (category === "") {
-        alert("카테고리를 입력하세요!");
-        return;
-      }
-      if (price <= 0) {
-        alert("가격을 입력하세요!");
-        return;
-      }
-      if (description === "") {
-        alert("설명을 입력하세요!");
-        return;
-      }
-      imgFiles.map((img) => formdata.append("productImgs", img.file));
-      const imgUrls = await productApi.setProductImages(formdata);
-      // 모든 입력을 완료한 경우 api를 통해 product data를 서버로 전달
-      const data = {
-        content: description,
-        category: "test",
-        price: price,
-        productName: name,
-        imgUrls: imgUrls,
-      };
-      const result = await productApi.setProduct(data);
-      if (result) {
-        alert('상품 등록이 완료되었습니다. 홈화면으로 이동합니다.');
-        navigate('/');
-      } else {
-        alert('상품 등록에 실패하였습니다. 다시 시도해주세요!');
-      }
-    };
-
-    return (
-      <div
-        hidden={props.value !== props.index}
-        style={{ fontFamily: "Noto Sans CJK KR" }}
-      >
-        <ThemeProvider theme={theme}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              minWidth: "1024px",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                width: "1024px",
-              }}
-            >
-              <Stack>
-                <StyledBox
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    borderBottom: "3px solid #1E1D29",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      marginRight: "30px",
-                      marginLeft: "5px",
-                      color: "#212121",
-                      fontSize: "26px",
-                      fontWeight: 500,
-                    }}
-                  >
-                    상품 정보
-                  </Typography>
-                  <Typography sx={{}} color={"primary"} fontSize={"16px"}>
-                    *필수항목
-                  </Typography>
-                </StyledBox>
-                <RegistTabContent
-                  name={name}
-                  setName={setName}
-                  setCategory={setCategory}
-                  setDescription={setDescription}
-                  setImgFiles={setImgFiles}
-                  setPrice={setPrice}
-                  imgFiles={imgFiles}
-                />
-              </Stack>
-            </Box>
-          </Box>
-
-          <Box
-            sx={{
-              position: "sticky",
-              bottom: "0",
-              display: "flex",
-              justifyContent: "center",
-              height: "90px",
-              borderTop: "1px solid #EEEEEE",
-              backgroundColor: "#FAFAFD",
-            }}
-          >
-            <Box
-              sx={{
-                width: "1024px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "end",
-              }}
-            >
-              <Button
-                sx={{
-                  width: "160px",
-                  height: "60px",
-                  backgroundColor: "#FF5058",
-                  "&:hover": {
-                    backgroundColor: "#FF3A44",
-                  },
-                }}
-                onClick={handleSubmit}
-              >
-                <Typography color={"white"} fontSize={"20px"}>
-                  등록하기
-                </Typography>
-              </Button>
-            </Box>
-          </Box>
-        </ThemeProvider>
-      </div>
-    );
+export const RegistTab = (props) => {
+  const formdata = new FormData();
+  const navigate = useNavigate();
+  const [imgFiles, setImgFiles] = React.useState([]); // 업로드한 이미지 파일들
+  let name = "";
+  const setName = (_name) => {
+    name = _name;
+  };
+  const [category, setCategory] = React.useState("noraml"); // 카테고리
+  let price = ""; // 가격
+  const setPrice = (_price) => {
+    price = _price;
+  };
+  let description = ""; // 설명
+  const setDescription = (_description) => {
+    description = _description;
   };
 
-  const RegistTabContent = (props) => {
-    const rowNames = ["상품 이미지", "제목", "카테고리", "가격", "설명"];
-    console.log("이미지 파일들", props.imgFiles);
-    const rowContents = [
-      <ProductImg imgFiles={props.imgFiles} setImgFiles={props.setImgFiles} />,
-      <ProductName name={props.name} setName={props.setName} />,
-      <ProductCategory setCategory={props.setCategory} />,
-      <ProductPrice setPrice={props.setPrice} />,
-      <ProductDescription setDescription={props.setDescription} />,
-    ];
-
-    const componentList = rowNames.map((name, index) => {
-      return (
-        <StyledBox>
-          <Grid container>
-            <Grid item xs={2} sx={{ display: "flex", alignItems: "center" }}>
-              <Typography sx={{}} fontSize={"18px"} color={"#212121"}>
-                {name}
-              </Typography>
-              <Typography sx={{ color: "#FF646B" }}>&nbsp;&nbsp;*</Typography>
-            </Grid>
-            <Grid item xs={8}>
-              {rowContents[index]}
-            </Grid>
-          </Grid>
-        </StyledBox>
-      );
-    });
-    return <>{componentList}</>;
-  };
-
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const a11yProps = (index) => {
-    return {
-      id: `simple-tab-${index}`,
-      "aria-controls": `simple-tabpanel-${index}`,
+  const handleSubmit = async () => {
+    // 등록하기 버튼 누를 경우 실행되는 함수
+    if (imgFiles.length < 1) {
+      // 이미지 파일 등록 안된 경우
+      // 이미지 파일 등록하는 component로 화면 이동하고 등록하라고 알림
+      alert("이미지를 입력하세요!");
+      return;
+    }
+    if (name === "") {
+      // 제목 안적은 경우
+      alert("제목을 입력하세요!");
+      return;
+    }
+    if (category === "") {
+      alert("카테고리를 입력하세요!");
+      return;
+    }
+    if (price <= 0) {
+      alert("가격을 입력하세요!");
+      return;
+    }
+    if (description === "") {
+      alert("설명을 입력하세요!");
+      return;
+    }
+    imgFiles.map((img) => formdata.append("productImgs", img.file));
+    const imgUrls = await productApi.setProductImages(formdata);
+    // 모든 입력을 완료한 경우 api를 통해 product data를 서버로 전달
+    const data = {
+      content: description,
+      category: "test",
+      price: price,
+      productName: name,
+      imgUrls: imgUrls,
     };
+    const result = await productApi.setProduct(data);
+    if (result) {
+      alert('상품 등록이 완료되었습니다. 홈화면으로 이동합니다.');
+      navigate('/');
+    } else {
+      alert('상품 등록에 실패하였습니다. 다시 시도해주세요!');
+    }
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          display: "flex",
+    <div
+      style={{ fontFamily: "Noto Sans CJK KR" }}
+    >
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            minWidth: "1024px",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              width: "1024px",
+            }}
+          >
+            <Stack>
+              <StyledBox
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  borderBottom: "3px solid #1E1D29",
+                }}
+              >
+                <Typography
+                  sx={{
+                    marginRight: "30px",
+                    marginLeft: "5px",
+                    color: "#212121",
+                    fontSize: "26px",
+                    fontWeight: 500,
+                  }}
+                >
+                  상품 정보
+                </Typography>
+                <Typography sx={{}} color={"primary"} fontSize={"16px"}>
+                  *필수항목
+                </Typography>
+              </StyledBox>
+              <RegistTabContent
+                name={name}
+                setName={setName}
+                setCategory={setCategory}
+                setDescription={setDescription}
+                setImgFiles={setImgFiles}
+                setPrice={setPrice}
+                imgFiles={imgFiles}
+              />
+            </Stack>
+          </Box>
+        </Box>
 
-          flexDirection: "column",
+        <Box
+          sx={{
+            position: "sticky",
+            bottom: "0",
+            display: "flex",
+            justifyContent: "center",
+            height: "90px",
+            borderTop: "1px solid #EEEEEE",
+            backgroundColor: "#FAFAFD",
+          }}
+        >
+          <Box
+            sx={{
+              width: "1024px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "end",
+            }}
+          >
+            <Button
+              sx={{
+                width: "160px",
+                height: "60px",
+                backgroundColor: "#FF5058",
+                "&:hover": {
+                  backgroundColor: "#FF3A44",
+                },
+              }}
+              onClick={handleSubmit}
+            >
+              <Typography color={"white"} fontSize={"20px"}>
+                등록하기
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
+      </ThemeProvider>
+    </div>
+  );
+};
+
+const RegistTabContent = (props) => {
+  const rowNames = ["상품 이미지", "제목", "카테고리", "가격", "설명"];
+  console.log("이미지 파일들", props.imgFiles);
+  const rowContents = [
+    <ProductImg imgFiles={props.imgFiles} setImgFiles={props.setImgFiles} />,
+    <ProductName name={props.name} setName={props.setName} />,
+    <ProductCategory setCategory={props.setCategory} />,
+    <ProductPrice setPrice={props.setPrice} />,
+    <ProductDescription setDescription={props.setDescription} />,
+  ];
+
+  const componentList = rowNames.map((name, index) => {
+    return (
+      <StyledBox>
+        <Grid container>
+          <Grid item xs={2} sx={{ display: "flex", alignItems: "center" }}>
+            <Typography sx={{}} fontSize={"18px"} color={"#212121"}>
+              {name}
+            </Typography>
+            <Typography sx={{ color: "#FF646B" }}>&nbsp;&nbsp;*</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            {rowContents[index]}
+          </Grid>
+        </Grid>
+      </StyledBox>
+    );
+  });
+  return <>{componentList}</>;
+};
+
+export const Products = () => {
+  const navigate = useNavigate();
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Stack
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          minWidth: '1024px',
         }}
       >
         <AppBar
           position="static"
           sx={{
             backgroundColor: "transparent",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             height: "70px",
-            display: "flex",
-            justifyContent: "center",
-            minWidth: "1024px",
-            alignItems: "center",
             boxShadow: 0,
             borderBottom: "1px solid #EDEDED",
           }}
         >
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            sx={{
-              width: "1024px",
-            }}
-            TabIndicatorProps={{
-              style: {
-                backgroundColor: "transparent",
-              },
-            }}
-          >
-            <Tab label="상품 등록" {...a11yProps(0)} disableTouchRipple />
-            <Tab label="상품 관리" {...a11yProps(1)} disableTouchRipple />
-          </Tabs>
+          <div style={{ width: '1024px',}}>
+            <Button
+              disableTouchRipple
+              onClick={() => {
+                navigate('/products/regist');
+              }}
+              sx={{
+                fontWeight: '400',
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                }
+              }}
+            >상품 등록
+            </Button>
+            <Button
+              disableTouchRipple
+              onClick={() => {
+                navigate('/products/manage');
+              }}
+              sx={{
+                fontWeight: '400',
+                marginLeft: '30px',
+                '&:hover': {
+                  backgroundColor: 'transparent',
+                }
+              }}
+            >
+              상품 관리
+            </Button>
+          </div>
+          
         </AppBar>
-
-        <RegistTab value={value} index={0}></RegistTab>
-        <ManageTab value={value} index={1}></ManageTab>
-        <Stack sx={{ width: "1024px" }}></Stack>
-      </Box>
+        <Stack sx={{ width: "1024px" }}>
+          <Outlet/>
+        </Stack>
+      </Stack>
     </ThemeProvider>
   );
 };
-
-export default Products;
