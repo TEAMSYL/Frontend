@@ -52,6 +52,7 @@ const StyledBox = styled(Box)`
 `;
 
 const ManageTab = (props) => {
+  const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -99,6 +100,25 @@ const ManageTab = (props) => {
     setPage(0);
   };
 
+  const handleChangeBtn = (product) => {
+    navigate('/modify', { state: { product: product}});
+  };
+
+  // 삭제하기 버튼 눌렀을 때의 핸들러
+  const handleRemoveProductBtn = async (product) => {
+    try {
+      const response = productApi.deleteProduct(product.id.toString())
+      if (response == true) {
+        alert('성공적으로 상품이 제거되었습니다.');
+        fetchProducts(); 
+      } else {
+        alert('제거에 실패하였습니다. 다시 시도해주세요!');
+      }
+    } catch (error) {
+      console.log(error);
+      alert('제거에 실패하였습니다. 다시 시도해주세요!');
+    }
+  };
 
   const headCells = [
     {
@@ -255,6 +275,7 @@ const ManageTab = (props) => {
                               },
                             }}
                             disableTouchRipple
+                            onClick={() => handleChangeBtn(product)}
                           >
                             수정하기
                           </Button>
@@ -267,6 +288,7 @@ const ManageTab = (props) => {
                               },
                             }}
                             disableTouchRipple
+                            onClick={() => handleRemoveProductBtn(product)}
                           >
                             삭제하기
                           </Button>

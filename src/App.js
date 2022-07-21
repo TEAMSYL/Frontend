@@ -13,6 +13,7 @@ import PrivateRoute from './routers/PrivateRoute';
 import PublicRoute from './routers/PublicRoute';
 import { useSelector } from 'react-redux';
 import SearchPage from './components/SearchPage';
+import ProductModify from './components/ProductModify';
 
 const theme = createTheme({
   typography: {
@@ -56,6 +57,7 @@ function App() {
               }
           />
           <Route exact path='/search' element={<SearchPage/>}></Route>
+          <Route path='/modify' element={<ProductModify/>}></Route>
         </Routes>
       </div>
       <Footer></Footer>

@@ -74,12 +74,19 @@ async function setProductImages(data: FormData) {
   }
 }
 async function deleteProduct(id: string | undefined) {
+  console.log('id:',id);
   try {
-    await axios.delete(`http://localhost:8001/product/${id}`, {
+    const response = await axios.delete(`http://localhost:8001/product/${id}`, {
       withCredentials: true,
     });
+    if (response.data == "완료" && response.status == 200) { // 삭제에 성공한 경우
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     console.log(error);
+    return false;
   }
 }
 

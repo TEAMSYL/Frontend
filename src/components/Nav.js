@@ -58,7 +58,7 @@ const Nav = (props) => {
                 }}>
                     <Box sx={{
                         width: '100%',
-                        height: '150px',
+                        height: '115px',
                         paddingTop: '35px',}}>
                         <Box sx={{
                             display: 'flex',
