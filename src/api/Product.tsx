@@ -1,3 +1,4 @@
+import { TrySharp } from "@mui/icons-material";
 import axios from "axios";
 import { ISetProduct } from "./dto";
 
@@ -19,10 +20,33 @@ async function getProduct(id: string | undefined) {
     console.log(error);
   }
 }
-
-async function setProduct(data: ISetProduct) {
+async function getSellerProducts() {
+  try {
+    const response = await axios.get(
+      `http://localhost:8001/product/seller?page=2&limit=4`,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function isLoggedIn() {
   try {
     await axios.post(
+      "http://localhost:8001/auth/isLoggedIn",
+      {},
+      { withCredentials: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function setProduct(data: ISetProduct) {
+  try {
+    const response = await axios.post(
       "http://localhost:8001/product",
       {
         productName: data.productName,
@@ -33,18 +57,19 @@ async function setProduct(data: ISetProduct) {
       },
       { withCredentials: true }
     );
+    return response.data;
   } catch (error) {
     console.log(error);
   }
 }
-async function setProductImages(data: FormData) {
+async function setProductImages(data: FormData, productId) {
   try {
     const response = await axios.post(
-      "http://localhost:8001/product/images",
+      `http://localhost:8001/product/images/${productId}`,
       data,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data; charset=UTF-8",
         },
         withCredentials: true,
       }
@@ -71,6 +96,8 @@ const productApi = {
   setProduct,
   deleteProduct,
   setProductImages,
+  getSellerProducts,
+  isLoggedIn,
 };
 
 export default productApi;

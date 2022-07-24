@@ -308,10 +308,6 @@ const Products = () => {
         alert("설명을 입력하세요!");
         return;
       }
-      imgFiles.map((img) => formdata.append("productImgs", img.file));
-      console.log("formData: ", formdata);
-      const imgUrls = await productApi.setProductImages(formdata);
-      console.log("이미지 등록", imgFiles);
       // 모든 입력을 완료한 경우 api를 통해 product data를 서버로 전달
       console.log(name);
       console.log(price);
@@ -322,9 +318,16 @@ const Products = () => {
         category: "test",
         price: price,
         productName: name,
-        imgUrls: imgUrls,
+        // imgUrls: imgUrls,
       };
-      await productApi.setProduct(data);
+      const { productId } = await productApi.setProduct(data);
+
+      imgFiles.map((img, idx) =>
+        formdata.append("productImgs", img.file, `file_${idx}`)
+      );
+      await productApi.setProductImages(formdata, productId);
+      console.log("상품 등록 응답", productId);
+      console.log("formData: ", formdata);
     };
 
     return (
