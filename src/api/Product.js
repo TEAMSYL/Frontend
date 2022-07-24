@@ -1,6 +1,6 @@
 import { TrySharp } from "@mui/icons-material";
 import axios from "axios";
-import { ISetProduct } from "./dto";
+//import { ISetProduct } from "./dto";
 
 async function getProducts() {
   try {
@@ -12,7 +12,19 @@ async function getProducts() {
   }
 }
 
-async function getProduct(id: string | undefined) {
+/* @param
+ * num: type-num, startProductId: type-num
+ */
+async function getProductsByNum(num, startProductId) {
+  // startProductId부터 최신순으로 num개 만큼 상품정보를 읽어온다.
+  // 읽어와야하는 상품 정보
+  // => 대표 이미지, 제목, 가격
+}
+
+/* @param
+ * id: type-string|undefined
+ */
+async function getProduct(id) {
   try {
     const response = await axios.get(`http://localhost:8001/product/${id}`);
     return response.data;
@@ -33,7 +45,11 @@ async function getSellerProducts() {
     console.log(error);
   }
 }
-async function isLoggedIn() {
+
+/* @param
+ * data: type-ISedProduct
+ */
+async function setProducts(data) {
   try {
     await axios.post(
       "http://localhost:8001/auth/isLoggedIn",
@@ -44,7 +60,7 @@ async function isLoggedIn() {
     console.log(error);
   }
 }
-async function setProduct(data: ISetProduct) {
+async function setProduct(data) {
   try {
     const response = await axios.post(
       "http://localhost:8001/product",
@@ -62,7 +78,7 @@ async function setProduct(data: ISetProduct) {
     console.log(error);
   }
 }
-async function setProductImages(data: FormData, productId) {
+async function setProductImages(data, productId) {
   try {
     const response = await axios.post(
       `http://localhost:8001/product/images/${productId}`,
@@ -80,7 +96,11 @@ async function setProductImages(data: FormData, productId) {
     console.log(error);
   }
 }
-async function deleteProduct(id: string | undefined) {
+
+/* @param
+ * id: type-string|undefined
+ */
+async function deleteProduct(id) {
   try {
     await axios.delete(`http://localhost:8001/product/${id}`, {
       withCredentials: true,
@@ -97,7 +117,6 @@ const productApi = {
   deleteProduct,
   setProductImages,
   getSellerProducts,
-  isLoggedIn,
 };
 
 export default productApi;

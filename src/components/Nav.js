@@ -8,7 +8,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import productApi from "../api/Product.tsx";
+import productApi from "../api/Product";
 const searchBoxDefaultValue = "상품명 or 상점이름으로 검색하세요!";
 const SERVICE_NAME = "블록마켓";
 

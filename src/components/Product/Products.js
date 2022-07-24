@@ -29,7 +29,7 @@ import {
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import imageCompression from "browser-image-compression";
 import ClearIcon from "@mui/icons-material/Clear";
-import productApi from "../../api/Product.tsx";
+import productApi from "../../api/Product";
 
 const theme = createTheme({
   palette: {
