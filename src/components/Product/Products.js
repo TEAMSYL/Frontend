@@ -80,6 +80,7 @@ export const ManageTab = (props) => {
     try {
       await productApi.getUserProducts().then( (response) => {
         const productsData = response.data;;
+        console.log('productData: ',productsData);
         setMyProducts(productsData);
       });
     } catch(error) {
@@ -107,8 +108,8 @@ export const ManageTab = (props) => {
   // 삭제하기 버튼 눌렀을 때의 핸들러
   const handleRemoveProductBtn = async (product) => {
     try {
-      const response = productApi.deleteProduct(product.id.toString())
-      if (response == true) {
+      const result = productApi.deleteProduct(product.id.toString());
+      if (result) {
         alert('성공적으로 상품이 제거되었습니다.');
         fetchProducts(); 
       } else {
@@ -131,19 +132,19 @@ export const ManageTab = (props) => {
       id: "state",
       numeric: false,
       label: "상태",
-      width: "10%",
+      width: "12.5%",
     },
     {
       id: "name",
       numeric: false,
       label: "제목",
-      width: "35%",
+      width: "30%",
     },
     {
       id: "price",
       numeric: true,
       label: "가격",
-      width: "15%",
+      width: "17.5%",
     },
     {
       id: "curDate",
@@ -367,22 +368,33 @@ export const RegistTab = (props) => {
       alert("설명을 입력하세요!");
       return;
     }
-    imgFiles.map((img) => formdata.append("productImgs", img.file));
-    const imgUrls = await productApi.setProductImages(formdata);
+
+    //imgFiles.map((img) => formdata.append("productImgs", img.file));
+    //const imgUrls = await productApi.setProductImages(formdata);
     // 모든 입력을 완료한 경우 api를 통해 product data를 서버로 전달
-    const data = {
+    const productData = {
       content: description,
       category: "test",
       price: price,
-      productName: name,
-      imgUrls: imgUrls,
+      productName: name
     };
-    const result = await productApi.setProduct(data);
+
+    const data = new FormData();
+    data.append("data", JSON.stringify(productData));
+    data.append("thumbnail", imgFiles[0].file);
+    console.log('data:', data);
+    const { productId } = await productApi.setProduct(data);
+
+    imgFiles.map((img, idx) =>
+      formdata.append("productImgs", img.file, `file_${idx}`)
+    );
+    const result = await productApi.setProductImages(formdata, productId);
+
     if (result) {
-      alert('상품 등록이 완료되었습니다. 홈화면으로 이동합니다.');
-      navigate('/');
+      alert("상품 등록에 성공했습니다.");
+      navigate('/products/manage');
     } else {
-      alert('상품 등록에 실패하였습니다. 다시 시도해주세요!');
+      alert("상품 등록에 실패하였습니다. 다시 시도해주세요.");
     }
   };
 
@@ -515,7 +527,6 @@ const RegistTabContent = (props) => {
 
 export const Products = () => {
   const navigate = useNavigate();
-  console.log('location:',  useLocation());
   return (
     <ThemeProvider theme={theme}>
       <Stack

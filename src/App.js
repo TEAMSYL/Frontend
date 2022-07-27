@@ -15,7 +15,14 @@ import PublicRoute from './routers/PublicRoute';
 import { useSelector } from 'react-redux';
 import SearchPage from './components/SearchPage';
 import ProductModify from './components/ProductModify';
+<<<<<<< HEAD
 import DetailProduct from './components/Product/ProductDetail/DetailProduct'
+=======
+import TxManagePage from './components/TxMangePage';
+import Purchase from './components/TxMangePage/Purchase';
+import Sell from './components/TxMangePage/Sell';
+
+>>>>>>> ee605ab451855fd7570753619da67ee85b550c85
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -72,6 +79,10 @@ function App() {
           />
           <Route exact path='/search' element={<SearchPage/>}></Route>
           <Route path='/modify' element={<ProductModify/>}></Route>
+          <Route path='/transaction/manage' element={<TxManagePage/>}>
+            <Route path='sell' element={<Sell/>}/>
+            <Route path='purchase' element={<Purchase/>}/>
+          </Route>
         </Routes>
       </div>
       <Footer></Footer>

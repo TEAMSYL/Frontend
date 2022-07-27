@@ -112,14 +112,18 @@ const Nav = (props) => {
                                 <Button 
                                     onClick={() => {
                                         if (isLogin == true) {
+<<<<<<< HEAD
                                             navigate('/mystore/'+id);
+=======
+                                            navigate('/transaction/manage/sell');
+>>>>>>> ee605ab451855fd7570753619da67ee85b550c85
                                         } else {
                                             props.openModal();
                                         }
                                     }}
                                     startIcon={<StorefrontIcon />}
                                 >
-                                    내 상점</Button>
+                                    거래관리</Button>
                                 <Button 
                                     onClick={() => {
                                         if (isLogin == true) {

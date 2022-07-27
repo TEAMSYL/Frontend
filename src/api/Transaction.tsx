@@ -32,5 +32,17 @@ async function permit(productId: number) {
     console.log(error);
   }
 }
-const transactionApi = { request, permit };
+
+async function getRecievedRequest() {
+    try {
+      const response = await axios.get(
+        'http://localhost:8001/transaction/request/recieved',
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+}
+
+const transactionApi = { request, permit, getRecievedRequest };
 export default transactionApi;

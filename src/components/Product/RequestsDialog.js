@@ -2,6 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Dialog, DialogTitle, TableBody, TableCell, Stack, TableContainer, TableHead, TableRow, Button, TablePagination, Table } from '@mui/material';
 import React from 'react';
 import { AddBoxSharp } from '@mui/icons-material';
+import transactionApi from '../../api/Transaction.tsx';
 
 const headCells = [
     {   
@@ -59,6 +60,8 @@ const RequestsDialog = (props) => {
 
     // 상품에 대한 구매요청 fetch 해오는 function
     const fetchRequests = async () => {
+        const requests = transactionApi.getRecievedRequest();
+
         // test data로 setting
         const testData = [
             {   
