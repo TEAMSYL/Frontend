@@ -131,19 +131,19 @@ export const ManageTab = (props) => {
       id: "state",
       numeric: false,
       label: "상태",
-      width: "10%",
+      width: "12.5%",
     },
     {
       id: "name",
       numeric: false,
       label: "제목",
-      width: "35%",
+      width: "30%",
     },
     {
       id: "price",
       numeric: true,
       label: "가격",
-      width: "15%",
+      width: "17.5%",
     },
     {
       id: "curDate",

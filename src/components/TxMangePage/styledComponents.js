@@ -1,7 +1,7 @@
 import { AppBar, Box, Button, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
-import React from 'react';
-import { ProductCell, Palette } from '../SearchPage/StyledComponents';
+import React, { useEffect } from 'react';
 import { styled } from "@mui/material/styles";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Container = ({ children}) => {
     return (
@@ -46,6 +46,9 @@ export const PageName = ({ pageName }) => {
 };
 
 export const Tab = () => {
+    const navigate = useNavigate();
+    const [ isSellTab, setIsSellTab] = React.useState(true);
+
     return (
         <AppBar
             position="static"
@@ -63,11 +66,12 @@ export const Tab = () => {
                 <Button
                     disableTouchRipple
                     onClick={() => {
-                        //navigate('/products/regist');
+                        setIsSellTab(true);
+                        navigate('/transaction/manage/sell');
                     }}
                     sx={{
                         fontWeight: '400',
-                        //color: `${useLocation().pathname == '/products/regist' ? '#FF50558' : '#212121'}`,
+                        color: `${useLocation().pathname == '/transaction/manage/sell' ? '#FF5055' : '#212121'}`,
                         '&:hover': {
                         backgroundColor: 'transparent',
                         }
@@ -76,12 +80,13 @@ export const Tab = () => {
                 <Button
                     disableTouchRipple
                     onClick={() => {
-                        //navigate('/products/manage');
+                        setIsSellTab(false);
+                        navigate('/transaction/manage/purchase');
                     }}
                     sx={{
                         fontWeight: '400',
                         marginLeft: '30px',
-                        //color: `${useLocation().pathname == '/products/manage' ? '#FF50558' : '#212121'}`,
+                        color: `${useLocation().pathname == '/transaction/manage/purchase' ? '#FF5055' : '#212121'}`,
                         '&:hover': {
                             backgroundColor: 'transparent',
                         }
@@ -92,7 +97,7 @@ export const Tab = () => {
     );
 }
 
-export const PaginationTable = ({ myProducts }) => {
+export const SellTable = ({ requests }) => {
     const [ rowsPerPage , setRowsPerPage ] = React.useState(5);
     const [ page, setPage ] = React.useState(0);
 
@@ -105,6 +110,10 @@ export const PaginationTable = ({ myProducts }) => {
         setPage(0);
     };
     
+    const handleCancelBtn = (request) => {
+        // api로 취소 요청
+    };
+
     const RowCell = styled(TableCell)`
     text-align: center;
     `;
@@ -114,31 +123,37 @@ export const PaginationTable = ({ myProducts }) => {
             id: "img",
             numeric: false,
             label: "사진",
-            width: "20%",
+            width: "18%",
         },
         {
             id: "state",
             numeric: false,
             label: "진행상태",
-            width: "20%",
+            width: "12.5%",
         },
         {
             id: "name",
             numeric: false,
             label: "제목",
-            width: "20%",
+            width: "30%",
         },
         {
             id: "price",
             numeric: true,
             label: "가격",
-            width: "20%",
+            width: "17.5%",
+        },
+        {
+            id: "buyer",
+            numeric: false,
+            label: "구매자",
+            width: "12%"
         },
         {
             id: "buttons",
             numeric: false,
             label: "기능",
-            width: "20%",
+            width: "10%",
         }
     ];
 
@@ -151,143 +166,137 @@ export const PaginationTable = ({ myProducts }) => {
                 alignItems: "center",
             }}
         >
-            {myProducts.length < 1 && (
-                <div>등록한 상품이 존재하지 않거나 진행 중인 판매 거래가 없습니다.</div>
+            {requests.length < 1 && (
+                <div>진행 중인 판매 거래가 없습니다.</div>
             )}
-            <Box
-                sx={{
-                display: "flex",
-                justifyContent: "center",
-                width: "1024px",
-                margin: "40px 0 32px",
-                }}
-            >
-                <TablePagination
-                    count={myProducts.length}
-                    rowsPerPageOptions={[
-                        { value: 5, label: "5개씩" },
-                        { value: 10, label: "10개씩" },
-                    ]}
-                    rowsPerPage={rowsPerPage}
-                    labelRowsPerPage={""}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowPerPage}
-                />
-            </Box>
-            <TableContainer sx={{ width: 1024 }}>
-                <Table  padding='none'>
-                    <TableHead
-                        sx={{
-                            backgroundColor: "#FAFAFD",
-                            borderTop: "0.5px solid black",
-                        }}
-                    >
-                        <TableRow>
-                            {headCells.map((cell) => (
-                                <TableCell
-                                    key={cell.id}
-                                    align={"center"}
-                                    label={cell.label}
-                                    sx={{
-                                        width: `${cell.width}`,
-                                        fontWeight: "600",
-                                        height: "20px",
-                                        padding: 1,
-                                        borderTop: "0.5px solid black",
-                                        borderBottom: "0.5px solid black",
-                                    }}
-                                >
-                                    {cell.label}
-                                </TableCell>
-                            ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {myProducts
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((product, index) => {
-                            return (
-                                <TableRow>
-                                    <RowCell>
-                                        <Box
-                                            sx={{
-                                                position: 'relative',
-                                                display: 'block',
-                                                overflow: 'hidden',
-                                                width: '100%',
-                                                paddingBottom: '100%',
-                                            }}
-                                        >
-                                            <img 
-                                                src={product.ProductImgs[0].imgUrl} 
-                                                style={{ 
-                                                    position: 'absolute',
+            {requests.length > 0 && (
+                <>
+                <Box
+                    sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "1024px",
+                    margin: "40px 0 32px",
+                    }}
+                >
+                    <TablePagination
+                        count={requests.length}
+                        rowsPerPageOptions={[
+                            { value: 5, label: "5개씩" },
+                            { value: 10, label: "10개씩" },
+                        ]}
+                        rowsPerPage={rowsPerPage}
+                        labelRowsPerPage={""}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowPerPage}
+                    />
+                </Box>
+                <TableContainer sx={{ width: 1024 }}>
+                    <Table  padding='none'>
+                        <TableHead
+                            sx={{
+                                backgroundColor: "#FAFAFD",
+                                borderTop: "0.5px solid black",
+                            }}
+                        >
+                            <TableRow>
+                                {headCells.map((cell) => (
+                                    <TableCell
+                                        key={cell.id}
+                                        align={"center"}
+                                        label={cell.label}
+                                        sx={{
+                                            width: `${cell.width}`,
+                                            fontWeight: "600",
+                                            height: "20px",
+                                            padding: 1,
+                                            borderTop: "0.5px solid black",
+                                            borderBottom: "0.5px solid black",
+                                        }}
+                                    >
+                                        {cell.label}
+                                    </TableCell>
+                                ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {requests
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((request, index) => {
+                                return (
+                                    <TableRow>
+                                        <RowCell>
+                                            <Box
+                                                sx={{
+                                                    position: 'relative',
                                                     display: 'block',
-                                                    minWidth: '100%',
-                                                    minHeight: '100%',
-                                                    objectFit: 'contain',
-                                                    borderBottom: '1px solid #E6E5EF',
-                                                    backgroundColor: '#FAFAFD'
+                                                    overflow: 'hidden',
+                                                    width: '100%',
+                                                    paddingBottom: '100%',
                                                 }}
-                                            />
-                                        </Box>
+                                            >
+                                                <img 
+                                                    src={request.ProductImgs[0].imgUrl} 
+                                                    style={{ 
+                                                        position: 'absolute',
+                                                        display: 'block',
+                                                        minWidth: '100%',
+                                                        minHeight: '100%',
+                                                        objectFit: 'contain',
+                                                        borderBottom: '1px solid #E6E5EF',
+                                                        backgroundColor: '#FAFAFD'
+                                                    }}
+                                                />
+                                            </Box>
+                                        </RowCell>
+                                        <RowCell>
+                                            {request.status === 'before' ? '판매중' : '이외의 상태'}
+                                        </RowCell>
+                                        <RowCell sx={{ color: "#0072E6", fontWeight: "600" }}>
+                                            {request.productName}
+                                        </RowCell>
+                                        <RowCell>{request.price}ETH</RowCell>
+                                        <RowCell>구매자</RowCell>
+                                        <RowCell>
+                                            <Stack spacing={1}>
+                                                <Button
+                                                    sx={{
+                                                        color: "#FFFFFF",
+                                                        background: '#FF5055',
+                                                        //border: "0.5px solid #FF5055",
+                                                        height: "30px",
+                                                        "&:hover": {
+                                                            backgroundColor: "#FF5055",
+                                                        },
+                                                    }}
+                                                    disableTouchRipple
+                                                    onClick={() => handleCancelBtn(request)}
+                                                >거래 취소
+                                                </Button>
+                                                <Button
+                                                    sx={{
+                                                        color: "#212121",
+                                                        border: "0.5px solid #C3C2CC",
+                                                        height: "30px",
+                                                        "&:hover": {
+                                                            backgroundColor: "#ededed",
+                                                        },
+                                                    }}
+                                                    disableTouchRipple
+                                                   //onClick={() => handleDialogOpen(product)}
+                                                >송장 입력
+                                                </Button>
+                                        </Stack>
                                     </RowCell>
-                                    <RowCell>
-                                        {product.status === 'before' ? '판매중' : '이외의 상태'}
-                                    </RowCell>
-                                    <RowCell sx={{ color: "#0072E6", fontWeight: "600" }}>
-                                        {product.productName}
-                                    </RowCell>
-                                    <RowCell>{product.price}ETH</RowCell>
-                                    <RowCell>
-                                        <Stack spacing={1}>
-                                            <Button
-                                                sx={{
-                                                    color: "#0072E6",
-                                                    border: "0.5px solid #C3C2CC",
-                                                    height: "30px",
-                                                    "&:hover": {
-                                                        backgroundColor: "#ededed",
-                                                    },
-                                                }}
-                                                disableTouchRipple
-                                                //onClick={() => handleChangeBtn(product)}
-                                            >수정하기
-                                            </Button>
-                                            <Button
-                                                sx={{
-                                                    border: "0.5px solid #C3C2CC",
-                                                    height: "30px",
-                                                    "&:hover": {
-                                                        backgroundColor: "#ededed",
-                                                    },
-                                                }}
-                                                disableTouchRipple
-                                                //onClick={() => handleRemoveProductBtn(product)}
-                                            >삭제하기
-                                            </Button>
-                                            <Button
-                                                sx={{
-                                                    color: "#212121",
-                                                    border: "0.5px solid #C3C2CC",
-                                                    height: "30px",
-                                                    "&:hover": {
-                                                        backgroundColor: "#ededed",
-                                                    },
-                                                }}
-                                                disableTouchRipple
-                                               //onClick={() => handleDialogOpen(product)}
-                                            >구매요청
-                                            </Button>
-                                    </Stack>
-                                </RowCell>
-                            </TableRow>
-                        );
-                        })}
-                        </TableBody>
-                </Table>
-            </TableContainer>
+                                </TableRow>
+                            );
+                            })}
+                            </TableBody>
+                    </Table>
+                </TableContainer>
+                </>
+            )}
         </Stack>
     );
 };
