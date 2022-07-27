@@ -39,7 +39,6 @@ async function getRecievedRequest() {
         'http://localhost:8001/transaction/request/recieved',
         { withCredentials: true }
       );
-      console.log('response:',response);
     } catch (error) {
       console.log(error);
     }

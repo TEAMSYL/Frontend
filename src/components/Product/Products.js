@@ -80,6 +80,7 @@ export const ManageTab = (props) => {
     try {
       await productApi.getUserProducts().then( (response) => {
         const productsData = response.data;;
+        console.log('productData: ',productsData);
         setMyProducts(productsData);
       });
     } catch(error) {
@@ -371,21 +372,30 @@ export const RegistTab = (props) => {
     //imgFiles.map((img) => formdata.append("productImgs", img.file));
     //const imgUrls = await productApi.setProductImages(formdata);
     // 모든 입력을 완료한 경우 api를 통해 product data를 서버로 전달
-    const data = {
+    const productData = {
       content: description,
       category: "test",
       price: price,
-      productName: name,
-      //imgUrls: imgUrls,
+      productName: name
     };
 
+    const data = new FormData();
+    data.append("data", JSON.stringify(productData));
+    data.append("thumbnail", imgFiles[0].file);
+    console.log('data:', data);
     const { productId } = await productApi.setProduct(data);
+
     imgFiles.map((img, idx) =>
       formdata.append("productImgs", img.file, `file_${idx}`)
     );
-    await productApi.setProductImages(formdata, productId);
-    console.log("상품 등록 응답", productId);
-    console.log("formData: ", formdata);
+    const result = await productApi.setProductImages(formdata, productId);
+
+    if (result) {
+      alert("상품 등록에 성공했습니다.");
+      navigate('/products/manage');
+    } else {
+      alert("상품 등록에 실패하였습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -517,7 +527,6 @@ const RegistTabContent = (props) => {
 
 export const Products = () => {
   const navigate = useNavigate();
-  console.log('location:',  useLocation());
   return (
     <ThemeProvider theme={theme}>
       <Stack

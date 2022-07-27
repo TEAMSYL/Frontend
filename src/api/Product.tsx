@@ -33,18 +33,16 @@ async function getProduct(id: string | undefined) {
   }
 }
 
-async function setProduct(data: ISetProduct) {
+async function setProduct(data: FormData) {
   try {
     const response = await axios.post(
       "http://localhost:8001/product",
-      {
-        productName: data.productName,
-        content: data.content,
-        category: data.category,
-        price: data.price,
-        imgUrls: data.imgUrls,
-      },
-      { withCredentials: true }
+      data,
+      { 
+        headers: {
+          "Content-Type": "multipart/form-data; charset=UTF-8",
+        },
+        withCredentials: true }
     );
     return response.data;
   } catch (error) {
@@ -65,9 +63,14 @@ async function setProductImages(data: FormData, productId) {
       }
     );
     console.log("이미지 api 응답", response);
-    return response;
+    if (response.status == 201) {
+      return true;
+    } else {
+      return false
+    }
   } catch (error) {
     console.log(error);
+    return false;
   }
 }
 
