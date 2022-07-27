@@ -6,6 +6,7 @@ import Menu from './components/Menu';
 import "./App.css";
 import { Route, Routes } from 'react-router-dom';
 import { Products, ManageTab, RegistTab }from './components/Product/Products';
+import Mystore from './components/Mystore/MyStore'
 import Footer from './components/Footer';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
@@ -14,7 +15,7 @@ import PublicRoute from './routers/PublicRoute';
 import { useSelector } from 'react-redux';
 import SearchPage from './components/SearchPage';
 import ProductModify from './components/ProductModify';
-
+import DetailProduct from './components/Product/ProductDetail/DetailProduct'
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -43,7 +44,16 @@ function App() {
             <Route path='regist' element={<RegistTab/>}/>
             <Route path='manage' element={<ManageTab/>}/>
           </Route>
-          
+          <Route exact path="/mystore/:userId" element={
+              <PrivateRoute isLogin={isLogin}>
+                <Mystore/>
+              </PrivateRoute>} 
+          />  
+          <Route exact path="/detail/:productId" element={
+            <PrivateRoute isLogin={isLogin}>
+              <DetailProduct/>
+            </PrivateRoute>} 
+          />  
           <Route 
             exact path="/signup" 
             element={

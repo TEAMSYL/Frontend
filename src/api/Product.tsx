@@ -25,7 +25,7 @@ async function getUserProducts() {
 
 async function getProduct(id: string | undefined) {
   try {
-    const response = await axios.get(`http://localhost:8001/product/${id}`);
+    const response = await axios.get(`http://localhost:8001/product/detail/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);

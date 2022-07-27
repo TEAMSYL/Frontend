@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ButtonGroup, Box, Button, Input } from "@mui/material";
 import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
 import SearchIcon from '@mui/icons-material/Search';
@@ -8,7 +8,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import userApi from '../api/User.tsx'
 const searchBoxDefaultValue = "상품명 or 상점이름으로 검색하세요!";
 const SERVICE_NAME = "블록마켓";
 
@@ -39,6 +39,8 @@ const Nav = (props) => {
     const { isLogin } = useSelector(state => state.isLogin);
     const navigate = useNavigate();
     const [ searchKeyword, setSearchKeyword ] = React.useState('');
+    const [id, setId] = useState('1')
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -110,6 +112,7 @@ const Nav = (props) => {
                                 <Button 
                                     onClick={() => {
                                         if (isLogin == true) {
+                                            navigate('/mystore/'+id);
                                         } else {
                                             props.openModal();
                                         }
@@ -120,6 +123,7 @@ const Nav = (props) => {
                                 <Button 
                                     onClick={() => {
                                         if (isLogin == true) {
+                                            navigate('/chat');
                                         } else {
                                             props.openModal();
                                         }
