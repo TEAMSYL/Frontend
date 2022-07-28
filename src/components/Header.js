@@ -95,7 +95,9 @@ const Header = (props) => {
             ) : (
               <Button onClick={props.openModal}>로그인/회원가입</Button>
             )}
-            <Button onClick={isLogin ? () => {} : props.openModal}>
+            <Button onClick={isLogin ? () => {
+              navigate('/mystore');
+            } : props.openModal}>
               내 상점
             </Button>
           </ButtonGroup>

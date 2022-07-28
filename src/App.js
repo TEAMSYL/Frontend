@@ -17,6 +17,8 @@ import ProductModify from './components/ProductModify';
 import TxManagePage from './components/TxMangePage';
 import Purchase from './components/TxMangePage/Purchase';
 import Sell from './components/TxMangePage/Sell';
+import Mystore from './components/Mystore/MyStore';
+import DetailProduct from './components/Product/ProductDetail/DetailProduct';
 
 const theme = createTheme({
   typography: {
@@ -55,6 +57,7 @@ function App() {
                 </PublicRoute>
               }
           />
+
           <Route 
             exact path="/signin" 
             element={
@@ -63,12 +66,23 @@ function App() {
                 </PublicRoute>
               }
           />
+
           <Route exact path='/search' element={<SearchPage/>}></Route>
           <Route path='/modify' element={<ProductModify/>}></Route>
           <Route path='/transaction/manage' element={<TxManagePage/>}>
             <Route path='sell' element={<Sell/>}/>
             <Route path='purchase' element={<Purchase/>}/>
           </Route>
+          <Route exact path="/mystore" element={
+              <PrivateRoute isLogin={isLogin}>
+                <Mystore/>
+              </PrivateRoute>} 
+          /> 
+          <Route exact path="/detail/:productId" element={
+            <PrivateRoute isLogin={isLogin}>
+              <DetailProduct/>
+            </PrivateRoute>} 
+          /> 
         </Routes>
       </div>
       <Footer></Footer>

@@ -3,7 +3,7 @@ import { ITransactionRequest } from "./dto";
 
 async function request(data: ITransactionRequest) {
   try {
-    await axios.post(
+    const response = await axios.post(
       `http://localhost:8001/transaction/request`,
       {
         productId: data.productId,
@@ -13,8 +13,10 @@ async function request(data: ITransactionRequest) {
         withCredentials: true,
       }
     );
+      return response;
   } catch (error) {
     console.log(error);
+    return error.response;
   }
 }
 async function permit(productId: number) {
@@ -33,16 +35,42 @@ async function permit(productId: number) {
   }
 }
 
+async function refuse(requestId: number) {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8001/transaction/request/${String(requestId)}`,
+      { withCredentials: true }
+    );
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error.response;
+  }
+}
+
 async function getRecievedRequest() {
     try {
       const response = await axios.get(
         'http://localhost:8001/transaction/request/recieved',
         { withCredentials: true }
       );
+      return response;
     } catch (error) {
       console.log(error);
     }
 }
 
-const transactionApi = { request, permit, getRecievedRequest };
+async function getRequestsToProduct(productId: string) {
+  try {
+    const response = await axios.get(`http://localhost:8001/transaction/request/recieved/product?productId=${productId}`,
+      { withCredentials: true}
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const transactionApi = { request, permit, getRecievedRequest, getRequestsToProduct, refuse };
 export default transactionApi;

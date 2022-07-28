@@ -121,6 +121,11 @@ export const ManageTab = (props) => {
     }
   };
 
+  const handleImgClick = (product) => {
+    let productId = product.id;
+    navigate(`/detail/${productId}`);
+  }
+  
   const headCells = [
     {
       id: "img",
@@ -253,6 +258,7 @@ export const ManageTab = (props) => {
                                   borderBottom: '1px solid #E6E5EF',
                                   backgroundColor: '#FAFAFD'
                               }}
+                              onClick={() => handleImgClick(product)}
                           />
                         </Box>
                       </RowCell>

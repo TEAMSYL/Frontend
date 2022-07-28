@@ -52,34 +52,28 @@ const RequestsDialog = (props) => {
         }
     };
 
-    const handleRejectBtn = (request) => {
-        // 서버로 거절 요청 보냄
-        // 거절 요청 처리 완료후
-        //setRequests([]);
+    const handleRejectBtn = async (request) => {
+        console.log('request: ', request);
+        const response = await transactionApi.refuse(request.id);
+        console.log(response);
+        if (response.status == 200) {
+            alert("제거에 성공했습니다.");
+            const newRequests = await fetchRequests();
+            setRequests(newRequests);
+        } else {
+            alert("제거에 실패하였습니다.");
+        }
     };
 
     // 상품에 대한 구매요청 fetch 해오는 function
     const fetchRequests = async () => {
-        const requests = transactionApi.getRecievedRequest();
-
-        // test data로 setting
-        const testData = [
-            {   
-                id: '1',
-                nick: 'test',
-                date: '2018-12-12',
-            },
-            {   
-                id: '2',
-                nick: 'hello1',
-                date: '2018-12-12',
-            },
-            {   
-                nick: 'hello1',
-                date: '2018-12-12',
-            },
-        ];
-        return testData;
+        const requests = await transactionApi.getRequestsToProduct(String(product.id));
+        if (requests) {
+            return requests;
+        } else {
+            alert('요청정보 로딩에 실패했습니다!');
+            handleClose();
+        }
         // 작성 필요
     };
 
@@ -131,8 +125,11 @@ const RequestsDialog = (props) => {
                         <TableBody sx={{ width: '100%' }}>
                             {requests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((request) => (
                                 <TableRow>
-                                    <TableBodyCell>{request.nick}</TableBodyCell>
-                                    <TableBodyCell>{request.date}</TableBodyCell>
+                                    <TableBodyCell>{request.User.nick}</TableBodyCell>
+                                    <TableBodyCell>
+                                        {request.createdAt.slice(0, 10)}<br/>
+                                        {request.createdAt.slice(11, 16)}
+                                    </TableBodyCell>
                                     <TableBodyCell>
                                         <Stack spacing={1}>
                                             <Button
@@ -157,7 +154,7 @@ const RequestsDialog = (props) => {
                                                         backgroundColor: "#ededed",
                                                     },
                                                 }}
-                                                onClick={handleRejectBtn}
+                                                onClick={() => handleRejectBtn(request)}
                                                 disableTouchRipple
                                             >
                                                 거절하기

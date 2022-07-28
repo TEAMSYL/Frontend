@@ -33,6 +33,16 @@ async function getProduct(id: string | undefined) {
   }
 }
 
+async function getProductDetail(id: string | undefined) {
+  console.log('id:', id);
+  try {
+    const response = await axios.get(`http://localhost:8001/product/detail?id=${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function setProduct(data: FormData) {
   try {
     const response = await axios.post(
@@ -99,6 +109,7 @@ const productApi = {
   deleteProduct,
   setProductImages,
   getUserProducts,
+  getProductDetail,
 };
 
 export default productApi;
