@@ -19,6 +19,7 @@ async function getUser() {
     const response = await axios.get(`http://localhost:8001/user`, {
       withCredentials: true,
     });
+    console.log('user:', response.data);
     return response.data;
   } catch (error) {
     console.log(error);

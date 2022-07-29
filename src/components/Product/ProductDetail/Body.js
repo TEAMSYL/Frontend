@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Box, Container, Avatar, Stack } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import styled from "styled-components";
@@ -7,11 +7,14 @@ import productApi from '../../../api/Product.tsx';
 import transactionApi from '../../../api/Transaction.tsx';
 import userApi from '../../../api/User.tsx';
 
-const Body = ({product : {id, status, productName, price, category, thumbnail}}) => {
+const Body = ({product, user}) => {
+    //const location = useLocation();
+    const navigate = useNavigate();
+
     const handleRequest = async () => {
         const data = {
-            productId: id,
-            price: price
+            productId: product.id,
+            price: product.price
         };
         const response = await transactionApi.request(data);
         if (response.status !== 200) {
@@ -21,6 +24,14 @@ const Body = ({product : {id, status, productName, price, category, thumbnail}})
         }
     };
 
+    const handleModify = () => {
+        navigate('/modify', { state: { product: product}});
+    };
+
+    useEffect(() => {
+        console.log('유저 props:', user);
+    }, []);
+    
     return (
         <Box style={{width:"1024px", height:"490px", margin:"0 auto"}}>
             <Box sx={{
@@ -28,13 +39,13 @@ const Body = ({product : {id, status, productName, price, category, thumbnail}})
                     padding: '30px 0px;'
                 }}>
                 <Avatar sx={{ width:"428px", height:"428px" }} variant="square">
-                    <img src={thumbnail}/>
+                    <img src={product.thumbnail}/>
                 </Avatar>
                 <Info>
                     <TitleInfo>
-                        <Title>{productName}</Title>
+                        <Title>{product.productName}</Title>
                             <PriceBtn>
-                                <Pricing  style={{fontSize:"40px", fontStyle: 'bold'}}>{price}<span>ETH</span></Pricing >
+                                <Pricing  style={{fontSize:"40px", fontStyle: 'bold'}}>{product.price}<span>ETH</span></Pricing >
                             
                             </PriceBtn>
                     </TitleInfo>
@@ -70,10 +81,17 @@ const Body = ({product : {id, status, productName, price, category, thumbnail}})
                             <Btngap>찜</Btngap>
                             <Btngap>2</Btngap>
                         </HeartBtn>
-                        <ContactBtn>연락하기</ContactBtn>
-                        <BuyBtn
-                            onClick={handleRequest}
-                        >바로구매</BuyBtn>
+                        { (product.sellerId !== user.id) &&
+                            <>
+                                <ContactBtn>연락하기</ContactBtn>
+                                <BuyBtn
+                                    onClick={handleRequest}
+                                >구매요청</BuyBtn>
+                            </>
+                        }
+                        {
+                            (product.sellerId === user.id) && <ModifyBtn onClick={handleModify}>수정하기</ModifyBtn>
+                        }
                     </BottomInfo>
                 </Info>
             </Box>
@@ -194,6 +212,19 @@ const ContactBtn = styled.button`
 
 const BuyBtn = styled.button`
     background: rgb(247, 0, 0);
+    border: 1px solid rgb(223, 0, 0);
+    color: rgb(255, 255, 255);
+    width:100%;
+    cursor: pointer;
+    height: 56px;
+    width: 179px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 20.7px;
+`;
+
+const ModifyBtn = styled.button`
+    background: rgb(204, 204, 204);
     border: 1px solid rgb(223, 0, 0);
     color: rgb(255, 255, 255);
     width:100%;

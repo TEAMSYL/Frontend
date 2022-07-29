@@ -8,13 +8,12 @@ const Mystore = ()=> {
     const [userId, setUserId] = React.useState();
 
     const fetchUser = async () => {
-        const user = userApi.getUser();
+        const user = await userApi.getUser();
         return user;
     };
 
     React.useEffect(() => {
         const user = fetchUser().then((user) => {
-            console.log('user id: ', user.id);
             setUserId(user.id);
         });
 
