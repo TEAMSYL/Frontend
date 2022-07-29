@@ -441,7 +441,8 @@ const Signup = () => {
                                         size='small'
                                         color={'secondary'}
                                         sx={{ width: 420 }}
-                                        InputProps={{ readOnly: true, }}
+                                        InputProps={{ readOnly: false, }}
+                                        onChange={(e) => {setWalletAddress(e.target.value);}}
                                     >
                                     </TextField>
                                     <Box marginLeft={'20px'}>

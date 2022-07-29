@@ -73,7 +73,7 @@ function App() {
             <Route path='sell' element={<Sell/>}/>
             <Route path='purchase' element={<Purchase/>}/>
           </Route>
-          <Route exact path="/mystore" element={
+          <Route exact path="/mystore/:userId" element={
               <PrivateRoute isLogin={isLogin}>
                 <Mystore/>
               </PrivateRoute>} 

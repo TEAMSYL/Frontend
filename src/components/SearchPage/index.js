@@ -1,6 +1,7 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import React from 'react'
 import { useLocation } from 'react-router-dom';
+import productApi from '../../api/Product.tsx';
 import { Container, ProductsSection, MainSection, InfoBar, SortButton, NoResultCase, Palette, ProductCell, Pagination } from './StyledComponents';
 
 const SearchPage = () => {
@@ -16,69 +17,9 @@ const SearchPage = () => {
     const [ searchKeyword, setSearchKeyword ] = React.useState(location.state.searchKeyword); 
 
     const fetchproducts = async() => {
-        const newProducts = [
-            { name: '1' }, 
-            { name: '2' }, 
-            { name: '3' }, 
-            { name: '4' }, 
-            { name: '5' }, 
-            { name: '6' }, 
-            { name: '7' }, 
-            { name: '8' }, 
-            { name: '9' }, 
-            { name: '10' },
-            { name: '11' },
-            { name: '12' },
-            { name: '13' },
-            { name: '14' },
-            { name: '15' },
-            { name: '16' },
-            { name: '17' },
-            { name: '18' },
-            { name: '19' },
-            { name: '20' },
-            { name: '21' },
-            { name: '22' },
-            { name: '23' },
-            { name: '24' },
-            { name: '25' },
-            { name: '26' },
-            { name: '27' },
-            { name: '28' },
-            { name: '29' },
-            { name: '30' },
-            { name: '01' }, 
-            { name: '02' }, 
-            { name: '03' }, 
-            { name: '04' }, 
-            { name: '05' }, 
-            { name: '06' }, 
-            { name: '07' }, 
-            { name: '08' }, 
-            { name: '09' }, 
-            { name: '010' },
-            { name: '011' },
-            { name: '012' },
-            { name: '013' },
-            { name: '014' },
-            { name: '015' },
-            { name: '016' },
-            { name: '017' },
-            { name: '018' },
-            { name: '019' },
-            { name: '020' },
-            { name: '021' },
-            { name: '022' },
-            { name: '023' },
-            { name: '024' },
-            { name: '025' },
-            { name: '026' },
-            { name: '027' },
-            { name: '028' },
-            { name: '029' },
-            { name: '030' },
-        ];
-        return newProducts;
+        console.log('패치 함수 호출!:', location.state.searchKeyword);
+        const products = await productApi.searchProducts(location.state.searchKeyword);
+        return products;
     };
 
     // 최신순 버튼 클릭 핸들러
@@ -106,7 +47,7 @@ const SearchPage = () => {
 
 
     React.useEffect(() => {
-        console.log('렌더링!');
+        console.log('렌더링! ', location.state.searchKeyword);
         setSearchKeyword(location.state.searchKeyword);
         fetchproducts()
         .then((data) => {

@@ -1,8 +1,9 @@
 import { styled } from "@mui/material/styles";
-import { Box, Dialog, DialogTitle, TableBody, TableCell, Stack, TableContainer, TableHead, TableRow, Button, TablePagination, Table } from '@mui/material';
+import { Box, Dialog, DialogTitle, TableBody, TableCell, Stack, TableContainer, TableHead, TableRow, Button, TablePagination, Table, Typography } from '@mui/material';
 import React from 'react';
 import { AddBoxSharp } from '@mui/icons-material';
 import transactionApi from '../../api/Transaction.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const headCells = [
     {   
@@ -31,6 +32,7 @@ const RequestsDialog = (props) => {
     const [ requests, setRequests ] = React.useState([]); 
     const [ rowsPerPage, setRowPerPage ] = React.useState(5);
     const [ page, setPage ] = React.useState(0);
+    const naivgate = useNavigate();
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
@@ -125,7 +127,17 @@ const RequestsDialog = (props) => {
                         <TableBody sx={{ width: '100%' }}>
                             {requests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((request) => (
                                 <TableRow>
-                                    <TableBodyCell>{request.User.nick}</TableBodyCell>
+                                    <TableBodyCell>
+                                        <Typography
+                                            sx={{ 
+                                                '&:hover': {
+                                                    cursor: 'pointer',
+                                                }
+                                            }}
+                                            onClick={() => naivgate(`/mystore/${request.User.id}`)}>
+                                                {request.User.nick}
+                                        </Typography>
+                                    </TableBodyCell>
                                     <TableBodyCell>
                                         {request.createdAt.slice(0, 10)}<br/>
                                         {request.createdAt.slice(11, 16)}

@@ -52,7 +52,7 @@ const  MystoreBottom = ({userId}) => {
                 </ul>
             </TabMenu>
             <TabContent>
-                {tabMenu === 0 && <MyProducts />}
+                {tabMenu === 0 && <MyProducts userId={userId}/>}
                 {tabMenu === 1 && <Test2 />}
                 {tabMenu === 2 && <Test3 />}
             </TabContent>

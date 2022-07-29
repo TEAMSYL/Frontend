@@ -93,7 +93,7 @@ const Nav = (props) => {
                                     border: "2px solid #F72F33",
                                     fontSize: "14px",
                                 }} 
-                                onChange={(e) => {setSearchKeyword(e.target.value); console.log(searchKeyword);}}
+                                onChange={(e) => {setSearchKeyword(e.target.value);}}
                                 disableUnderline/>
                             <ButtonGroup>
                                 <Button 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { styled } from "@mui/material/styles";
 import { Box, Button, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export const Container = ({ children }) => {
     return (
@@ -106,6 +107,11 @@ export const SortButton = ({ children, isSelect, onClick}) => {
 };
 
 export const ProductCell = ({ product }) => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(`/detail/${product.id}`);
+    }
     return (
         <Button
             sx={{
@@ -116,6 +122,7 @@ export const ProductCell = ({ product }) => {
                     backgroundColor: 'transparent',
                 }
             }}
+            onClick={handleClick}
         >
             <Stack width='100%'>
                 <Box
@@ -128,7 +135,7 @@ export const ProductCell = ({ product }) => {
                     }}
                 >
                     <img 
-                        src='/images/MetaMask_Fox.svg.png' 
+                        src={product.thumbnail} 
                         style={{ 
                             position: 'absolute',
                             display: 'block',
@@ -146,13 +153,13 @@ export const ProductCell = ({ product }) => {
                         fontSize='16px' 
                         paddingBottom='15px'
                         color={Palette.text_black}
-                    >{product.name}</Typography>
+                    >{product.productName.slice(0,12) + "..."}</Typography>
                     <Typography 
                         textAlign='start' 
                         fontSize='18px' 
                         fontWeight='600'
                         color={Palette.text_black}
-                    >100ETH</Typography>
+                    >{product.price} ETH</Typography>
                 </Stack>
             </Stack>
         </Button>

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import ApiAuth from "../api/Auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import userApi from '../api/User.tsx';
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -95,8 +96,9 @@ const Header = (props) => {
             ) : (
               <Button onClick={props.openModal}>로그인/회원가입</Button>
             )}
-            <Button onClick={isLogin ? () => {
-              navigate('/mystore');
+            <Button onClick={isLogin ? async () => {
+              const user = await userApi.getUser();
+              navigate(`/mystore/${user.id}`);
             } : props.openModal}>
               내 상점
             </Button>

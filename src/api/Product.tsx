@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ISetProduct } from "./dto";
 import { TrySharp } from "@mui/icons-material";
+import { createTrue } from 'typescript';
 
 async function getProducts() {
   try {
@@ -23,6 +24,17 @@ async function getUserProducts() {
     console.log(error);
   } 
 }
+
+async function getProductsByUserId(userId: string) {
+  try {
+    const response = await axios.get(`http://localhost:8001/product/${userId}`,
+    {withCredentials: true});
+    console.log('response: ', response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 async function getProduct(id: string | undefined) {
   try {
@@ -85,7 +97,6 @@ async function setProductImages(data: FormData, productId) {
 }
 
 async function deleteProduct(id: string | undefined) {
-  console.log('id:',id);
   try {
     const response = await axios.delete(`http://localhost:8001/product/${id}`, {
       withCredentials: true,
@@ -102,6 +113,16 @@ async function deleteProduct(id: string | undefined) {
   }
 }
 
+async function searchProducts(keyWord: string) {
+  keyWord =  encodeURIComponent(keyWord);
+  try {
+    const response = await axios.get(`http://localhost:8001/product/search?searchword=${keyWord}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const productApi = {
   getProducts,
   getProduct,
@@ -110,6 +131,8 @@ const productApi = {
   setProductImages,
   getUserProducts,
   getProductDetail,
+  searchProducts,
+  getProductsByUserId
 };
 
 export default productApi;
