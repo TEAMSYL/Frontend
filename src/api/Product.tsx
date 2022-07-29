@@ -27,9 +27,9 @@ async function getUserProducts() {
 
 async function getProductsByUserId(userId: string) {
   try {
-    const response = await axios.get(`http://localhost:8001/product/${userId}`,
+    const response = await axios.get(`http://localhost:8001/product/user/${userId}`,
     {withCredentials: true});
-    console.log('response: ', response);
+    console.log('getProductsByUserId response: ', response);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -117,6 +117,7 @@ async function searchProducts(keyWord: string) {
   keyWord =  encodeURIComponent(keyWord);
   try {
     const response = await axios.get(`http://localhost:8001/product/search?searchword=${keyWord}`);
+    console.log(response);
     return response.data;
   } catch (error) {
     console.log(error);

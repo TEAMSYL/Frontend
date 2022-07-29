@@ -17,7 +17,6 @@ const SearchPage = () => {
     const [ searchKeyword, setSearchKeyword ] = React.useState(location.state.searchKeyword); 
 
     const fetchproducts = async() => {
-        console.log('패치 함수 호출!:', location.state.searchKeyword);
         const products = await productApi.searchProducts(location.state.searchKeyword);
         return products;
     };

@@ -19,19 +19,28 @@ async function request(data: ITransactionRequest) {
     return error.response;
   }
 }
-async function permit(productId: number) {
+async function permit(productId: number, buyerId: number) {
   try {
-    await axios.post(
-      `http://localhost:8001/transaction/permit`,
+    const response = await axios.post(
+      `http://localhost:8001/transaction/permission`,
       {
         productId: productId,
+        buyerId: buyerId
       },
       {
         withCredentials: true,
       }
     );
+
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+    console.log('요청 수락 api 결과: ', response);
   } catch (error) {
     console.log(error);
+    return false;
   }
 }
 

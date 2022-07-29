@@ -78,11 +78,7 @@ function App() {
                 <Mystore/>
               </PrivateRoute>} 
           /> 
-          <Route exact path="/detail/:productId" element={
-            <PrivateRoute isLogin={isLogin}>
-              <DetailProduct/>
-            </PrivateRoute>} 
-          /> 
+          <Route exact path="/detail/:productId" element={<DetailProduct/>} /> 
         </Routes>
       </div>
       <Footer></Footer>

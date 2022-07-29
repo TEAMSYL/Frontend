@@ -32,6 +32,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import productApi from "../../api/Product.tsx";
 import RequestsDialog from './RequestsDialog';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { LegendToggleSharp } from '@mui/icons-material';
 
 const theme = createTheme({
   palette: {
@@ -124,8 +125,22 @@ export const ManageTab = (props) => {
   const handleImgClick = (product) => {
     let productId = product.id;
     navigate(`/detail/${productId}`);
-  }
+  };
+
+  const handleMoveToManage = (product) => {
+    // 거래 상세 페이지로 이동시킴
+  };
   
+  const getProductState = (state) => {
+    let status = "";
+    if (state === 'before' || state === 'requested') {
+      status = "판매중";
+    } else if (state === 'permitted') {
+      status = "거래중";
+    }
+    return status;
+  };
+
   const headCells = [
     {
       id: "img",
@@ -263,7 +278,7 @@ export const ManageTab = (props) => {
                         </Box>
                       </RowCell>
                       <RowCell>{
-                        product.status === 'before' ? '판매중' : '이외의 상태'
+                        `${getProductState(product.status)}`
                       }</RowCell>
                       <RowCell sx={{ color: "#0072E6", fontWeight: "600" }}>
                         {product.productName}
@@ -272,47 +287,61 @@ export const ManageTab = (props) => {
                       <RowCell>{product.updatedAt.slice(0,10)}</RowCell>
                       <RowCell>
                         <Stack spacing={1}>
-                          <Button
-                            sx={{
-                              color: "#0072E6",
-                              border: "0.5px solid #C3C2CC",
-                              height: "30px",
-                              "&:hover": {
-                                backgroundColor: "#ededed",
-                              },
-                            }}
-                            disableTouchRipple
-                            onClick={() => handleChangeBtn(product)}
-                          >
-                            수정하기
-                          </Button>
-                          <Button
-                            sx={{
-                              border: "0.5px solid #C3C2CC",
-                              height: "30px",
-                              "&:hover": {
-                                backgroundColor: "#ededed",
-                              },
-                            }}
-                            disableTouchRipple
-                            onClick={() => handleRemoveProductBtn(product)}
-                          >
-                            삭제하기
-                          </Button>
-                          <Button
-                            sx={{
-                              color: "#212121",
-                              border: "0.5px solid #C3C2CC",
-                              height: "30px",
-                              "&:hover": {
-                                backgroundColor: "#ededed",
-                              },
-                            }}
-                            disableTouchRipple
-                            onClick={() => handleDialogOpen(product)}
-                          >
-                            구매요청
-                          </Button>
+                          { (product.status !== 'permitted') &&
+                            <>
+                            <Button
+                              sx={{
+                                color: "#0072E6",
+                                border: "0.5px solid #C3C2CC",
+                                height: "30px",
+                                "&:hover": {
+                                  backgroundColor: "#ededed",
+                                },
+                              }}
+                              disableTouchRipple
+                              onClick={() => handleChangeBtn(product)}
+                            >수정하기</Button>
+                            <Button
+                              sx={{
+                                border: "0.5px solid #C3C2CC",
+                                height: "30px",
+                                "&:hover": {
+                                  backgroundColor: "#ededed",
+                                },
+                              }}
+                              disableTouchRipple
+                              onClick={() => handleRemoveProductBtn(product)}
+                            >삭제하기</Button>
+                            <Button
+                              sx={{
+                                color: "#212121",
+                                border: "0.5px solid #C3C2CC",
+                                height: "30px",
+                                "&:hover": {
+                                  backgroundColor: "#ededed",
+                                },
+                              }}
+                              disableTouchRipple
+                              onClick={() => handleDialogOpen(product)}
+                            >구매요청</Button>
+                            </>
+                          }
+                          { (product.status === 'permitted') &&
+                            <>
+                            <Button
+                              sx={{
+                                color: "#212121",
+                                border: "0.5px solid #C3C2CC",
+                                height: "30px",
+                                "&:hover": {
+                                  backgroundColor: "#ededed",
+                                },
+                              }}
+                              disableTouchRipple
+                              onClick={() => handleMoveToManage(product)}
+                            >거래관리</Button>
+                            </>
+                          }
                         </Stack>
                       </RowCell>
                     </TableRow>

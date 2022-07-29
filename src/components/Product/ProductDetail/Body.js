@@ -12,6 +12,11 @@ const Body = ({product, user}) => {
     const navigate = useNavigate();
 
     const handleRequest = async () => {
+        if (user == undefined) {
+            alert('로그인 후 이용해주세요.');
+            return;
+        }
+
         const data = {
             productId: product.id,
             price: product.price
@@ -24,14 +29,54 @@ const Body = ({product, user}) => {
         }
     };
 
-    const handleModify = () => {
-        navigate('/modify', { state: { product: product}});
+    const handleMoveToMyProducts = () => {
+        navigate(`/mystore/${user.id}`);
     };
 
     useEffect(() => {
         console.log('유저 props:', user);
     }, []);
     
+    const Buttons = () => {
+        if (user === undefined) {
+            console.log('로그인 안함');
+            return (
+                <>  
+                    <HeartBtn>
+                        <FavoriteIcon sx={{fontSize:'19px'}}></FavoriteIcon>
+                        <Btngap>찜</Btngap>
+                        <Btngap>2</Btngap>
+                    </HeartBtn>
+                    <ContactBtn>연락하기</ContactBtn>
+                    <BuyBtn
+                        onClick={handleRequest}
+                    >구매요청</BuyBtn>
+                </>
+            );
+        } else if (product.sellerId !== user.id) {
+            console.log('로그인 했는데 내상품 아님');
+            return (
+                <>  
+                    <HeartBtn>
+                        <FavoriteIcon sx={{fontSize:'19px'}}></FavoriteIcon>
+                        <Btngap>찜</Btngap>
+                        <Btngap>2</Btngap>
+                    </HeartBtn>
+                    <ContactBtn>연락하기</ContactBtn>
+                    <BuyBtn
+                        onClick={handleRequest}
+                    >구매요청</BuyBtn>
+                </>
+            );
+        } else {
+            console.log('로그인 했고 내 상품');
+            return (
+                <MyProductsBtn onClick={handleMoveToMyProducts}>
+                    내 상품 관리
+                </MyProductsBtn>
+            );
+        }
+    };
     return (
         <Box style={{width:"1024px", height:"490px", margin:"0 auto"}}>
             <Box sx={{
@@ -76,22 +121,7 @@ const Body = ({product, user}) => {
                         </Stack>
                     </StateInfo>
                     <BottomInfo>
-                        <HeartBtn>
-                            <FavoriteIcon sx={{fontSize:'19px'}}></FavoriteIcon>
-                            <Btngap>찜</Btngap>
-                            <Btngap>2</Btngap>
-                        </HeartBtn>
-                        { (product.sellerId !== user.id) &&
-                            <>
-                                <ContactBtn>연락하기</ContactBtn>
-                                <BuyBtn
-                                    onClick={handleRequest}
-                                >구매요청</BuyBtn>
-                            </>
-                        }
-                        {
-                            (product.sellerId === user.id) && <ModifyBtn onClick={handleModify}>수정하기</ModifyBtn>
-                        }
+                        <Buttons/>
                     </BottomInfo>
                 </Info>
             </Box>
@@ -223,17 +253,17 @@ const BuyBtn = styled.button`
     line-height: 20.7px;
 `;
 
-const ModifyBtn = styled.button`
-    background: rgb(204, 204, 204);
-    border: 1px solid rgb(223, 0, 0);
+const MyProductsBtn = styled.button`
+    background: #FFA425;
+    border: none;
     color: rgb(255, 255, 255);
     width:100%;
     cursor: pointer;
     height: 56px;
-    width: 179px;
     font-size: 18px;
     font-weight: 600;
     line-height: 20.7px;
+    margin: 0 0 0 40px;
 `;
 
 
