@@ -1,11 +1,19 @@
 import axios from "axios";
-import { ISetProduct } from "./dto";
-import { TrySharp } from "@mui/icons-material";
-import { createTrue } from 'typescript';
 
 async function getProducts() {
   try {
     const response = await axios.get(`http://localhost:8001/product`);
+    console.log("상품 목록:", response.data);
+    return await response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function getCategoryProducts(categoryId) {
+  try {
+    const response = await axios.get(
+      `http://localhost:8001/product/category/${categoryId}`
+    );
     console.log("상품 목록:", response.data);
     return await response.data;
   } catch (error) {
@@ -22,19 +30,21 @@ async function getUserProducts() {
     return response;
   } catch (error) {
     console.log(error);
-  } 
+  }
 }
 
 async function getProductsByUserId(userId: string) {
   try {
-    const response = await axios.get(`http://localhost:8001/product/user/${userId}`,
-    {withCredentials: true});
-    console.log('getProductsByUserId response: ', response);
+    const response = await axios.get(
+      `http://localhost:8001/product/user/${userId}`,
+      { withCredentials: true }
+    );
+    console.log("getProductsByUserId response: ", response);
     return response.data;
   } catch (error) {
     console.log(error);
   }
-};
+}
 
 async function getProduct(id: string | undefined) {
   try {
@@ -46,9 +56,11 @@ async function getProduct(id: string | undefined) {
 }
 
 async function getProductDetail(id: string | undefined) {
-  console.log('id:', id);
+  console.log("id:", id);
   try {
-    const response = await axios.get(`http://localhost:8001/product/detail?id=${id}`);
+    const response = await axios.get(
+      `http://localhost:8001/product/detail?id=${id}`
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -57,15 +69,12 @@ async function getProductDetail(id: string | undefined) {
 
 async function setProduct(data: FormData) {
   try {
-    const response = await axios.post(
-      "http://localhost:8001/product",
-      data,
-      { 
-        headers: {
-          "Content-Type": "multipart/form-data; charset=UTF-8",
-        },
-        withCredentials: true }
-    );
+    const response = await axios.post("http://localhost:8001/product", data, {
+      headers: {
+        "Content-Type": "multipart/form-data; charset=UTF-8",
+      },
+      withCredentials: true,
+    });
     return response.data;
   } catch (error) {
     console.log(error);
@@ -88,7 +97,7 @@ async function setProductImages(data: FormData, productId) {
     if (response.status == 201) {
       return true;
     } else {
-      return false
+      return false;
     }
   } catch (error) {
     console.log(error);
@@ -101,8 +110,9 @@ async function deleteProduct(id: string | undefined) {
     const response = await axios.delete(`http://localhost:8001/product/${id}`, {
       withCredentials: true,
     });
-    console.log('상품 삭제 response: ', response);
-    if (response.data == "완료" && response.status == 200) { // 삭제에 성공한 경우
+    console.log("상품 삭제 response: ", response);
+    if (response.data == "완료" && response.status == 200) {
+      // 삭제에 성공한 경우
       return true;
     } else {
       return false;
@@ -114,9 +124,11 @@ async function deleteProduct(id: string | undefined) {
 }
 
 async function searchProducts(keyWord: string) {
-  keyWord =  encodeURIComponent(keyWord);
+  keyWord = encodeURIComponent(keyWord);
   try {
-    const response = await axios.get(`http://localhost:8001/product/search?searchword=${keyWord}`);
+    const response = await axios.get(
+      `http://localhost:8001/product/search?searchword=${keyWord}`
+    );
     console.log(response);
     return response.data;
   } catch (error) {
@@ -126,6 +138,7 @@ async function searchProducts(keyWord: string) {
 
 const productApi = {
   getProducts,
+  getCategoryProducts,
   getProduct,
   setProduct,
   deleteProduct,
@@ -133,7 +146,7 @@ const productApi = {
   getUserProducts,
   getProductDetail,
   searchProducts,
-  getProductsByUserId
+  getProductsByUserId,
 };
 
 export default productApi;

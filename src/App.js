@@ -1,24 +1,24 @@
 import React from "react";
 import Main from "./components/Main";
-import LoginModal from './components/LoginModal';
-import { createTheme, ThemeProvider } from '@mui/material';
-import Menu from './components/Menu';
+import LoginModal from "./components/LoginModal";
+import { createTheme, ThemeProvider } from "@mui/material";
+import Menu from "./components/Menu";
 import "./App.css";
-import { Route, Routes } from 'react-router-dom';
-import { Products, ManageTab, RegistTab }from './components/Product/Products';
-import Footer from './components/Footer';
-import Signup from './components/Signup';
-import Signin from './components/Signin';
-import PrivateRoute from './routers/PrivateRoute';
-import PublicRoute from './routers/PublicRoute';
-import { useSelector } from 'react-redux';
-import SearchPage from './components/SearchPage';
-import ProductModify from './components/ProductModify';
-import TxManagePage from './components/TxMangePage';
-import Purchase from './components/TxMangePage/Purchase';
-import Sell from './components/TxMangePage/Sell';
-import Mystore from './components/Mystore/MyStore';
-import DetailProduct from './components/Product/ProductDetail/DetailProduct';
+import { Route, Routes } from "react-router-dom";
+import { Products, ManageTab, RegistTab } from "./components/Product/Products";
+import Footer from "./components/Footer";
+import Signup from "./components/Signup";
+import Signin from "./components/Signin";
+import PrivateRoute from "./routers/PrivateRoute";
+import PublicRoute from "./routers/PublicRoute";
+import { useSelector } from "react-redux";
+import SearchPage from "./components/SearchPage";
+import ProductModify from "./components/ProductModify";
+import TxManagePage from "./components/TxMangePage";
+import Purchase from "./components/TxMangePage/Purchase";
+import Sell from "./components/TxMangePage/Sell";
+import Mystore from "./components/Mystore/MyStore";
+import DetailProduct from "./components/Product/ProductDetail/DetailProduct";
 
 const theme = createTheme({
   typography: {
@@ -27,62 +27,73 @@ const theme = createTheme({
 });
 
 function App() {
-  const [ openLoginModal, setOpenLoginModal] = React.useState(false);
+  const [openLoginModal, setOpenLoginModal] = React.useState(false);
   const handleOpenLoginModalOpen = () => setOpenLoginModal(true);
   const handleOpenLoginModalClose = () => setOpenLoginModal(false);
-  const { isLogin } = useSelector(state => state.isLogin);
-  
+  const { isLogin } = useSelector((state) => state.isLogin);
+
   return (
     <ThemeProvider theme={theme}>
-      <Menu openModal={handleOpenLoginModalOpen}/>
-      <div style={{paddingTop: "190px"}}>
+      <Menu openModal={handleOpenLoginModalOpen} />
+      <div style={{ paddingTop: "190px" }}>
         <Routes>
           <Route exact path="/" element={<Main />} />
-          <Route 
-            exact path="/products" 
+          <Route
+            exact
+            path="/products"
             element={
               <PrivateRoute isLogin={isLogin}>
-                <Products/>
-              </PrivateRoute>} 
+                <Products />
+              </PrivateRoute>
+            }
           >
-            <Route path='regist' element={<RegistTab/>}/>
-            <Route path='manage' element={<ManageTab/>}/>
+            <Route path="regist" element={<RegistTab />} />
+            <Route path="manage" element={<ManageTab />} />
           </Route>
-          
-          <Route 
-            exact path="/signup" 
+
+          <Route
+            exact
+            path="/signup"
             element={
-                <PublicRoute isLogin={isLogin}>
-                  <Signup />
-                </PublicRoute>
-              }
+              <PublicRoute isLogin={isLogin}>
+                <Signup />
+              </PublicRoute>
+            }
           />
 
-          <Route 
-            exact path="/signin" 
+          <Route
+            exact
+            path="/signin"
             element={
-                <PublicRoute isLogin={isLogin}>
-                  <Signin/>
-                </PublicRoute>
-              }
+              <PublicRoute isLogin={isLogin}>
+                <Signin />
+              </PublicRoute>
+            }
           />
 
-          <Route exact path='/search' element={<SearchPage/>}></Route>
-          <Route path='/modify' element={<ProductModify/>}></Route>
-          <Route path='/transaction/manage' element={<TxManagePage/>}>
-            <Route path='sell' element={<Sell/>}/>
-            <Route path='purchase' element={<Purchase/>}/>
+          <Route exact path="/search" element={<SearchPage />}></Route>
+          <Route path="/modify" element={<ProductModify />}></Route>
+          <Route path="/transaction/manage" element={<TxManagePage />}>
+            <Route path="sell" element={<Sell />} />
+            <Route path="purchase" element={<Purchase />} />
           </Route>
-          <Route exact path="/mystore/:userId" element={
+          <Route
+            exact
+            path="/mystore/:userId"
+            element={
               <PrivateRoute isLogin={isLogin}>
-                <Mystore/>
-              </PrivateRoute>} 
-          /> 
-          <Route exact path="/detail/:productId" element={<DetailProduct/>} /> 
+                <Mystore />
+              </PrivateRoute>
+            }
+          />
+          <Route exact path="/detail/:productId" element={<DetailProduct />} />
         </Routes>
       </div>
       <Footer></Footer>
-      <LoginModal open={openLoginModal} closeModal={handleOpenLoginModalClose}/>
+      <LoginModal
+        open={openLoginModal}
+        closeModal={handleOpenLoginModalClose}
+      />
     </ThemeProvider>
   );
 }
