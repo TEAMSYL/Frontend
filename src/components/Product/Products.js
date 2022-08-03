@@ -260,6 +260,9 @@ export const ManageTab = (props) => {
                               overflow: 'hidden',
                               width: '100%',
                               paddingBottom: '100%',
+                              "&:hover": {
+                                cursor: 'pointer'
+                              }
                           }}
                         >
                           <img 
@@ -271,7 +274,7 @@ export const ManageTab = (props) => {
                                   minHeight: '100%',
                                   objectFit: 'contain',
                                   borderBottom: '1px solid #E6E5EF',
-                                  backgroundColor: '#FAFAFD'
+                                  backgroundColor: '#FAFAFD',
                               }}
                               onClick={() => handleImgClick(product)}
                           />

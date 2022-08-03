@@ -45,17 +45,15 @@ const RequestsDialog = (props) => {
 
     const handleAcceptBtn = async (request) => {
         console.log('request:', request);
-        if (window.confirm(`${request.nick} 님 외의 요청은 모두 거절됩니다. 수락하시겠습니까?`)) {
+        if (window.confirm(`${request.nick} 님의 요청을 수락하시겠습니까?`)) {
             // 서버로 request 수락 되었고 이외의 요청 remove 하도록 요청
-            const result = await transactionApi.permit(request.productId, request.buyerId);
+            const response = await transactionApi.permit(request.productId, request.buyerId);
             
-            if (result) {
+            if (response.status === 200) {
                 alert('요청 수락이 완료되었습니다.');
                 onClose();
-                // 거래 진행 보여주는 페이지로 navigation
-                //naivgate('')
             } else {
-                alert('요청 수락에 실패하였습니다. 다시 시도해주세요!');
+                alert(response.data);
             }
         } else {
 

@@ -2,6 +2,7 @@ import { AppBar, Box, Button, Grid, Stack, Table, TableBody, TableCell, TableCon
 import React, { useEffect } from 'react';
 import { styled } from "@mui/material/styles";
 import { useLocation, useNavigate } from 'react-router-dom';
+import transactionApi from '../../api/Transaction.tsx';
 
 export const Container = ({ children}) => {
     return (
@@ -100,6 +101,7 @@ export const Tab = () => {
 export const SellTable = ({ requests }) => {
     const [ rowsPerPage , setRowsPerPage ] = React.useState(5);
     const [ page, setPage ] = React.useState(0);
+    const navigate = useNavigate();
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -110,10 +112,28 @@ export const SellTable = ({ requests }) => {
         setPage(0);
     };
     
-    const handleCancelBtn = (request) => {
-        // api로 취소 요청
+    const handleCancelBtn = async (request) => {
+        //const response = await transactionApi.cancel(String(request.id));
     };
 
+    const getTxStatusText = (txState) => {
+        let stateText;
+        switch(txState) {
+            case 0:
+                stateText = '입금 전';
+                break;
+            case 1:
+                stateText = '입금완료';
+                break;
+            case 2:
+                stateText = '배송시작';
+                break;
+            default:
+                stateText = '이외상태';
+                break;
+        }
+        return stateText;
+    };
     const RowCell = styled(TableCell)`
     text-align: center;
     `;
@@ -237,7 +257,7 @@ export const SellTable = ({ requests }) => {
                                                 }}
                                             >
                                                 <img 
-                                                    src={request.ProductImgs[0].imgUrl} 
+                                                    src={request.thumbnail} 
                                                     style={{ 
                                                         position: 'absolute',
                                                         display: 'block',
@@ -247,46 +267,295 @@ export const SellTable = ({ requests }) => {
                                                         borderBottom: '1px solid #E6E5EF',
                                                         backgroundColor: '#FAFAFD'
                                                     }}
+                                                    onClick={() => navigate(`/detail/${request.id}`)}
                                                 />
                                             </Box>
                                         </RowCell>
                                         <RowCell>
-                                            {request.status === 'before' ? '판매중' : '이외의 상태'}
+                                            {getTxStatusText(request.txState)}
                                         </RowCell>
                                         <RowCell sx={{ color: "#0072E6", fontWeight: "600" }}>
                                             {request.productName}
                                         </RowCell>
                                         <RowCell>{request.price}ETH</RowCell>
-                                        <RowCell>구매자</RowCell>
+                                        <RowCell>
+                                            <Typography
+                                                onClick={()=> navigate(`/mystore/${request.Transaction.buyerId}`)}
+                                                sx={{ 
+                                                    fontSize: '16px',
+                                                    '&:hover': { cursor: 'pointer'}
+                                                }}
+                                            >{request.buyer.nick}</Typography>
+                                        </RowCell>
                                         <RowCell>
                                             <Stack spacing={1}>
-                                                <Button
-                                                    sx={{
-                                                        color: "#FFFFFF",
-                                                        background: '#FF5055',
-                                                        //border: "0.5px solid #FF5055",
-                                                        height: "30px",
-                                                        "&:hover": {
-                                                            backgroundColor: "#FF5055",
-                                                        },
+                                                { (request.txState !== 2) && 
+                                                    <Button
+                                                        sx={{
+                                                            color: "#FFFFFF",
+                                                            background: '#FF5055',
+                                                            //border: "0.5px solid #FF5055",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#FF5055",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                        onClick={() => handleCancelBtn(request)}
+                                                    >거래 취소
+                                                    </Button>
+                                                }
+                                                { (request.txState === 1) &&
+                                                    <Button
+                                                        sx={{
+                                                            color: "#212121",
+                                                            border: "0.5px solid #C3C2CC",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#ededed",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                       //onClick={() => handleDialogOpen(product)}
+                                                    >송장 입력
+                                                    </Button>
+                                                }
+                                        </Stack>
+                                    </RowCell>
+                                </TableRow>
+                            );
+                            })}
+                            </TableBody>
+                    </Table>
+                </TableContainer>
+                </>
+            )}
+        </Stack>
+    );
+};
+
+export const PurchaseTable = ({ requests }) => {
+    const [ rowsPerPage , setRowsPerPage ] = React.useState(5);
+    const [ page, setPage ] = React.useState(0);
+    const navigate = useNavigate();
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+    
+    const handleCancelBtn = async (request) => {
+        //const response = await transactionApi.cancel(String(request.id));
+    };
+
+    const getTxStatusText = (txState) => {
+        let stateText;
+        switch(txState) {
+            case 0:
+                stateText = '입금 전';
+                break;
+            case 1:
+                stateText = '입금완료';
+                break;
+            case 2:
+                stateText = '배송시작';
+                break;
+            default:
+                stateText = '이외상태';
+                break;
+        }
+        return stateText;
+    };
+    const RowCell = styled(TableCell)`
+    text-align: center;
+    `;
+
+    const headCells = [
+        {
+            id: "img",
+            numeric: false,
+            label: "사진",
+            width: "18%",
+        },
+        {
+            id: "state",
+            numeric: false,
+            label: "진행상태",
+            width: "12.5%",
+        },
+        {
+            id: "name",
+            numeric: false,
+            label: "제목",
+            width: "30%",
+        },
+        {
+            id: "price",
+            numeric: true,
+            label: "가격",
+            width: "17.5%",
+        },
+        {
+            id: "buyer",
+            numeric: false,
+            label: "판매자",
+            width: "12%"
+        },
+        {
+            id: "buttons",
+            numeric: false,
+            label: "기능",
+            width: "10%",
+        }
+    ];
+
+    return (
+        <Stack
+            sx={{
+                display: "flex",
+                minWidth: "1024px",
+                minHeight: "50vw",
+                alignItems: "center",
+            }}
+        >
+            {requests.length < 1 && (
+                <div>진행 중인 구매 거래가 없습니다.</div>
+            )}
+            {requests.length > 0 && (
+                <>
+                <Box
+                    sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "1024px",
+                    margin: "40px 0 32px",
+                    }}
+                >
+                    <TablePagination
+                        count={requests.length}
+                        rowsPerPageOptions={[
+                            { value: 5, label: "5개씩" },
+                            { value: 10, label: "10개씩" },
+                        ]}
+                        rowsPerPage={rowsPerPage}
+                        labelRowsPerPage={""}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowPerPage}
+                    />
+                </Box>
+                <TableContainer sx={{ width: 1024 }}>
+                    <Table  padding='none'>
+                        <TableHead
+                            sx={{
+                                backgroundColor: "#FAFAFD",
+                                borderTop: "0.5px solid black",
+                            }}
+                        >
+                            <TableRow>
+                                {headCells.map((cell) => (
+                                    <TableCell
+                                        key={cell.id}
+                                        align={"center"}
+                                        label={cell.label}
+                                        sx={{
+                                            width: `${cell.width}`,
+                                            fontWeight: "600",
+                                            height: "20px",
+                                            padding: 1,
+                                            borderTop: "0.5px solid black",
+                                            borderBottom: "0.5px solid black",
+                                        }}
+                                    >
+                                        {cell.label}
+                                    </TableCell>
+                                ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {requests
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((request, index) => {
+                                return (
+                                    <TableRow>
+                                        <RowCell>
+                                            <Box
+                                                sx={{
+                                                    position: 'relative',
+                                                    display: 'block',
+                                                    overflow: 'hidden',
+                                                    width: '100%',
+                                                    paddingBottom: '100%',
+                                                }}
+                                            >
+                                                <img 
+                                                    src={request.product.thumbnail} 
+                                                    style={{ 
+                                                        position: 'absolute',
+                                                        display: 'block',
+                                                        minWidth: '100%',
+                                                        minHeight: '100%',
+                                                        objectFit: 'contain',
+                                                        borderBottom: '1px solid #E6E5EF',
+                                                        backgroundColor: '#FAFAFD'
                                                     }}
-                                                    disableTouchRipple
-                                                    onClick={() => handleCancelBtn(request)}
-                                                >거래 취소
-                                                </Button>
-                                                <Button
-                                                    sx={{
-                                                        color: "#212121",
-                                                        border: "0.5px solid #C3C2CC",
-                                                        height: "30px",
-                                                        "&:hover": {
-                                                            backgroundColor: "#ededed",
-                                                        },
-                                                    }}
-                                                    disableTouchRipple
-                                                   //onClick={() => handleDialogOpen(product)}
-                                                >송장 입력
-                                                </Button>
+                                                    onClick={() => navigate(`/detail/${request.id}`)}
+                                                />
+                                            </Box>
+                                        </RowCell>
+                                        <RowCell>
+                                            {getTxStatusText(request.txState)}
+                                        </RowCell>
+                                        <RowCell sx={{ color: "#0072E6", fontWeight: "600" }}>
+                                            {request.product.productName}
+                                        </RowCell>
+                                        <RowCell>{request.product.price}ETH</RowCell>
+                                        <RowCell>
+                                            <Typography
+                                                onClick={()=> navigate(`/mystore/${request.Transaction.buyerId}`)}
+                                                sx={{ 
+                                                    fontSize: '16px',
+                                                    '&:hover': { cursor: 'pointer'}
+                                                }}
+                                            >{request.seller.nick}</Typography>
+                                        </RowCell>
+                                        <RowCell>
+                                            <Stack spacing={1}>
+                                                { (request.txState !== 2) && 
+                                                    <Button
+                                                        sx={{
+                                                            color: "#FFFFFF",
+                                                            background: '#FF5055',
+                                                            //border: "0.5px solid #FF5055",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#FF5055",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                        onClick={() => handleCancelBtn(request)}
+                                                    >거래 취소
+                                                    </Button>
+                                                }
+                                                { (request.txState === 0) &&
+                                                    <Button
+                                                        sx={{
+                                                            color: "#212121",
+                                                            border: "0.5px solid #C3C2CC",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#ededed",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                       //onClick={() => handleDialogOpen(product)}
+                                                    >입금 하기
+                                                    </Button>
+                                                }
                                         </Stack>
                                     </RowCell>
                                 </TableRow>

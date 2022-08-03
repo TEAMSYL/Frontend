@@ -32,15 +32,10 @@ async function permit(productId: number, buyerId: number) {
       }
     );
 
-    if (response.status === 200) {
-      return true;
-    } else {
-      return false;
-    }
-    console.log('요청 수락 api 결과: ', response);
+    return response;
   } catch (error) {
     console.log(error);
-    return false;
+    return error.response;
   }
 }
 
@@ -81,5 +76,50 @@ async function getRequestsToProduct(productId: string) {
   }
 }
 
-const transactionApi = { request, permit, getRecievedRequest, getRequestsToProduct, refuse };
+async function getPermittedRequests() {
+  try {
+    const response = await axios.get(
+      `http://localhost:8001/transaction/permission`,
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+async function getPermittedPurchases() {
+  try {
+    const response = await axios.get(
+      `http://localhost:8001/transaction/purchase/permission`,
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function cancel(txId: string) {
+  try {
+    const response = await axios.delete(`http://localhost:8001/transaction/cancel/${txId}`,
+      { withCredentials: true}
+    );
+    console.log("cancel function response: ", response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const transactionApi = { 
+  request, 
+  permit, 
+  getRecievedRequest, 
+  getRequestsToProduct,
+  refuse,
+  cancel,
+  getPermittedRequests,
+  getPermittedPurchases
+};
 export default transactionApi;
