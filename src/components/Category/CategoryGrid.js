@@ -18,16 +18,7 @@ import ParkIcon from "@mui/icons-material/Park";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import { Typography } from "@mui/material";
 import productApi from "../../api/Product.tsx";
-import {
-  orange,
-  grey,
-  green,
-  red,
-  lightBlue,
-  deepPurple,
-  yellow,
-  brown,
-} from "@mui/material/colors";
+import { orange, grey, green, red, yellow, brown } from "@mui/material/colors";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
