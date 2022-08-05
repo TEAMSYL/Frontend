@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { styled } from "@mui/material/styles";
 import { useLocation, useNavigate } from 'react-router-dom';
 import transactionApi from '../../api/Transaction.tsx';
+import InfoModal from './InfoModal';
 
 export const Container = ({ children}) => {
     return (
@@ -334,10 +335,22 @@ export const SellTable = ({ requests }) => {
     );
 };
 
-export const PurchaseTable = ({ requests }) => {
+export const PurchaseTable = ({ requests, fetchProducts }) => {
     const [ rowsPerPage , setRowsPerPage ] = React.useState(5);
     const [ page, setPage ] = React.useState(0);
+    const [ infoModalOpen, setInfoModalOpen ] = React.useState(false);
+    const [ requestToModal, setReqeustToModal ] = React.useState(requests[0]);
+
     const navigate = useNavigate();
+
+    const openInfoModal = (request) => {
+        setReqeustToModal(request);
+        setInfoModalOpen(true);
+    };
+
+    const closeInfoModal = () => {
+        setInfoModalOpen(false);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -552,8 +565,23 @@ export const PurchaseTable = ({ requests }) => {
                                                             },
                                                         }}
                                                         disableTouchRipple
-                                                       //onClick={() => handleDialogOpen(product)}
+                                                       onClick={() => openInfoModal(request)}
                                                     >입금 하기
+                                                    </Button>
+                                                }
+                                                { (request.txState === 2) &&
+                                                    <Button
+                                                        sx={{
+                                                            color: "#212121",
+                                                            border: "0.5px solid #C3C2CC",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#ededed",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                        //onClick={() => handleDialogOpen(product)}
+                                                    >구매 확정
                                                     </Button>
                                                 }
                                         </Stack>
@@ -564,6 +592,15 @@ export const PurchaseTable = ({ requests }) => {
                             </TableBody>
                     </Table>
                 </TableContainer>
+                { 
+                    requests.length > 0 && 
+                    <InfoModal 
+                        open={infoModalOpen}
+                        onClose={closeInfoModal}
+                        request={requestToModal}
+                        fetchProducts={fetchProducts}
+                    />
+                }
                 </>
             )}
         </Stack>

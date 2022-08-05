@@ -100,6 +100,22 @@ async function getPermittedPurchases() {
   }
 }
 
+async function makePayment(txId: String) {
+  try {
+    const response = await axios.post(
+      `http://localhost:8001/transaction/makepayment`,
+      {
+        txId: txId
+      },
+      { withCredentials: true }
+    );
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 async function cancel(txId: string) {
   try {
     const response = await axios.delete(`http://localhost:8001/transaction/cancel/${txId}`,
@@ -120,6 +136,7 @@ const transactionApi = {
   refuse,
   cancel,
   getPermittedRequests,
-  getPermittedPurchases
+  getPermittedPurchases,
+  makePayment
 };
-export default transactionApi;
+export default transactionApi;  

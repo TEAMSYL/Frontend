@@ -21,7 +21,7 @@ const Purchase = () => {
 
     return (
         <Stack sx={{ width: '1024px' }}>
-            <PurchaseTable requests={transactions}></PurchaseTable>
+            <PurchaseTable requests={transactions} fetchProducts={fetchProducts}></PurchaseTable>
         </Stack>
     );
 };
