@@ -20,7 +20,7 @@ import Sell from "./components/TxMangePage/Sell";
 import Mystore from "./components/Mystore/MyStore";
 import DetailProduct from "./components/Product/ProductDetail/DetailProduct";
 import userApi from "../src/api/User.tsx";
-
+import CategoryPage from "./components/Category/CategoryPage";
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -33,7 +33,7 @@ function App() {
   const handleOpenLoginModalClose = () => setOpenLoginModal(false);
   const dispatch = useDispatch();
   const { isLogin } = useSelector((state) => state.isLogin);
-  
+
   useEffect(() => {
     async function fetchUser() {
       const user = await userApi.getUser();
@@ -85,6 +85,7 @@ function App() {
           />
 
           <Route exact path="/search" element={<SearchPage />}></Route>
+          <Route path="/category" element={<CategoryPage />}></Route>
           <Route path="/modify" element={<ProductModify />}></Route>
           <Route path="/transaction/manage" element={<TxManagePage />}>
             <Route path="sell" element={<Sell />} />
