@@ -3,16 +3,13 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
   Box,
-  Button,
   IconButton,
   ImageList,
   ImageListItem,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import imageCompression from "browser-image-compression";
-import { alpha, styled } from "@mui/material/styles";
 
 const ProductImg = (props) => {
   const getCompressedImg = async (file) => {
@@ -101,6 +98,7 @@ const ProductImg = (props) => {
         {props.imgFiles.map((img) => (
           <ImageListItem key={img.url}>
             <img
+              alt=""
               src={img.url}
               style={{
                 width: "200px",
@@ -161,8 +159,6 @@ const ProductName = (props) => {
         sx={{
           width: "720px",
           height: "50px",
-          height: "100%",
-          width: "100%",
           marginRight: "20px",
         }}
         onChange={(e) => {
@@ -183,10 +179,6 @@ const ProductName = (props) => {
       </Typography>
     </Box>
   );
-};
-
-const ProductCategory = (props) => {
-  return <div>test</div>;
 };
 
 const ProductPrice = (props) => {
@@ -280,10 +272,4 @@ const ProductDescription = (props) => {
   );
 };
 
-export {
-  ProductCategory,
-  ProductDescription,
-  ProductImg,
-  ProductName,
-  ProductPrice,
-};
+export { ProductDescription, ProductImg, ProductName, ProductPrice };

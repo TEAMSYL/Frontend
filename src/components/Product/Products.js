@@ -6,8 +6,6 @@ import {
   createTheme,
   Grid,
   Stack,
-  Tab,
-  Tabs,
   ThemeProvider,
   Typography,
   TableContainer,
@@ -22,17 +20,13 @@ import React from "react";
 import {
   ProductImg,
   ProductName,
-  ProductCategory,
   ProductPrice,
   ProductDescription,
 } from "./RegistTabComponents";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import imageCompression from "browser-image-compression";
-import ClearIcon from "@mui/icons-material/Clear";
+import CategorySelect from "../Category/CategorySelect";
 import productApi from "../../api/Product.tsx";
-import RequestsDialog from './RequestsDialog';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LegendToggleSharp } from '@mui/icons-material';
+import RequestsDialog from "./RequestsDialog";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -57,8 +51,8 @@ export const ManageTab = (props) => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [ dialogOpen, setDialogOpen ] = React.useState(false);
-  const [ clickedProduct, setClickedProduct] = React.useState();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [clickedProduct, setClickedProduct] = React.useState();
 
   const handleDialogOpen = (product) => {
     console.log(product);
@@ -77,14 +71,14 @@ export const ManageTab = (props) => {
 
   // 서버로부터 나의 상품 정보 가져오기 (작성필요 7.20)
   const fetchProducts = async () => {
-    const useProducts= [];
+    const useProducts = [];
     try {
-      await productApi.getUserProducts().then( (response) => {
-        const productsData = response.data;;
-        console.log('productData: ',productsData);
+      await productApi.getUserProducts().then((response) => {
+        const productsData = response.data;
+        console.log("productData: ", productsData);
         setMyProducts(productsData);
       });
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -103,7 +97,7 @@ export const ManageTab = (props) => {
   };
 
   const handleChangeBtn = (product) => {
-    navigate('/modify', { state: { product: product}});
+    navigate("/modify", { state: { product: product } });
   };
 
   // 삭제하기 버튼 눌렀을 때의 핸들러
@@ -111,14 +105,14 @@ export const ManageTab = (props) => {
     try {
       const result = productApi.deleteProduct(product.id.toString());
       if (result) {
-        alert('성공적으로 상품이 제거되었습니다.');
-        fetchProducts(); 
+        alert("성공적으로 상품이 제거되었습니다.");
+        fetchProducts();
       } else {
-        alert('제거에 실패하였습니다. 다시 시도해주세요!');
+        alert("제거에 실패하였습니다. 다시 시도해주세요!");
       }
     } catch (error) {
       console.log(error);
-      alert('제거에 실패하였습니다. 다시 시도해주세요!');
+      alert("제거에 실패하였습니다. 다시 시도해주세요!");
     }
   };
 
@@ -130,12 +124,12 @@ export const ManageTab = (props) => {
   const handleMoveToManage = (product) => {
     // 거래 상세 페이지로 이동시킴
   };
-  
+
   const getProductState = (state) => {
     let status = "";
-    if (state === 'before' || state === 'requested') {
+    if (state === "before" || state === "requested") {
       status = "판매중";
-    } else if (state === 'permitted') {
+    } else if (state === "permitted") {
       status = "거래중";
     }
     return status;
@@ -219,7 +213,7 @@ export const ManageTab = (props) => {
           />
         </Box>
         <TableContainer sx={{ width: 1024 }}>
-          <Table  padding='none'>
+          <Table padding="none">
             <TableHead
               sx={{
                 backgroundColor: "#FAFAFD",
@@ -255,96 +249,103 @@ export const ManageTab = (props) => {
                       <RowCell>
                         <Box
                           sx={{
-                              position: 'relative',
-                              display: 'block',
-                              overflow: 'hidden',
-                              width: '100%',
-                              paddingBottom: '100%',
-                              "&:hover": {
-                                cursor: 'pointer'
-                              }
+                            position: "relative",
+                            display: "block",
+                            overflow: "hidden",
+                            width: "100%",
+                            paddingBottom: "100%",
+                            "&:hover": {
+                              cursor: "pointer",
+                            },
                           }}
                         >
-                          <img 
-                              src={product.ProductImgs[0].imgUrl} 
-                              style={{ 
-                                  position: 'absolute',
-                                  display: 'block',
-                                  minWidth: '100%',
-                                  minHeight: '100%',
-                                  objectFit: 'contain',
-                                  borderBottom: '1px solid #E6E5EF',
-                                  backgroundColor: '#FAFAFD',
-                              }}
-                              onClick={() => handleImgClick(product)}
+                          <img
+                            alt=""
+                            src={product.ProductImgs[0].imgUrl}
+                            style={{
+                              position: "absolute",
+                              display: "block",
+                              minWidth: "100%",
+                              minHeight: "100%",
+                              objectFit: "contain",
+                              borderBottom: "1px solid #E6E5EF",
+                              backgroundColor: "#FAFAFD",
+                            }}
+                            onClick={() => handleImgClick(product)}
                           />
                         </Box>
                       </RowCell>
-                      <RowCell>{
-                        `${getProductState(product.status)}`
-                      }</RowCell>
+                      <RowCell>{`${getProductState(product.status)}`}</RowCell>
                       <RowCell sx={{ color: "#0072E6", fontWeight: "600" }}>
                         {product.productName}
                       </RowCell>
                       <RowCell>{product.price}ETH</RowCell>
-                      <RowCell>{product.updatedAt.slice(0,10)}</RowCell>
+                      <RowCell>{product.updatedAt.slice(0, 10)}</RowCell>
                       <RowCell>
                         <Stack spacing={1}>
-                          { (product.status !== 'permitted') &&
+                          {product.status !== "permitted" && (
                             <>
-                            <Button
-                              sx={{
-                                color: "#0072E6",
-                                border: "0.5px solid #C3C2CC",
-                                height: "30px",
-                                "&:hover": {
-                                  backgroundColor: "#ededed",
-                                },
-                              }}
-                              disableTouchRipple
-                              onClick={() => handleChangeBtn(product)}
-                            >수정하기</Button>
-                            <Button
-                              sx={{
-                                border: "0.5px solid #C3C2CC",
-                                height: "30px",
-                                "&:hover": {
-                                  backgroundColor: "#ededed",
-                                },
-                              }}
-                              disableTouchRipple
-                              onClick={() => handleRemoveProductBtn(product)}
-                            >삭제하기</Button>
-                            <Button
-                              sx={{
-                                color: "#212121",
-                                border: "0.5px solid #C3C2CC",
-                                height: "30px",
-                                "&:hover": {
-                                  backgroundColor: "#ededed",
-                                },
-                              }}
-                              disableTouchRipple
-                              onClick={() => handleDialogOpen(product)}
-                            >구매요청</Button>
+                              <Button
+                                sx={{
+                                  color: "#0072E6",
+                                  border: "0.5px solid #C3C2CC",
+                                  height: "30px",
+                                  "&:hover": {
+                                    backgroundColor: "#ededed",
+                                  },
+                                }}
+                                disableTouchRipple
+                                onClick={() => handleChangeBtn(product)}
+                              >
+                                수정하기
+                              </Button>
+                              <Button
+                                sx={{
+                                  border: "0.5px solid #C3C2CC",
+                                  height: "30px",
+                                  "&:hover": {
+                                    backgroundColor: "#ededed",
+                                  },
+                                }}
+                                disableTouchRipple
+                                onClick={() => handleRemoveProductBtn(product)}
+                              >
+                                삭제하기
+                              </Button>
+                              <Button
+                                sx={{
+                                  color: "#212121",
+                                  border: "0.5px solid #C3C2CC",
+                                  height: "30px",
+                                  "&:hover": {
+                                    backgroundColor: "#ededed",
+                                  },
+                                }}
+                                disableTouchRipple
+                                onClick={() => handleDialogOpen(product)}
+                              >
+                                구매요청
+                              </Button>
                             </>
-                          }
-                          { (product.status === 'permitted') &&
+                          )}
+                          {product.status === "permitted" && (
                             <>
-                            <Button
-                              sx={{
-                                color: "#212121",
-                                border: "0.5px solid #C3C2CC",
-                                height: "30px",
-                                "&:hover": {
-                                  backgroundColor: "#ededed",
-                                },
-                              }}
-                              disableTouchRipple
-                              onClick={() => handleMoveToManage(product)}
-                            >거래관리</Button>
+                              <Button
+                                sx={{
+                                  color: "#212121",
+                                  border: "0.5px solid #C3C2CC",
+                                  height: "30px",
+                                  "&:hover": {
+                                    backgroundColor: "#ededed",
+                                  },
+                                }}
+                                disableTouchRipple
+                                onClick={() => handleMoveToManage(product)}
+                              >
+                                거래관리
+                              </Button>
                             </>
-                          }
+                          )}
                         </Stack>
                       </RowCell>
                     </TableRow>
@@ -371,7 +372,7 @@ export const RegistTab = (props) => {
   const setName = (_name) => {
     name = _name;
   };
-  const [category, setCategory] = React.useState("noraml"); // 카테고리
+  const [category, setCategory] = React.useState(""); // 카테고리
   let price = ""; // 가격
   const setPrice = (_price) => {
     price = _price;
@@ -412,15 +413,15 @@ export const RegistTab = (props) => {
     // 모든 입력을 완료한 경우 api를 통해 product data를 서버로 전달
     const productData = {
       content: description,
-      category: "test",
+      category: category,
       price: price,
-      productName: name
+      productName: name,
     };
 
     const data = new FormData();
     data.append("data", JSON.stringify(productData));
     data.append("thumbnail", imgFiles[0].file);
-    console.log('data:', data);
+    console.log("data:", data);
     const { productId } = await productApi.setProduct(data);
 
     imgFiles.map((img, idx) =>
@@ -430,16 +431,14 @@ export const RegistTab = (props) => {
 
     if (result) {
       alert("상품 등록에 성공했습니다.");
-      navigate('/products/manage');
+      navigate("/products/manage");
     } else {
       alert("상품 등록에 실패하였습니다. 다시 시도해주세요.");
     }
   };
 
   return (
-    <div
-      style={{ fontFamily: "Noto Sans CJK KR" }}
-    >
+    <div style={{ fontFamily: "Noto Sans CJK KR" }}>
       <ThemeProvider theme={theme}>
         <Box
           sx={{
@@ -481,6 +480,7 @@ export const RegistTab = (props) => {
               <RegistTabContent
                 name={name}
                 setName={setName}
+                category={category}
                 setCategory={setCategory}
                 setDescription={setDescription}
                 setImgFiles={setImgFiles}
@@ -538,7 +538,10 @@ const RegistTabContent = (props) => {
   const rowContents = [
     <ProductImg imgFiles={props.imgFiles} setImgFiles={props.setImgFiles} />,
     <ProductName name={props.name} setName={props.setName} />,
-    <ProductCategory setCategory={props.setCategory} />,
+    <CategorySelect
+      category={props.category}
+      setCategory={props.setCategory}
+    />,
     <ProductPrice setPrice={props.setPrice} />,
     <ProductDescription setDescription={props.setDescription} />,
   ];
@@ -569,59 +572,67 @@ export const Products = () => {
     <ThemeProvider theme={theme}>
       <Stack
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          minWidth: '1024px',
+          display: "flex",
+          alignItems: "center",
+          minWidth: "1024px",
         }}
       >
         <AppBar
           position="static"
           sx={{
             backgroundColor: "transparent",
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             height: "70px",
             boxShadow: 0,
             borderBottom: "1px solid #EDEDED",
           }}
         >
-          <div style={{ width: '1024px',}}>
+          <div style={{ width: "1024px" }}>
             <Button
               disableTouchRipple
               onClick={() => {
-                navigate('/products/regist');
+                navigate("/products/regist");
               }}
               sx={{
-                fontWeight: '400',
-                color: `${useLocation().pathname == '/products/regist' ? '#FF50558' : '#212121'}`,
-                '&:hover': {
-                  backgroundColor: 'transparent',
-                }
+                fontWeight: "400",
+                color: `${
+                  useLocation().pathname === "/products/regist"
+                    ? "#FF50558"
+                    : "#212121"
+                }`,
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
               }}
-            >상품 등록
+            >
+              상품 등록
             </Button>
             <Button
               disableTouchRipple
               onClick={() => {
-                navigate('/products/manage');
+                navigate("/products/manage");
               }}
               sx={{
-                fontWeight: '400',
-                marginLeft: '30px',
-                color: `${useLocation().pathname == '/products/manage' ? '#FF50558' : '#212121'}`,
-                '&:hover': {
-                  backgroundColor: 'transparent',
-                }
+                fontWeight: "400",
+                marginLeft: "30px",
+                color: `${
+                  useLocation().pathname === "/products/manage"
+                    ? "#FF50558"
+                    : "#212121"
+                }`,
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
               }}
             >
               상품 관리
             </Button>
           </div>
-          
         </AppBar>
         <Stack sx={{ width: "1024px" }}>
-          <Outlet/>
+          <Outlet />
         </Stack>
       </Stack>
     </ThemeProvider>
