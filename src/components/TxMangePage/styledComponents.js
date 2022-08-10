@@ -4,6 +4,8 @@ import { styled } from "@mui/material/styles";
 import { useLocation, useNavigate } from 'react-router-dom';
 import transactionApi from '../../api/Transaction.tsx';
 import InfoModal from './InfoModal';
+import TrackingNumModal from './TrackingNumModal';
+import CompleteModal from './CompleteModal';
 
 export const Container = ({ children}) => {
     return (
@@ -99,9 +101,11 @@ export const Tab = () => {
     );
 }
 
-export const SellTable = ({ requests }) => {
+export const SellTable = ({ requests, fetchRequests }) => {
     const [ rowsPerPage , setRowsPerPage ] = React.useState(5);
     const [ page, setPage ] = React.useState(0);
+    const [ trackingNumModalOpen, setTrackingNumModalOpen ] = React.useState(false);
+    const [ requestToModal, setReqeustToModal ] = React.useState(requests[0]);
     const navigate = useNavigate();
 
     const handleChangePage = (event, newPage) => {
@@ -113,6 +117,15 @@ export const SellTable = ({ requests }) => {
         setPage(0);
     };
     
+    const openTrackingNumModal = (request) => {
+        setReqeustToModal(request);
+        setTrackingNumModalOpen(true);
+    };
+
+    const closeTrackingNumModal = () => {
+        setTrackingNumModalOpen(false);
+    };
+
     const handleCancelBtn = async (request) => {
         //const response = await transactionApi.cancel(String(request.id));
     };
@@ -317,7 +330,7 @@ export const SellTable = ({ requests }) => {
                                                             },
                                                         }}
                                                         disableTouchRipple
-                                                       //onClick={() => handleDialogOpen(product)}
+                                                        onClick={() => openTrackingNumModal(request)}
                                                     >송장 입력
                                                     </Button>
                                                 }
@@ -331,6 +344,17 @@ export const SellTable = ({ requests }) => {
                 </TableContainer>
                 </>
             )}
+            { requests.length > 0 &&
+                (
+                    <TrackingNumModal
+                        open={trackingNumModalOpen}
+                        onClose={closeTrackingNumModal}
+                        request={requestToModal}
+                        fetchRequests={fetchRequests}
+                    />
+                )
+            }
+            
         </Stack>
     );
 };
@@ -339,7 +363,9 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
     const [ rowsPerPage , setRowsPerPage ] = React.useState(5);
     const [ page, setPage ] = React.useState(0);
     const [ infoModalOpen, setInfoModalOpen ] = React.useState(false);
+    const [ completeModalOpen, setCompleteModalOpen ] = React.useState(false);
     const [ requestToModal, setReqeustToModal ] = React.useState(requests[0]);
+
 
     const navigate = useNavigate();
 
@@ -350,6 +376,15 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
 
     const closeInfoModal = () => {
         setInfoModalOpen(false);
+    };
+
+    const openCompleteModal = (request) => {
+        setReqeustToModal(request);
+        setCompleteModalOpen(true);
+    };
+
+    const closeCompleteModal = () => {
+        setCompleteModalOpen(false);
     };
 
     const handleChangePage = (event, newPage) => {
@@ -580,8 +615,8 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                                             },
                                                         }}
                                                         disableTouchRipple
-                                                        //onClick={() => handleDialogOpen(product)}
-                                                    >구매 확정
+                                                        onClick={() => openCompleteModal(request)}
+                                                    >반품 / 확정
                                                     </Button>
                                                 }
                                         </Stack>
@@ -594,12 +629,20 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                 </TableContainer>
                 { 
                     requests.length > 0 && 
+                    <>
                     <InfoModal 
                         open={infoModalOpen}
                         onClose={closeInfoModal}
                         request={requestToModal}
                         fetchProducts={fetchProducts}
                     />
+                    <CompleteModal
+                        open={completeModalOpen}
+                        onClose={closeCompleteModal}
+                        request={requestToModal}
+                        fetchProducts={fetchProducts}
+                    />
+                    </>
                 }
                 </>
             )}

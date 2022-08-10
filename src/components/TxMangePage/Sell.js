@@ -38,7 +38,7 @@ const Sell = () => {
 
     return (
         <Stack sx={{ width: '1024px'}}>
-            <SellTable requests={requests}/>
+            <SellTable requests={requests} fetchRequests={fetchRequests}/>
         </Stack>
     );
 };

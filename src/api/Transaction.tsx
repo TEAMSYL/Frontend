@@ -128,6 +128,21 @@ async function cancel(txId: string) {
   }
 };
 
+async function setTrackingNumber(trackingNumber: string, productId: string) {
+  try {
+    const response = await axios.post(`http://localhost:8001/transaction/trackingnumber`,
+      { 
+        productId: productId,
+        trackingNumber: trackingNumber
+      },
+      { withCredentials: true},
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const transactionApi = { 
   request, 
   permit, 
@@ -137,6 +152,7 @@ const transactionApi = {
   cancel,
   getPermittedRequests,
   getPermittedPurchases,
-  makePayment
+  makePayment,
+  setTrackingNumber
 };
 export default transactionApi;  
