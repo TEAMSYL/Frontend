@@ -30,17 +30,31 @@ const CompleteModal = ({open, onClose, request, fetchProducts}) => {
 
     const closeModal = () => {
         setLoading(false);
+        setSuccess(false);
+        setFail(false);
+
         onClose();
     };
 
-    const handleComplete = () => {
+    const handleComplete = async () => {
         setLoading(true);
-        
-    };
 
-    React.useEffect(() => {
-        console.log(request);
-    }, []);
+        const response = await transactionApi.complete(request.product.id);
+
+        // function timeout(delay) {
+        //     return new Promise( res => setTimeout(res, delay) );
+        // }
+        // await timeout(2000);
+        setLoading(false);
+        if (response.status === 200) {
+            setSuccess(true);
+            setFail(false);
+            fetchProducts();
+        } else {
+            setSuccess(true);
+            setFail(false);
+        }
+    };
 
     return (
         <Modal
@@ -70,7 +84,7 @@ const CompleteModal = ({open, onClose, request, fetchProducts}) => {
                             borderBottom: '1px solid #EDEDED',
                         }}
                     >구매확정</Typography>
-                    <Grid container rowSpacing={1} sx={{ paddingBottom: '30px'}}>
+                    <Grid container rowSpacing={1} sx={{ paddingBottom: '10px', borderBottom: '1px solid #EDEDED' }} >
                         <Grid item xs={12}>
                             {"상품은 잘 받으셨나요?"}
                         </Grid>
@@ -86,43 +100,34 @@ const CompleteModal = ({open, onClose, request, fetchProducts}) => {
                         </Grid>
                     </Grid>
                     
-                    <div style={{ display: 'flex', justifyContent: 'end'}}>
-                        { loading && (
-                            <CircularProgress
-                                size={30}
-                                sx={{ marginRight: '10px'}}
-                            />   
-                        )}
-                        { (success || fail) && (
-                            <Avatar 
-                                sx={{
-                                    width: 30,
-                                    height: 30,
-                                    backgroundColor: (success ? '#47A74B' : '#F72F33'),
-                                    marginRight: '10px',
-                                }}
-                            >
-                                {success && (<CheckIcon sx={{ color: '#FFFFFF' }}/>)}
-                                {fail && (<ClearIcon sx={{ color: '#FFFFFF' }}/>)}
-                            </Avatar>
-                        )}
-                        <Button 
+                    <Typography sx={{ textAlign: 'right', fontSize: '14px', fontWeigth: '200', paddingTop: '10px', marginRight: '10px'}} color={ fail ? "#F72F33" : success ? "#03C75A" : ""}>
+                        {fail && "다시 시도해주세요."}
+                        {success && "완료되었습니다."}
+                    </Typography>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'end', paddingTop: '10px'}}>
+                        <Button
                             disableTouchRipple
                             sx={{
                                 width: '100px',
-                                color: (success ? '#FFFFFF' : '#212121'),
-                                backgroundColor: (success ? '#47A74B' : 
-                                                  fail ? '#F72F33' : 'transparent'),
-                                border: (success || fail ? 'none' : "0.5px solid #C3C2CC"),
+                                color: '#212121',
+                                backgroundColor: 'transparent',
+                                border: "0.5px solid #C3C2CC",
                                 height: "30px",
                                 "&:hover": {
-                                    backgroundColor: (success ? '#47A74B' : fail ? '#F72F33' : "transparent"),
+                                    backgroundColor: "transparent",
                                 },
                                 marginRight: '10px',
                             }}
-                            //onClick={()=}
-                            disabled={loading || success}
-                        ><Typography sx={{ fontSize: '14px', color: (success || fail ? '#FFFFFF' : '#212121')}}>{success ? '완 료' : fail ? '실 패' : '확 정'}</Typography></Button>
+                            onClick={!success && handleComplete}
+                        >
+                            {   
+                                loading ? <CircularProgress size={20} sx={{ color: '#757575'}}/> :
+                                !success && fail ?  (<><ClearIcon sx={{ color: "#FF5055"}}/><Typography sx={{ fontSize: '14px', color: '#212121'}}>실패</Typography></>) :
+                                success && !fail ? (<><CheckIcon sx={{ color: '#03C75A'}}/><Typography sx={{ fontSize: '14px', color: '#212121'}}>완료</Typography></>) : 
+                                (<Typography sx={{ fontSize: '14px', color: '#212121'}}>확정 하기</Typography>)
+                            }
+                        </Button>
                         <Button
                             disableTouchRipple
                             sx={{

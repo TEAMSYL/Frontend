@@ -412,6 +412,12 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
             case 2:
                 stateText = '배송시작';
                 break;
+            case 3:
+                stateText = '거래취소';
+                break;
+            case 4:
+                stateText = '거래완료';
+                break;
             default:
                 stateText = '이외상태';
                 break;
@@ -538,6 +544,9 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                                     overflow: 'hidden',
                                                     width: '100%',
                                                     paddingBottom: '100%',
+                                                    '&:hover': {
+                                                        cursor: 'pointer'
+                                                    }
                                                 }}
                                             >
                                                 <img 
@@ -573,7 +582,7 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                         </RowCell>
                                         <RowCell>
                                             <Stack spacing={1}>
-                                                { (request.txState !== 2) && 
+                                                { (request.txState < 2) && 
                                                     <Button
                                                         sx={{
                                                             color: "#FFFFFF",
@@ -617,6 +626,21 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                                         disableTouchRipple
                                                         onClick={() => openCompleteModal(request)}
                                                     >반품 / 확정
+                                                    </Button>
+                                                }
+                                                { (request.txState === 4) &&
+                                                    <Button
+                                                        sx={{
+                                                            color: "#212121",
+                                                            border: "0.5px solid #C3C2CC",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#ededed",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                        //onClick={() => openCompleteModal(request)}
+                                                    >후기 등록
                                                     </Button>
                                                 }
                                         </Stack>
