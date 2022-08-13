@@ -359,6 +359,7 @@ export const ManageTab = (props) => {
         open={dialogOpen}
         onClose={handleDialogClose}
         product={clickedProduct}
+        fetchProducts={fetchProducts}
       />
     </div>
   );

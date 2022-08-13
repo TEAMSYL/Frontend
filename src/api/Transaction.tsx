@@ -158,6 +158,22 @@ async function complete(productId: string) {
   }
 };
 
+async function returnProduct(trackingNumber: String, productId: String) {
+  try {
+    const response = await axios.put(`http://localhost:8001/transaction/return`,
+      {
+        productId: productId,
+        trackingNumber: trackingNumber
+      },
+      { withCredentials: true }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 const transactionApi = { 
   request, 
   permit, 
@@ -169,6 +185,7 @@ const transactionApi = {
   getPermittedPurchases,
   makePayment,
   setTrackingNumber,
-  complete
+  complete,
+  returnProduct
 };
 export default transactionApi;  

@@ -6,6 +6,7 @@ import transactionApi from '../../api/Transaction.tsx';
 import InfoModal from './InfoModal';
 import TrackingNumModal from './TrackingNumModal';
 import CompleteModal from './CompleteModal';
+import ReturnModal from './ReturnModal';
 
 export const Container = ({ children}) => {
     return (
@@ -364,6 +365,7 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
     const [ page, setPage ] = React.useState(0);
     const [ infoModalOpen, setInfoModalOpen ] = React.useState(false);
     const [ completeModalOpen, setCompleteModalOpen ] = React.useState(false);
+    const [ returnModalOpen, setReturnModalOpen ] = React.useState(false);
     const [ requestToModal, setReqeustToModal ] = React.useState(requests[0]);
 
 
@@ -386,6 +388,15 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
     const closeCompleteModal = () => {
         setCompleteModalOpen(false);
     };
+
+    const openReturnModal = (request) => {
+        setReqeustToModal(request);
+        setReturnModalOpen(true);
+    };
+
+    const closeReturnModal = () => {
+        setReturnModalOpen(false);
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -614,6 +625,7 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                                     </Button>
                                                 }
                                                 { (request.txState === 2) &&
+                                                    <>
                                                     <Button
                                                         sx={{
                                                             color: "#212121",
@@ -625,8 +637,22 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                                         }}
                                                         disableTouchRipple
                                                         onClick={() => openCompleteModal(request)}
-                                                    >반품 / 확정
+                                                    >확정 하기
                                                     </Button>
+                                                    <Button
+                                                        sx={{
+                                                            color: "#212121",
+                                                            border: "0.5px solid #C3C2CC",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#ededed",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                        onClick={() => openReturnModal(request)}
+                                                    >반품 하기
+                                                    </Button>
+                                                    </>
                                                 }
                                                 { (request.txState === 4) &&
                                                     <Button
@@ -663,6 +689,12 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                     <CompleteModal
                         open={completeModalOpen}
                         onClose={closeCompleteModal}
+                        request={requestToModal}
+                        fetchProducts={fetchProducts}
+                    />
+                    <ReturnModal
+                        open={returnModalOpen}
+                        onClose={closeReturnModal}
                         request={requestToModal}
                         fetchProducts={fetchProducts}
                     />

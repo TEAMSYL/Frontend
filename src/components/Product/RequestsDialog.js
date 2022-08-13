@@ -28,7 +28,7 @@ const TableBodyCell = styled(TableCell)`
 `;
 
 const RequestsDialog = (props) => {
-    const { onClose, open, product } = props;
+    const { onClose, open, product, fetchProducts } = props;
     const [ requests, setRequests ] = React.useState([]); 
     const [ rowsPerPage, setRowPerPage ] = React.useState(5);
     const [ page, setPage ] = React.useState(0);
@@ -51,6 +51,7 @@ const RequestsDialog = (props) => {
             
             if (response.status === 200) {
                 alert('요청 수락이 완료되었습니다.');
+                fetchProducts();
                 onClose();
             } else {
                 alert(response.data);
