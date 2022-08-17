@@ -111,7 +111,7 @@ const TrackingNumModal = ({open, onClose, request, fetchRequests}) => {
         setInfoText("등록 중...");
         console.log(trackingNumber);
         console.log(request);
-        const response = await transactionApi.setTrackingNumber(trackingNumber, request.id);
+        const response = await transactionApi.setTrackingNumber(trackingNumber, request.id, companyCode);
         setRegistLoading(false);
 
         if (response.status === 200) {

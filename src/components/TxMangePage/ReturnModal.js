@@ -110,7 +110,7 @@ const ReturnModal = ({open, onClose, request, fetchProducts}) => {
         setReturnLoading(true);
         setInfoText("진행 중...");
         console.log(request);
-        const response = await transactionApi.returnProduct(trackingNumber, request.id);
+        const response = await transactionApi.returnProduct(trackingNumber, request.id, companyCode);
         
 
         if (response.status === 200) {

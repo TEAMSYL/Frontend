@@ -128,12 +128,13 @@ async function cancel(txId: string) {
   }
 };
 
-async function setTrackingNumber(trackingNumber: string, productId: string) {
+async function setTrackingNumber(trackingNumber: string, productId: string, trackingCode: string) {
   try {
     const response = await axios.post(`http://localhost:8001/transaction/trackingnumber`,
       { 
         productId: productId,
-        trackingNumber: trackingNumber
+        trackingNumber: trackingNumber,
+        trackingCode: trackingCode
       },
       { withCredentials: true},
     );
@@ -158,12 +159,26 @@ async function complete(productId: string) {
   }
 };
 
-async function returnProduct(trackingNumber: String, productId: String) {
+async function getTrackingInfo(productId: String) {
+  try {
+    const response = await axios.get(`http://localhost:8001/transaction/trackinginfo/${productId}`,
+      {
+        withCredentials: true
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function returnProduct(trackingNumber: String, productId: String, companyCode: String) {
   try {
     const response = await axios.put(`http://localhost:8001/transaction/return`,
       {
         productId: productId,
-        trackingNumber: trackingNumber
+        trackingNumber: trackingNumber,
+        trackingCode: companyCode
       },
       { withCredentials: true }
     );
@@ -186,6 +201,7 @@ const transactionApi = {
   makePayment,
   setTrackingNumber,
   complete,
-  returnProduct
+  returnProduct,
+  getTrackingInfo
 };
 export default transactionApi;  

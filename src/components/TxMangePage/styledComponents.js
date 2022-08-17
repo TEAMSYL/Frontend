@@ -7,6 +7,7 @@ import InfoModal from './InfoModal';
 import TrackingNumModal from './TrackingNumModal';
 import CompleteModal from './CompleteModal';
 import ReturnModal from './ReturnModal';
+import ShipmentModal from './ShipmentModal';
 
 export const Container = ({ children}) => {
     return (
@@ -107,6 +108,8 @@ export const SellTable = ({ requests, fetchRequests }) => {
     const [ page, setPage ] = React.useState(0);
     const [ trackingNumModalOpen, setTrackingNumModalOpen ] = React.useState(false);
     const [ requestToModal, setReqeustToModal ] = React.useState(requests[0]);
+    const [ ShipmentModalOpen, setShipmentModalOpen ] = React.useState(false);
+
     const navigate = useNavigate();
 
     const handleChangePage = (event, newPage) => {
@@ -127,6 +130,15 @@ export const SellTable = ({ requests, fetchRequests }) => {
         setTrackingNumModalOpen(false);
     };
 
+    const openShipmentModal = (request) => {
+        setReqeustToModal(request);
+        setShipmentModalOpen(true);
+    };
+
+    const closeShipmentModal = () => {
+        setShipmentModalOpen(false);
+    };
+
     const handleCancelBtn = async (request) => {
         //const response = await transactionApi.cancel(String(request.id));
     };
@@ -143,9 +155,18 @@ export const SellTable = ({ requests, fetchRequests }) => {
             case 2:
                 stateText = '배송시작';
                 break;
+            case 3:
+                stateText = '거래취소';
+                break;
+            case 4:
+                stateText = '거래완료';
+                break;
+            case 5:
+                stateText = '반품';
+                break;
             default:
                 stateText = '이외상태';
-                break;
+                break;  
         }
         return stateText;
     };
@@ -304,7 +325,7 @@ export const SellTable = ({ requests, fetchRequests }) => {
                                         </RowCell>
                                         <RowCell>
                                             <Stack spacing={1}>
-                                                { (request.txState !== 2) && 
+                                                { (request.txState !== 2 && request.txState !== 5) && 
                                                     <Button
                                                         sx={{
                                                             color: "#FFFFFF",
@@ -335,6 +356,21 @@ export const SellTable = ({ requests, fetchRequests }) => {
                                                     >송장 입력
                                                     </Button>
                                                 }
+                                                { (request.txState === 5) &&
+                                                    <Button
+                                                        sx={{
+                                                            color: "#212121",
+                                                            border: "0.5px solid #C3C2CC",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#ededed",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
+                                                        onClick={() => openShipmentModal(request)}
+                                                    >배송 조회
+                                                    </Button>
+                                                }
                                         </Stack>
                                     </RowCell>
                                 </TableRow>
@@ -355,7 +391,16 @@ export const SellTable = ({ requests, fetchRequests }) => {
                     />
                 )
             }
-            
+            { requests.length > 0 &&
+                (
+                    <ShipmentModal
+                        open={ShipmentModalOpen}
+                        onClose={closeShipmentModal}
+                        request={requestToModal}
+                        fetchRequests={fetchRequests}
+                    />
+                )
+            }
         </Stack>
     );
 };
@@ -366,6 +411,7 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
     const [ infoModalOpen, setInfoModalOpen ] = React.useState(false);
     const [ completeModalOpen, setCompleteModalOpen ] = React.useState(false);
     const [ returnModalOpen, setReturnModalOpen ] = React.useState(false);
+    const [ ShipmentModalOpen, setShipmentModalOpen ] = React.useState(false);
     const [ requestToModal, setReqeustToModal ] = React.useState(requests[0]);
 
 
@@ -398,6 +444,15 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
         setReturnModalOpen(false);
     }
 
+    const openShipmentModal = (request) => {
+        setReqeustToModal(request);
+        setShipmentModalOpen(true);
+    };
+
+    const closeShipmentModal = () => {
+        setShipmentModalOpen(false);
+    };
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -428,6 +483,9 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                 break;
             case 4:
                 stateText = '거래완료';
+                break;
+            case 5:
+                stateText = '반품';
                 break;
             default:
                 stateText = '이외상태';
@@ -636,6 +694,19 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                                             },
                                                         }}
                                                         disableTouchRipple
+                                                        onClick={() => openShipmentModal(request)}
+                                                    >배송 조회
+                                                    </Button>
+                                                    <Button
+                                                        sx={{
+                                                            color: "#212121",
+                                                            border: "0.5px solid #C3C2CC",
+                                                            height: "30px",
+                                                            "&:hover": {
+                                                                backgroundColor: "#ededed",
+                                                            },
+                                                        }}
+                                                        disableTouchRipple
                                                         onClick={() => openCompleteModal(request)}
                                                     >확정 하기
                                                     </Button>
@@ -697,6 +768,12 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                         onClose={closeReturnModal}
                         request={requestToModal}
                         fetchProducts={fetchProducts}
+                    />
+                    <ShipmentModal
+                        open={ShipmentModalOpen}
+                        onClose={closeShipmentModal}
+                        request={requestToModal}
+                        //fetchRequests={fetchRequests}
                     />
                     </>
                 }
