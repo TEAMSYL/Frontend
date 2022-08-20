@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React,{useState, useEffect} from 'react';
 import Main from "./components/Main";
 import LoginModal from "./components/LoginModal";
 import { createTheme, ThemeProvider } from "@mui/material";
@@ -21,6 +21,9 @@ import Mystore from "./components/Mystore/MyStore";
 import DetailProduct from "./components/Product/ProductDetail/DetailProduct";
 import userApi from "../src/api/User.tsx";
 import CategoryPage from "./components/Category/CategoryPage";
+import NFT from './components/NFT/CreateNFT';
+import MyNFT from './components/NFT/MyNFT';
+import SellNFT from './components/NFT/SellNFTs';
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -33,6 +36,28 @@ function App() {
   const handleOpenLoginModalClose = () => setOpenLoginModal(false);
   const dispatch = useDispatch();
   const { isLogin } = useSelector((state) => state.isLogin);
+  const [account, setAccount] = useState("");
+  const getAccount = async () => {
+    try {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setAccount(accounts[0]);
+        alert('로그인 중...')
+        alert('현재 계정 : ' + accounts[0])
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if(isLogin){
+      getAccount();
+      console.log(account)
+    }
+  }, [isLogin]);
 
   useEffect(() => {
     async function fetchUser() {
@@ -47,7 +72,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Menu openModal={handleOpenLoginModalOpen} />
+      <Menu openModal={handleOpenLoginModalOpen} getAccount={getAccount} />
       <div style={{ paddingTop: "190px" }}>
         <Routes>
           <Route exact path="/" element={<Main />} />
@@ -100,6 +125,9 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route exact path='/nft' element={<NFT account={account} getAccount={getAccount}/>}></Route>
+          <Route exact path='/mynft' element={<MyNFT account={account} getAccount={getAccount}/>}></Route>
+          <Route exact path='/sellnft' element={<SellNFT account={account} getAccount={getAccount}/>}></Route>
           <Route exact path="/detail/:productId" element={<DetailProduct />} />
         </Routes>
       </div>

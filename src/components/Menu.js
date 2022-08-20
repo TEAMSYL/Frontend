@@ -6,7 +6,7 @@ import Nav from './Nav';
 const  Menu = (props) => {
     return (
         <Box sx={{position: "fixed", top: 0, zIndex: 10}}>
-            <Header openModal={props.openModal}/>
+            <Header openModal={props.openModal} getAccount={props.getAccount}/>
             <Nav openModal={props.openModal}/>
         </Box>
     );

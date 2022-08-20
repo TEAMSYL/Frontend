@@ -1,10 +1,11 @@
 import React from "react";
-import { ButtonGroup, Box, Button, Input, Typography } from "@mui/material";
+import { ButtonGroup, Box, Button, Input, Menu , MenuItem,Fade } from "@mui/material";
 import CurrencyBitcoinIcon from "@mui/icons-material/CurrencyBitcoin";
 import SearchIcon from "@mui/icons-material/Search";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import ChatIcon from "@mui/icons-material/Chat";
+import WallpaperIcon from '@mui/icons-material/Wallpaper';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +40,15 @@ const Nav = (props) => {
   const { isLogin } = useSelector((state) => state.isLogin);
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = React.useState("");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -146,6 +156,56 @@ const Nav = (props) => {
                 >
                   채팅
                 </Button>
+                <Button
+                    id="fade-button"
+                    aria-controls={open ? 'fade-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                    startIcon={<WallpaperIcon/>}
+                >
+                    NFT
+                </Button>
+                <Menu
+                    id="fade-menu"
+                    MenuListProps={{
+                    'aria-labelledby': 'fade-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    TransitionComponent={Fade}
+                >
+                    <MenuItem 
+                        onClick={() => {
+                            if (isLogin == true) {
+                                handleClose();
+                                navigate('/mynft');
+                            } else {
+                                props.openModal();
+                            }
+                        }}>My NFT</MenuItem>  
+
+                    <MenuItem
+                            onClick={() => {
+                                if (isLogin == true) {
+                                    handleClose();
+                                    navigate('/nft');
+                                } else {
+                                    props.openModal();
+                                }
+                            }}>Create</MenuItem>
+                    
+                    <MenuItem 
+                            onClick={() => {
+                                if (isLogin == true) {
+                                    handleClose();
+                                    navigate('/sellnft');
+                                } else {
+                                    props.openModal();
+                                }
+                            }}>Explore</MenuItem>
+                </Menu>
               </ButtonGroup>
             </Box>
             <CategoryModal/>
