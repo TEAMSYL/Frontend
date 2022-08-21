@@ -1,0 +1,14 @@
+.messages {
+  padding: 5% 0;
+  overflow: auto;
+  flex: auto;
+  height:673px;
+}
+h4{
+  text-align: center;
+}
+/* img.iii {
+  width: 200px;
+  height: 200px;
+  object-fit: scale-down;;
+} */

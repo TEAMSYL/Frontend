@@ -24,6 +24,7 @@ import CategoryPage from "./components/Category/CategoryPage";
 import NFT from './components/NFT/CreateNFT';
 import MyNFT from './components/NFT/MyNFT';
 import SellNFT from './components/NFT/SellNFTs';
+import Chat from "./components/Chat/Chat";
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -125,6 +126,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route exact path="/chat" element={<Chat />} />
           <Route exact path='/nft' element={<NFT account={account} getAccount={getAccount}/>}></Route>
           <Route exact path='/mynft' element={<MyNFT account={account} getAccount={getAccount}/>}></Route>
           <Route exact path='/sellnft' element={<SellNFT account={account} getAccount={getAccount}/>}></Route>

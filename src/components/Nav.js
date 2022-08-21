@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ButtonGroup, Box, Button, Input, Menu , MenuItem,Fade } from "@mui/material";
 import CurrencyBitcoinIcon from "@mui/icons-material/CurrencyBitcoin";
 import SearchIcon from "@mui/icons-material/Search";
@@ -8,8 +8,10 @@ import ChatIcon from "@mui/icons-material/Chat";
 import WallpaperIcon from '@mui/icons-material/Wallpaper';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 import CategoryModal from "./Category/CategoryModal";
+import chatApi from "../api/Chat.tsx";
+import userApi from "../api/User.tsx";
 
 const searchBoxDefaultValue = "상품명 or 상점이름으로 검색하세요!";
 const SERVICE_NAME = "블록마켓";
@@ -41,7 +43,43 @@ const Nav = (props) => {
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = React.useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [name, setName] = useState('');
+  const sc = useSelector( (state) => state.socket)
+  const [socket, setSocket] = useState(null);
+  const [reload, setReload] = useState(Number)
+  const [alarm, setAlarm] = useState(false)
   const open = Boolean(anchorEl);
+
+  useEffect(()=>{
+    setSocket(sc)
+  },[sc])
+
+  userApi.getUser().then((data) => {
+    // console.log(data);
+    if(data["id"] != "undefined"){
+      setName(String(data["id"]));
+    }
+
+  });
+
+  useEffect(()=>{
+    socket?.on('reload', (num)=>{
+      setReload(num);
+    })
+  })
+
+  useEffect(() => {
+    chatApi.getLastCnt(Number(name)).then((data) => {
+      console.log(data);
+      if (data) {
+        setAlarm(true);
+      }else{
+        setAlarm(false);
+      }
+    })
+  }, [reload])
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -145,14 +183,25 @@ const Nav = (props) => {
                 >
                   거래관리
                 </Button>
+                {(alarm)?(
+                  <b style={{margin:'0px',position: "relative", top:'5px',left:'18px',width:'15px', height:'15px', borderRadius:'50%',
+                  background:"lightcoral"}}>{alarm}
+                  </b>   
+                )
+                :(
+                  <b style={{visibility:'hidden', margin:'0px',position: "relative", top:'5px',left:'18px',width:'15px', height:'15px', borderRadius:'50%',
+                  background:"lightcoral"}}>{alarm}
+                  </b>   
+                )}
                 <Button
                   onClick={() => {
                     if (isLogin == true) {
+                      navigate("/chat");
                     } else {
                       props.openModal();
                     }
                   }}
-                  startIcon={<ChatIcon />}
+                  startIcon={<ChatIcon/>}
                 >
                   채팅
                 </Button>

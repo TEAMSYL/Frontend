@@ -1,15 +1,51 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Box, Container, Avatar, Stack } from '@mui/material';
+import { useSelector } from "react-redux";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import styled from "styled-components";
 import productApi from '../../../api/Product.tsx';
 import transactionApi from '../../../api/Transaction.tsx';
 import userApi from '../../../api/User.tsx';
+import chatApi from '../../../api/Chat.tsx';
 
 const Body = ({product, user}) => {
     //const location = useLocation();
     const navigate = useNavigate();
+    const sc = useSelector( (state) => state.socket)
+    const [socket, setSocket] = useState(null);
+    useEffect(()=>{
+      setSocket(sc)
+    },[sc])
+    const handleChatRequet = async() => {
+
+        if (user.id != 'undefined'){
+            chatApi.findRoom(product.id,user.id).then(data => {
+              // 방이 있다면
+              if(data){
+                  navigate(`/chat?room=${data['id']}&name=${user.id}`)
+                  // console.log(data);
+              }
+              // 방이 없다면
+              else {
+                //만들고
+                chatApi.createRoom(product.sellerId, user.id, product.id).then(()=>{
+                  console.log("chatload?")
+                  socket?.emit("chatReload");
+                })
+                chatApi.findRoom(product.id, user.id).then(data => {
+                  // 방이 있다면
+                  if(data){
+                      navigate(`/chat?room=${data['id']}&name=${user.id}`)
+                  }
+                })
+              }
+          })
+        }else{
+          console.log("로그인 필요!")
+        }
+    }
+
 
     const handleRequest = async () => {
         if (user == undefined) {
@@ -62,7 +98,11 @@ const Body = ({product, user}) => {
                         <Btngap>찜</Btngap>
                         <Btngap>2</Btngap>
                     </HeartBtn>
-                    <ContactBtn>연락하기</ContactBtn>
+                    <ContactBtn
+                        onClick={handleChatRequet}
+                    >
+                        연락하기
+                    </ContactBtn>
                     <BuyBtn
                         onClick={handleRequest}
                     >구매요청</BuyBtn>

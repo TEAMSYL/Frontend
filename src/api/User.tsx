@@ -26,9 +26,19 @@ async function getUser() {
   }
 }
 
+async function getUserNick(id: Number | undefined) {
+  try {
+    const response = await axios.get(`http://localhost:8001/user/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const userApi = {
   getUser,
   setWallet,
+  getUserNick
 };
 
 export default userApi;
