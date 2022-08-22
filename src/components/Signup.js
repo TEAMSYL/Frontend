@@ -43,10 +43,10 @@ const Signup = () => {
     const [ passwordForCheck, setPasswordForCheck ] = React.useState('');
     const [ isSamePassword, setIsSamePassword ] = React.useState(false);
 
-    const [ nickName, setNickName ] = React.useState('');
-    const [ isValidNickNameFormat, setIsValidNickNameFormat ] = React.useState(false);
-    const [ isDuplicatedNickName, setIsDuplicatedNickName ] = React.useState(true);
-    const [ nickNameError, setNickNameError ] = React.useState(false);
+    //const [ nickName, setNickName ] = React.useState('');
+    //const [ isValidNickNameFormat, setIsValidNickNameFormat ] = React.useState(false);
+    //const [ isDuplicatedNickName, setIsDuplicatedNickName ] = React.useState(true);
+    //const [ nickNameError, setNickNameError ] = React.useState(false);
 
     const [ walletAddress, setWalletAddress ] = React.useState('');
 
@@ -55,7 +55,6 @@ const Signup = () => {
     const navigate = useNavigate();
 
     const elemRef = [
-        React.useRef(null),
         React.useRef(null),
         React.useRef(null),
         React.useRef(null),
@@ -103,41 +102,41 @@ const Signup = () => {
         }
     };
 
-    const handleNickName = (e) => {
-        setNickName(e.target.value);
-        let isValid = (e.target.value.length >= 2 && e.target.value.length <= 8)
-        console.log(isValid);
-        if (isValid) {
-            setIsValidNickNameFormat(true);
-            setNickNameError(false);
-        } else {
-            setIsValidNickNameFormat(false);
-            setNickNameError(true);
-        }
-    };
+    // const handleNickName = (e) => {
+    //     setNickName(e.target.value);
+    //     let isValid = (e.target.value.length >= 2 && e.target.value.length <= 8)
+    //     console.log(isValid);
+    //     if (isValid) {
+    //         setIsValidNickNameFormat(true);
+    //         setNickNameError(false);
+    //     } else {
+    //         setIsValidNickNameFormat(false);
+    //         setNickNameError(true);
+    //     }
+    // };
 
-    const handleNickNameCheckButton = () => {
-        // 중복체크 확인
-        if (!isValidNickNameFormat){
-            setNickNameError(true);
-            setIsValidNickNameFormat(true);
-            return;
-        } else {
-            console.log('hello ' + nickName);
-            ApiAuth.NickDuplicateCheck(nickName)
-            .then((response) => {
-                console.log(response);
-                if (response == true) {
-                    setIsDuplicatedNickName(false);
-                    setNickNameError(false);
+    // const handleNickNameCheckButton = () => {
+    //     // 중복체크 확인
+    //     if (!isValidNickNameFormat){
+    //         setNickNameError(true);
+    //         setIsValidNickNameFormat(true);
+    //         return;
+    //     } else {
+    //         console.log('hello ' + nickName);
+    //         ApiAuth.NickDuplicateCheck(nickName)
+    //         .then((response) => {
+    //             console.log(response);
+    //             if (response == true) {
+    //                 setIsDuplicatedNickName(false);
+    //                 setNickNameError(false);
                     
-                } else {
-                    setIsDuplicatedNickName(true);
-                    setNickNameError(true);
-                }
-            })
-        }
-    };
+    //             } else {
+    //                 setIsDuplicatedNickName(true);
+    //                 setNickNameError(true);
+    //             }
+    //         })
+    //     }
+    // };
 
     const getWalletAddrFromMetaMask = () => {
         // metamask와 연동 하는 코드 작성 필요
@@ -167,11 +166,11 @@ const Signup = () => {
             alert('비밀번호 확인 입력을 해주세요.');
             scrollTo(2);
             return;
-        } else if (nickNameError || nickName == '' || isDuplicatedNickName || !isValidNickNameFormat) {
-            alert('닉네임을 입력하세요.');
-            scrollTo(3);
-            return;
-        } else if (walletAddress == '') {
+        } //else if (nickNameError || nickName == '' || isDuplicatedNickName || !isValidNickNameFormat) {
+        //     alert('닉네임을 입력하세요.');
+        //     scrollTo(3);
+        //     return; } 
+        else if (walletAddress == '') {
             alert('지갑주소를 입력하세요.');
             scrollTo(4);
             return;
@@ -182,7 +181,7 @@ const Signup = () => {
         }
         // 모든 입력을 완료한 경우서버로 회원가입 요청
         Auth.SignUp({
-            nick: nickName,
+            //nick: nickName,
             email: id,
             password: password,
             walletAddress: walletAddress,
@@ -359,7 +358,7 @@ const Signup = () => {
                         </Grid>
                     </StyledBox>
                     
-                    <StyledBox ref={elemRef[3]}>
+                    {/* <StyledBox ref={elemRef[3]}>
                         <Grid container>
                             <Grid item xs={2}>
                                 <Typography fontSize={18} display={'inline-block'}>
@@ -417,7 +416,7 @@ const Signup = () => {
                                 </Stack>
                             </Grid>
                         </Grid>
-                    </StyledBox>
+                    </StyledBox> */}
                     
                     <StyledBox ref={elemRef[4]}>
                         <Grid container>

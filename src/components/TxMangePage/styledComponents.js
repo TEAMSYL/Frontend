@@ -325,7 +325,7 @@ export const SellTable = ({ requests, fetchRequests }) => {
                                         </RowCell>
                                         <RowCell>
                                             <Stack spacing={1}>
-                                                { (request.txState !== 2 && request.txState !== 5) && 
+                                                { (request.txState !== 2 && request.txState !== 5 && request.txState !== 4) && 
                                                     <Button
                                                         sx={{
                                                             color: "#FFFFFF",
