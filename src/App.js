@@ -21,6 +21,7 @@ import Mystore from "./components/Mystore/MyStore";
 import DetailProduct from "./components/Product/ProductDetail/DetailProduct";
 import userApi from "../src/api/User.tsx";
 import CategoryPage from "./components/Category/CategoryPage";
+import { QueryClientProvider, QueryClient } from "react-query";
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -44,71 +45,77 @@ function App() {
     }
     fetchUser();
   }, [dispatch]);
-
+  const queryClient = new QueryClient();
   return (
-    <ThemeProvider theme={theme}>
-      <Menu openModal={handleOpenLoginModalOpen} />
-      <div style={{ paddingTop: "190px" }}>
-        <Routes>
-          <Route exact path="/" element={<Main />} />
-          <Route
-            exact
-            path="/products"
-            element={
-              <PrivateRoute isLogin={isLogin}>
-                <Products />
-              </PrivateRoute>
-            }
-          >
-            <Route path="regist" element={<RegistTab />} />
-            <Route path="manage" element={<ManageTab />} />
-          </Route>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <Menu openModal={handleOpenLoginModalOpen} />
+        <div style={{ paddingTop: "190px" }}>
+          <Routes>
+            <Route exact path="/" element={<Main />} />
+            <Route
+              exact
+              path="/products"
+              element={
+                <PrivateRoute isLogin={isLogin}>
+                  <Products />
+                </PrivateRoute>
+              }
+            >
+              <Route path="regist" element={<RegistTab />} />
+              <Route path="manage" element={<ManageTab />} />
+            </Route>
 
-          <Route
-            exact
-            path="/signup"
-            element={
-              <PublicRoute isLogin={isLogin}>
-                <Signup />
-              </PublicRoute>
-            }
-          />
+            <Route
+              exact
+              path="/signup"
+              element={
+                <PublicRoute isLogin={isLogin}>
+                  <Signup />
+                </PublicRoute>
+              }
+            />
 
-          <Route
-            exact
-            path="/signin"
-            element={
-              <PublicRoute isLogin={isLogin}>
-                <Signin />
-              </PublicRoute>
-            }
-          />
+            <Route
+              exact
+              path="/signin"
+              element={
+                <PublicRoute isLogin={isLogin}>
+                  <Signin />
+                </PublicRoute>
+              }
+            />
 
-          <Route exact path="/search" element={<SearchPage />}></Route>
-          <Route path="/category" element={<CategoryPage />}></Route>
-          <Route path="/modify" element={<ProductModify />}></Route>
-          <Route path="/transaction/manage" element={<TxManagePage />}>
-            <Route path="sell" element={<Sell />} />
-            <Route path="purchase" element={<Purchase />} />
-          </Route>
-          <Route
-            exact
-            path="/mystore/:userId"
-            element={
-              <PrivateRoute isLogin={isLogin}>
-                <Mystore />
-              </PrivateRoute>
-            }
-          />
-          <Route exact path="/detail/:productId" element={<DetailProduct />} />
-        </Routes>
-      </div>
-      <Footer></Footer>
-      <LoginModal
-        open={openLoginModal}
-        closeModal={handleOpenLoginModalClose}
-      />
-    </ThemeProvider>
+            <Route exact path="/search" element={<SearchPage />}></Route>
+            <Route path="/category" element={<CategoryPage />}></Route>
+            <Route path="/modify" element={<ProductModify />}></Route>
+            <Route path="/transaction/manage" element={<TxManagePage />}>
+              <Route path="sell" element={<Sell />} />
+              <Route path="purchase" element={<Purchase />} />
+            </Route>
+            <Route
+              exact
+              path="/mystore/:userId"
+              element={
+                <PrivateRoute isLogin={isLogin}>
+                  <Mystore />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              exact
+              path="/detail/:productId"
+              element={<DetailProduct />}
+            />
+          </Routes>
+        </div>
+        {/* <Footer></Footer> */}
+        <LoginModal
+          open={openLoginModal}
+          closeModal={handleOpenLoginModalClose}
+        />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
