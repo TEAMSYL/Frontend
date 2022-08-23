@@ -7,7 +7,7 @@ const Rooms = ({ rooms, name, nick }) => {
   return(
     <div>
       {rooms.map((room, i) => (
-        <Box sx={{backgroundColor:'', border:'0.01px solid lightgray'}}key={i}>
+        <Box sx={{backgroundColor:'', border:'0.01px solid lightgray', marginTop:'0.5px'}}key={i}>
           <Room room={room} name={name} nick={nick} />
         </Box>
       ))}
