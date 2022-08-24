@@ -132,10 +132,10 @@ const MystoreBody = ({userId})=>{
                             <ShoppingBasketIcon color="success" sx={{fontSize: '20px', marginRight:'10px'}}></ShoppingBasketIcon>
                             <InfoBoxText>상품판매 <span>{storeSellCount} 회</span></InfoBoxText>
                         </StoreInfoBox>
-                        <StoreInfoBox>
+                        {/* <StoreInfoBox>
                             <LocalShippingIcon sx={{fontSize: '20px', marginRight:'10px'}}></LocalShippingIcon>
                             <InfoBoxText>택배발송 <span>? 회</span></InfoBoxText>
-                        </StoreInfoBox>
+                        </StoreInfoBox> */}
                     </StoreInfo>
                     <div>
                         {!userInfoEdit ? (
