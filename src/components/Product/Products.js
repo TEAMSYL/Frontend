@@ -498,6 +498,7 @@ export const RegistTab = (props) => {
             bottom: "0",
             display: "flex",
             justifyContent: "center",
+            width: '100%',
             height: "90px",
             borderTop: "1px solid #EEEEEE",
             backgroundColor: "#FAFAFD",
@@ -576,6 +577,7 @@ export const Products = () => {
           display: "flex",
           alignItems: "center",
           minWidth: "1024px",
+          width: '100%',
         }}
       >
         <AppBar
@@ -632,7 +634,7 @@ export const Products = () => {
             </Button>
           </div>
         </AppBar>
-        <Stack sx={{ width: "1024px" }}>
+        <Stack sx={{ width: "100%" }}>
           <Outlet />
         </Stack>
       </Stack>
