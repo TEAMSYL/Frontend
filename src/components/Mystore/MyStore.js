@@ -7,6 +7,9 @@ import MystoreBottom from './MystoreBottom'
 const Mystore = ({ account })=> {
     const { userId } = useParams();
 
+    React.useEffect(() => {   
+    }, [userId]);
+    
     return (
         <Box>
             <MystoreBody userId ={userId}></MystoreBody>

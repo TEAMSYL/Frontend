@@ -654,7 +654,9 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                         <RowCell>{request.product.price}ETH</RowCell>
                                         <RowCell>
                                             <Typography
-                                                onClick={()=> navigate(`/mystore/${request.Transaction.buyerId}`)}
+                                                onClick={()=> {
+                                                    navigate(`/mystore/${request.seller.id}`);
+                                                }}
                                                 sx={{ 
                                                     fontSize: '16px',
                                                     '&:hover': { cursor: 'pointer'}

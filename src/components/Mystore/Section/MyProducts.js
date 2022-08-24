@@ -24,7 +24,7 @@ const MyProducts = ({ userId }) => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [userId]);
 
   const handleClick = (id) => {
     console.log(id, ' Clicked!!')
@@ -42,16 +42,7 @@ const MyProducts = ({ userId }) => {
         </InfoBar>
         <ProductsSection>
           {myProducts.length === 0 && (
-              <NoResultCase>
-                  <Stack
-                      spacing={2} 
-                      width='50%'
-                      display='flex' alignItems='center'
-                  >
-                      {/* <Typography fontSize={24} color={Palette.text_red}>{searchKeyword}</Typography> */}
-                      <Typography fontSize={19} fontWeight={500} color={Palette.text_black}>에 대한 결과가 존재하지 않습니다.</Typography>
-                  </Stack>
-              </NoResultCase>
+                  <Typography fontSize={19} fontWeight={500} color={Palette.text_black}>판매 중인 상품이 없습니다.</Typography>
           )}
           {myProducts.length != 0 && (
               <>

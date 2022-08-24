@@ -58,7 +58,7 @@ const MystoreBody = ({userId})=>{
 
     useEffect(()=> {
         getStoreInfo();
-    }, [])
+    }, [userId])
 
     const IntroductionModifyHandler = () => {
         setUserInfoEdit((prev) => !prev);
