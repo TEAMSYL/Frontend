@@ -50,8 +50,8 @@ const  MystoreBottom = ({userId}) => {
             </TabMenu>
             <TabContent>
                 {tabMenu === 0 && <MyProducts userId={userId}/>}
-                {tabMenu === 1 && <Review />}
-                {tabMenu === 2 && <Test3 />}
+                {tabMenu === 1 && <Review userId={userId}/>}
+                {tabMenu === 2 && <Test3 userId={userId}/>}
             </TabContent>
         </Box>
     );
