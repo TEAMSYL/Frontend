@@ -2,18 +2,15 @@ import { Box } from '@mui/material';
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import MyProducts from "./Section/MyProducts.js";
-import Test2 from "./Section/test2";
+import Review from "./Section/Review";
 import Test3 from "./Section/test3";
-import Test4 from "./Section/test4";
-import Test5 from "./Section/test5";
-import Test6 from "./Section/test6";
 
 
 const  MystoreBottom = ({userId}) => {
     const tabMenuList = [
         "상품",
-        "찜",
         "상점후기",
+        "뱃지 탭(재화님)",
       ];
     const [tabMenu, setTabMenu] = useState(0);
     const onClickTabMenu = (e) => {
@@ -53,8 +50,8 @@ const  MystoreBottom = ({userId}) => {
             </TabMenu>
             <TabContent>
                 {tabMenu === 0 && <MyProducts userId={userId}/>}
-                {tabMenu === 1 && <Test2 />}
-                {tabMenu === 2 && <Test3 />}
+                {tabMenu === 1 && <Review userId={userId}/>}
+                {tabMenu === 2 && <Test3 userId={userId}/>}
             </TabContent>
         </Box>
     );
@@ -93,7 +90,7 @@ const TabMenu = styled.div`
 `;
 
 const TabContent = styled.div`
-  margin-top: 64px;
+  margin-top: 30px;
   & h3 {
     font-weight: 400;
     padding: 0;

@@ -7,7 +7,7 @@ async function SignUp(data) {
       {
         email: data.email,
         password: data.password,
-        nick: data.nick,
+        //nick: data.nick,
         walletAddress: data.walletAddress,
         privatekey: data.privatekey,
       },

@@ -140,7 +140,13 @@ export const SellTable = ({ requests, fetchRequests }) => {
     };
 
     const handleCancelBtn = async (request) => {
-        //const response = await transactionApi.cancel(String(request.id));
+        const response = await transactionApi.cancel(String(request.id));
+        if (response.status !== 200) {
+            alert("거래취소에 실패하였습니다. 다시 시도해주세요.");
+            return;
+        }
+        alert("거래 취소가 완료되었습니다.");
+        fetchRequests();
     };
 
     const getTxStatusText = (txState) => {
@@ -325,7 +331,7 @@ export const SellTable = ({ requests, fetchRequests }) => {
                                         </RowCell>
                                         <RowCell>
                                             <Stack spacing={1}>
-                                                { (request.txState !== 2 && request.txState !== 5) && 
+                                                { (request.txState !== 2 && request.txState !== 5 && request.txState !== 4 && request.txState !== 3) && 
                                                     <Button
                                                         sx={{
                                                             color: "#FFFFFF",
@@ -463,7 +469,13 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
     };
     
     const handleCancelBtn = async (request) => {
-        //const response = await transactionApi.cancel(String(request.id));
+        const response = await transactionApi.cancel(String(request.id));
+        if (response.status !== 200) {
+            alert("거래취소에 실패하였습니다. 다시 시도해주세요.");
+            return;
+        }
+        alert("거래 취소가 완료되었습니다.");
+        fetchProducts();
     };
 
     const getTxStatusText = (txState) => {
@@ -642,7 +654,9 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                         <RowCell>{request.product.price}ETH</RowCell>
                                         <RowCell>
                                             <Typography
-                                                onClick={()=> navigate(`/mystore/${request.Transaction.buyerId}`)}
+                                                onClick={()=> {
+                                                    navigate(`/mystore/${request.seller.id}`);
+                                                }}
                                                 sx={{ 
                                                     fontSize: '16px',
                                                     '&:hover': { cursor: 'pointer'}

@@ -144,11 +144,12 @@ async function setTrackingNumber(trackingNumber: string, productId: string, trac
   }
 };
 
-async function complete(productId: string) {
+async function complete(productId: string, sellerId: string) {
   try {
     const response = await axios.post(`http://localhost:8001/transaction/complete`,
       {
-        productId: productId
+        productId: productId,
+        sellerId: sellerId
       },
       { withCredentials: true}
     );

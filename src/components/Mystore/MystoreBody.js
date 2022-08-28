@@ -1,36 +1,92 @@
 import { Box, Avatar, Button } from '@mui/material';
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import PersonIcon from '@mui/icons-material/Person';
 import StoreIcon from '@mui/icons-material/Store';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-const MystoreBody = ()=>{
-
+import userApi from '../../api/User.tsx'
+import storeApi from '../../api/Store.tsx'
+const MystoreBody = ({userId})=>{
+    const [storeName, setStoreName] = useState('');
+    const [storeIntroduce, setStoreIntroduce] = useState('');
+    const [storeCreateTime, setStoreCreateTime] = useState('');
+    const [storeSellCount, setStoreSellCount] = useState(0);
+    const [storeButton, setStoreButton] = useState(0);
+    const [editStoreTitle, setEditStoreTitle] = useState('');
     const [editStoreIntroduction, setEditStoreIntroduction] = useState('');
     const [userInfoEdit, setUserInfoEdit] = useState(false);
     const [storeTitleEdit, setStoreTitleEdit] = useState(false);
 
+    const getStoreInfo = async() => {
+        try{
+            await userApi.getUser().then((response)=>{
+                const data = response
+                setStoreName(data.nick);
+            })
+
+            await storeApi.getStoreInfo(userId).then((response) => {
+                const data = response.data
+                console.log(data)
+                setStoreIntroduce(data.introduce);
+                setStoreSellCount(data.sellCount);
+                setStoreButton(data.button);
+                let createdTime = new Date(data.createdAt)
+                let currentTime = new Date();
+                let storeTime = currentTime.getTime() - createdTime.getTime();
+                setStoreCreateTime(storeTime / 1000 / 60 / 60 / 24);
+            })
+        } catch(error) {
+            console.log(error);
+        }
+    };
+
+    const setStoreInfo = async(data) => {
+        try{
+            await storeApi.setStoreInfo(userId, data);
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    const setStoreTitle = async(data) => {
+        try{
+            await userApi.setUserNick(userId, data);
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    useEffect(()=> {
+        getStoreInfo();
+    }, [userId])
+
     const IntroductionModifyHandler = () => {
-        // 상태 변경 상태로
         setUserInfoEdit((prev) => !prev);
-        // 소개글 수정
-        setEditStoreIntroduction();
       };
 
     const TitleModifyHandler = () => {
-        // 상태 변경 상태로
         setStoreTitleEdit((prev) => !prev);
-
     };
 
     const onSubmitStoreTitle = () => {
         // 상태 변경 상태로
+        // 닉네임 변경 추가
+        const data = {nick: editStoreTitle}
+        console.log(data)
+        setStoreName(editStoreTitle)
+        setStoreTitle(data)
         setStoreTitleEdit((prev) => !prev);
     }
 
     const onSubmitStoreDescription = () => {
         // 상태 변경 상태로
+        const data = {
+            sellCount: storeSellCount,
+            introduce: editStoreIntroduction, 
+            createAt: storeCreateTime,
+        }
+        setStoreIntroduce(editStoreIntroduction)
+        setStoreInfo(data);
         setUserInfoEdit((prev) => !prev);
     }
 
@@ -47,14 +103,15 @@ const MystoreBody = ()=>{
                             {!storeTitleEdit ? (
                             <>
                                 <Title>
-                                    123
+                                    {storeName}
                                 </Title>
                             </>
                             ):(
                             <>
                             <Box sx={{height:'100%', display:'flex'}}>
-                                <Storetextarea>
-                                </Storetextarea>
+                                <Storetextarea onChange={(e) => {
+                                    setEditStoreTitle(e.target.value);
+                                }}/>
                                 <StoreButton1 onClick={onSubmitStoreTitle}>확인
                                 </StoreButton1>
                             </Box>
@@ -69,40 +126,32 @@ const MystoreBody = ()=>{
                     <StoreInfo>
                         <StoreInfoBox1>
                             <StoreIcon color="secondary" sx={{fontSize: '20px', marginRight:'10px'}}></StoreIcon>
-                            <InfoBoxText>상점오픈일 <span>? 일 전</span></InfoBoxText>
+                            <InfoBoxText>상점오픈일 <span>{parseInt(storeCreateTime)} 일 전</span></InfoBoxText>
                         </StoreInfoBox1>
                         <StoreInfoBox>
-                            <PersonIcon color="primary" sx={{fontSize: '20px', marginRight:'10px'}}></PersonIcon>
-                            <InfoBoxText>상점방문수 <span>? 명</span></InfoBoxText>
-                        </StoreInfoBox>
-                        <StoreInfoBox>
                             <ShoppingBasketIcon color="success" sx={{fontSize: '20px', marginRight:'10px'}}></ShoppingBasketIcon>
-                            <InfoBoxText>상품판매 <span>? 회</span></InfoBoxText>
+                            <InfoBoxText>상품판매 <span>{storeSellCount} 회</span></InfoBoxText>
                         </StoreInfoBox>
-                        <StoreInfoBox>
+                        {/* <StoreInfoBox>
                             <LocalShippingIcon sx={{fontSize: '20px', marginRight:'10px'}}></LocalShippingIcon>
                             <InfoBoxText>택배발송 <span>? 회</span></InfoBoxText>
-                        </StoreInfoBox>
+                        </StoreInfoBox> */}
                     </StoreInfo>
-                    {/* <IntroduceInfo>
-                        123
-                    </IntroduceInfo> */}
                     <div>
                         {!userInfoEdit ? (
                         <>
-                            <IntroduceInfo>
-                                상점 오픈 일 : 유저 create at 시간 가져오기<br/>
-                                상점 방문 수 : ?<br/>
-                                상품 판매 : 완료 횟수 추가<br/>
-                                택배 발송 : 품목에 직거래 or 택배 발송 체크<br/>
-                                소개글 or 상점명 or 프로필이미지 상점 DB 생성
-                            </IntroduceInfo>
+                            {storeIntroduce == "" ? (
+                                <IntroduceInfo></IntroduceInfo>
+                            ):(
+                                <IntroduceInfo>{storeIntroduce}</IntroduceInfo>
+                            )}
                         </>
                         ):(
                         <>
                         <Box sx={{height:'100%', display:'flex'}}>
-                            <Usertextarea>
-                            </Usertextarea>
+                            <Usertextarea onChange={(e) => {
+                                    setEditStoreIntroduction(e.target.value);
+                            }}/>
                             <UserButton1 onClick={onSubmitStoreDescription}>확인
                             </UserButton1>
                         </Box>
@@ -132,14 +181,14 @@ const TitleInfo = styled.div`
     align-items : center;
     margin-left: 30px;
     border-bottom: 1px solid #EEEEEE;
-    width: 100%;
+    width: 693px;
     height: 75px;
 `;
 const StoreInfo = styled.div`
     display: flex;
     margin-left: 30px;
     border-bottom: 1px solid #EEEEEE;
-    width: 100%;
+    width: 693px;
     height: 45px;
 `;
 const StoreInfoBox = styled.div`

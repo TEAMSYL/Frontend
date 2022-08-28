@@ -8,6 +8,7 @@ import ApiAuth from "../api/Auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import userApi from '../api/User.tsx';
+import MetaIcon from '../images/MetaMask_Fox.png'
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -32,7 +33,6 @@ const theme = createTheme({
     },
   },
 });
-
 const Header = (props) => {
   //const [ isLogin, setIsLogin] = React.useState(sessionApi.isLogin());
   const { isLogin } = useSelector((state) => state.isLogin);
@@ -88,6 +88,14 @@ const Header = (props) => {
               startIcon={<StarIcon sx={{ color: "#E9B457" }} />}
             >
               즐겨찾기
+            </Button>
+            <Button
+              onClick={
+                props.getAccount
+              }
+            >
+              <img src="/images/MetaMask_Fox.svg.png" />
+              메타마스크
             </Button>
           </ButtonGroup>
           <ButtonGroup>

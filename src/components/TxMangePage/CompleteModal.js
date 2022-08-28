@@ -38,8 +38,7 @@ const CompleteModal = ({open, onClose, request, fetchProducts}) => {
 
     const handleComplete = async () => {
         setLoading(true);
-
-        const response = await transactionApi.complete(request.product.id);
+        const response = await transactionApi.complete(request.product.id, request.seller.id);
 
         // function timeout(delay) {
         //     return new Promise( res => setTimeout(res, delay) );
