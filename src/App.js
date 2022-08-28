@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import Main from "./components/Main";
 import LoginModal from "./components/LoginModal";
 import { createTheme, ThemeProvider } from "@mui/material";
@@ -21,9 +21,10 @@ import Mystore from "./components/Mystore/MyStore";
 import DetailProduct from "./components/Product/ProductDetail/DetailProduct";
 import userApi from "../src/api/User.tsx";
 import CategoryPage from "./components/Category/CategoryPage";
-import NFT from './components/NFT/CreateNFT';
-import MyNFT from './components/NFT/MyNFT';
-import SellNFT from './components/NFT/SellNFTs';
+import { QueryClientProvider, QueryClient } from "react-query";
+import NFT from "./components/NFT/CreateNFT";
+import MyNFT from "./components/NFT/MyNFT";
+import SellNFT from "./components/NFT/SellNFTs";
 import Chat from "./components/Chat/Chat";
 const theme = createTheme({
   typography: {
@@ -45,8 +46,8 @@ function App() {
           method: "eth_requestAccounts",
         });
         setAccount(accounts[0]);
-        alert('로그인 중...')
-        alert('현재 계정 : ' + accounts[0])
+        alert("로그인 중...");
+        alert("현재 계정 : " + accounts[0]);
       }
     } catch (error) {
       console.error(error);
@@ -54,9 +55,9 @@ function App() {
   };
 
   useEffect(() => {
-    if(isLogin){
+    if (isLogin) {
       getAccount();
-      console.log(account)
+      console.log(account);
     }
   }, [isLogin]);
 
@@ -70,75 +71,91 @@ function App() {
     }
     fetchUser();
   }, [dispatch]);
-
+  const queryClient = new QueryClient();
   return (
-    <ThemeProvider theme={theme}>
-      <Menu openModal={handleOpenLoginModalOpen} getAccount={getAccount} />
-      <div style={{ paddingTop: "190px" }}>
-        <Routes>
-          <Route exact path="/" element={<Main />} />
-          <Route
-            exact
-            path="/products"
-            element={
-              <PrivateRoute isLogin={isLogin}>
-                <Products />
-              </PrivateRoute>
-            }
-          >
-            <Route path="regist" element={<RegistTab />} />
-            <Route path="manage" element={<ManageTab />} />
-          </Route>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <Menu openModal={handleOpenLoginModalOpen} getAccount={getAccount} />
+        <div style={{ paddingTop: "190px" }}>
+          <Routes>
+            <Route exact path="/" element={<Main />} />
+            <Route
+              exact
+              path="/products"
+              element={
+                <PrivateRoute isLogin={isLogin}>
+                  <Products />
+                </PrivateRoute>
+              }
+            >
+              <Route path="regist" element={<RegistTab />} />
+              <Route path="manage" element={<ManageTab />} />
+            </Route>
+            <Route
+              exact
+              path="/signup"
+              element={
+                <PublicRoute isLogin={isLogin}>
+                  <Signup />
+                </PublicRoute>
+              }
+            />
 
-          <Route
-            exact
-            path="/signup"
-            element={
-              <PublicRoute isLogin={isLogin}>
-                <Signup />
-              </PublicRoute>
-            }
-          />
-
-          <Route
-            exact
-            path="/signin"
-            element={
-              <PublicRoute isLogin={isLogin}>
-                <Signin />
-              </PublicRoute>
-            }
-          />
-
-          <Route exact path="/search" element={<SearchPage />}></Route>
-          <Route path="/category" element={<CategoryPage />}></Route>
-          <Route path="/modify" element={<ProductModify />}></Route>
-          <Route path="/transaction/manage" element={<TxManagePage />}>
-            <Route path="sell" element={<Sell />} />
-            <Route path="purchase" element={<Purchase />} />
-          </Route>
-          <Route
-            exact
-            path="/mystore/:userId"
-            element={
-              <PrivateRoute isLogin={isLogin}>
-                <Mystore />
-              </PrivateRoute>
-            }
-          />
-          <Route exact path="/chat" element={<Chat />} />
-          <Route exact path='/nft' element={<NFT account={account} getAccount={getAccount}/>}></Route>
-          <Route exact path='/mynft' element={<MyNFT account={account} getAccount={getAccount}/>}></Route>
-          <Route exact path='/sellnft' element={<SellNFT account={account} getAccount={getAccount}/>}></Route>
-          <Route exact path="/detail/:productId" element={<DetailProduct />} />
-        </Routes>
-      </div>
-      <Footer></Footer>
-      <LoginModal
-        open={openLoginModal}
-        closeModal={handleOpenLoginModalClose}
-      />
-    </ThemeProvider>
+            <Route
+              exact
+              path="/signin"
+              element={
+                <PublicRoute isLogin={isLogin}>
+                  <Signin />
+                </PublicRoute>
+              }
+            />
+            <Route exact path="/search" element={<SearchPage />}></Route>
+            <Route path="/category" element={<CategoryPage />}></Route>
+            <Route path="/modify" element={<ProductModify />}></Route>
+            <Route path="/transaction/manage" element={<TxManagePage />}>
+              <Route path="sell" element={<Sell />} />
+              <Route path="purchase" element={<Purchase />} />
+            </Route>
+            <Route
+              exact
+              path="/mystore/:userId"
+              element={
+                <PrivateRoute isLogin={isLogin}>
+                  <Mystore />
+                </PrivateRoute>
+              }
+            />
+            <Route exact path="/chat" element={<Chat />} />
+            <Route
+              exact
+              path="/nft"
+              element={<NFT account={account} getAccount={getAccount} />}
+            ></Route>
+            <Route
+              exact
+              path="/mynft"
+              element={<MyNFT account={account} getAccount={getAccount} />}
+            ></Route>
+            <Route
+              exact
+              path="/sellnft"
+              element={<SellNFT account={account} getAccount={getAccount} />}
+            ></Route>
+            <Route
+              exact
+              path="/detail/:productId"
+              element={<DetailProduct />}
+            />
+          </Routes>
+        </div>
+        <Footer></Footer>
+        <LoginModal
+          open={openLoginModal}
+          closeModal={handleOpenLoginModalClose}
+        />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
