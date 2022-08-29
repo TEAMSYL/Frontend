@@ -185,12 +185,12 @@ const Nav = (props) => {
                 </Button>
                 {(alarm)?(
                   <b style={{margin:'0px',position: "relative", top:'5px',left:'18px',width:'15px', height:'15px', borderRadius:'50%',
-                  background:"lightcoral"}}>{alarm}
+                  background:"red"}}>{alarm}
                   </b>   
                 )
                 :(
                   <b style={{visibility:'hidden', margin:'0px',position: "relative", top:'5px',left:'18px',width:'15px', height:'15px', borderRadius:'50%',
-                  background:"lightcoral"}}>{alarm}
+                  background:"red"}}>{alarm}
                   </b>   
                 )}
                 <Button

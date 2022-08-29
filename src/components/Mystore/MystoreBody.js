@@ -1,11 +1,14 @@
-import { Box, Avatar, Button } from '@mui/material';
+import { Box, Avatar, Button, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import StoreIcon from '@mui/icons-material/Store';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import userApi from '../../api/User.tsx'
-import storeApi from '../../api/Store.tsx'
+import pigAfter from '../../images/Pig_after.png';
+import pigBefore from '../../images/Pig_before.png';
+import userApi from '../../api/User.tsx';
+import storeApi from '../../api/Store.tsx';
 const MystoreBody = ({userId})=>{
     const [storeName, setStoreName] = useState('');
     const [storeIntroduce, setStoreIntroduce] = useState('');
@@ -93,10 +96,12 @@ const MystoreBody = ({userId})=>{
 
     return (
         <Box style={{display:'flex', width:"1024px", height:"300px", margin:"0 auto", border:'1px solid #EEEEEE'}}>
-
-                <Avatar sx={{ width:"300px", height:"100%" }} variant="square">
-                    X
-                </Avatar>
+                {storeButton !=0 ? (
+                    <Avatar src={pigAfter} sx={{ width:"300px", height:"100%" }} variant="square"/>
+                ):(
+                    <Avatar src={pigBefore} sx={{ width:"300px", height:"100%" }} variant="square"/>
+                )}
+                
                 <Box sx={{width:'724px'}}>
                     <TitleInfo>
                         <div>
@@ -122,6 +127,13 @@ const MystoreBody = ({userId})=>{
                     {!storeTitleEdit && (
                         <UserButton2 onClick={TitleModifyHandler}>상점명 수정</UserButton2>
                         )}
+                    {storeButton != 0 ? (
+                    <Box sx={{marginLeft:'auto', marginRight:'10px'}}>
+                        <Typography sx={{color:'red'}}>
+                            <CheckCircleIcon sx={{fontSize:'17px'}} /> 버튼보유
+                        </Typography>
+                    </Box>)
+                    :(<></>)}
                     </TitleInfo>
                     <StoreInfo>
                         <StoreInfoBox1>

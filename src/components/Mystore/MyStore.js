@@ -12,7 +12,7 @@ const Mystore = ({ account })=> {
     
     return (
         <Box>
-            <MystoreBody userId ={userId}></MystoreBody>
+            <MystoreBody userId ={userId} account={account}></MystoreBody>
             <MystoreBottom userId ={userId} account={account}></MystoreBottom>
         </Box>
     );

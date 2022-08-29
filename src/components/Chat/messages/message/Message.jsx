@@ -7,6 +7,9 @@ import userApi from "../../../../api/User.tsx"
 const Message = ({ message: { text, user, sendTime, date, isRead }, name }) => {
   const [otherNick, setOtherNick] = useState('')
   let isSentByCurrentUser = false
+  if (text.substr(0, 18) == "https://gdtest1234"){
+    text = '<img class="iii" src = "'+ text + '" />'
+  }
   if(sendTime.length > 18){
     sendTime = sendTime.substr(11, 5)
   }else{
@@ -34,7 +37,7 @@ return isSentByCurrentUser ? (
           <p className='messageText colorDark' dangerouslySetInnerHTML={ {__html: ReactEmoji.emojify(text)} }></p>
         </div>
       </Box>
-      <p className='colorDark pl-10'>{sendTime}</p>
+      <p className='colorDark pl-10' style={{marginTop:'1px'}}>{sendTime}</p>
     </div>
   </div>
 ) : (
@@ -44,7 +47,7 @@ return isSentByCurrentUser ? (
         display:"flex",
         flexDirection: "column"
       }}>
-      <p className='sentText pr-10 '>{otherNick}</p>
+      <p className='sentText pr-10' style={{marginBottom:'3px'}}>{otherNick}</p>
       <div className='msgBox'>
       <Box sx ={{
         display:"flex"
@@ -53,7 +56,7 @@ return isSentByCurrentUser ? (
           <p className='messageText colorDark' dangerouslySetInnerHTML={ {__html: ReactEmoji.emojify(text)} }></p>
         </div>
         </Box>
-        <p className='colorDark pr-10'>{sendTime}</p>
+        <p className='colorDark pr-10' style={{marginTop:'1px'}}>{sendTime}</p>
         
     </div>
     </Box>

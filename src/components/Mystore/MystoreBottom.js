@@ -3,14 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import MyProducts from "./Section/MyProducts.js";
 import Review from "./Section/Review";
-import Test3 from "./Section/test3";
+import BlockButton from "./Section/BlockButton";
 
 
-const  MystoreBottom = ({userId}) => {
+const  MystoreBottom = ({userId, account}) => {
     const tabMenuList = [
         "상품",
         "상점후기",
-        "뱃지 탭(재화님)",
+        "블록버튼",
       ];
     const [tabMenu, setTabMenu] = useState(0);
     const onClickTabMenu = (e) => {
@@ -51,7 +51,7 @@ const  MystoreBottom = ({userId}) => {
             <TabContent>
                 {tabMenu === 0 && <MyProducts userId={userId}/>}
                 {tabMenu === 1 && <Review userId={userId}/>}
-                {tabMenu === 2 && <Test3 userId={userId}/>}
+                {tabMenu === 2 && <BlockButton userId={userId} account={account}/>}
             </TabContent>
         </Box>
     );

@@ -83,11 +83,13 @@ const Chat = () => {
     }}>
       <Box sx={{
         width:'512px',
-        border: '1px solid #dddddd'}}>
-        <Box>
+        border: '1px solid #dddddd',
+        borderRadius:'10px'
+        }}>
+        <Box sx={{height:'60px'}}>
             <h2 style={{margin:20}}>전체 대화</h2>
         </Box>
-        <Box>
+        <Box sx={{}}>
           <Stack spacing={1}>
             <Rooms rooms={rooms} name={name} nick={nick}/>
           </Stack>

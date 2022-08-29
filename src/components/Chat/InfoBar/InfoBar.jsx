@@ -34,7 +34,7 @@ const InfoBar = ({ roomId }) => {
     <Box className="infoBar">
       <Box className="leftInnerContainer">
         <Box sx={{display:'flex'}}>
-          <Avatar sx={{ width:"45px", height:"45px", marginTop:'8px', backgroundColor:'lightgray', opacity:'0.8'  }} variant="square">
+          <Avatar sx={{ width:"45px", height:"45px", marginTop:'8px', backgroundColor:'lightgray', opacity:'0.8', }} variant="square">
             <img style={{maxHeight:'100%'}}src={thumbnail} alt="깨짐"/>
           </Avatar>
           <Box sx={{marginLeft:'10px'}}>
@@ -42,9 +42,6 @@ const InfoBar = ({ roomId }) => {
             <Typography sx={{fontWeight:'300', color:'black'}}>{productName}</Typography>
           </Box>
         </Box>
-      </Box>
-      <Box className="rightInnerContainer">
-        <a href="/chat"><img src={closeIcon} alt="close icon" /></a>
       </Box>
     </Box>
 )};

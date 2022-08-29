@@ -8,7 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
-
+import storeApi from '../../api/Store.tsx'
+import userApi from '../../api/User.tsx'
 const style = {
     position: 'absolute',
     top: '50%',
@@ -22,7 +23,8 @@ const style = {
   };
 
 const ITEM_HEIGHT = 48;
-const NFTinfo = ({v, getToken, account}) => {
+const NFTinfo = ({v, account, userId}) => {
+    const [storeButton, setStoreButton] = useState(0);
     const [nftDesc, setNftDesc] = useState("");
     const [nftName, setNftName] = useState("");
     const [image, setImage] = useState(null);
@@ -38,6 +40,15 @@ const NFTinfo = ({v, getToken, account}) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
 
+    const getStoreButton = async()=>{
+        try{
+            await storeApi.getStoreInfo(userId).then((response) => {
+                setStoreButton((response.data)['button'])
+            })
+        } catch(error) {
+            console.log(error);
+        }
+    }
     const readNFTinfo = async () => {
         const res = await axios.get(v['TokenURI']);
         setNftName(res.data['name'])
@@ -54,8 +65,8 @@ const NFTinfo = ({v, getToken, account}) => {
     };
     useEffect(() => {
         readNFTinfo();
+        getStoreButton();
       }, []);
-
     const cancelHandler = async(_tokenId) => {
         try{
             if(!account)    return;
@@ -160,11 +171,16 @@ const NFTinfo = ({v, getToken, account}) => {
                         }}>Sale Cancel</MenuItem>
                     ):(
                         <MenuItem
-                        onClick={() => {
-                            sellModalHandleOpen();
-                            setAnchorEl(null);
+                            onClick={() => {
+                                console.log(storeButton)
+                                if(storeButton == (v.TokenId)){
+                                    alert('블록버튼 판매 불가')
+                                }else{
+                                    sellModalHandleOpen();
+                                    setAnchorEl(null);
+                                    
+                                }
                         }}>Sell</MenuItem>
-
                     )}
                     <MenuItem 
                         onClick={() => {

@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios'
 import NFTinfo from './NFTinfo'
 import { erc721Abi, erc721Address, web3} from "../erc721Contract.js";
+import userApi from '../../api/User.tsx'
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -25,6 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const MyNFT = ({account, getAccount}) => {
     const [arr, setArr] = useState(null);
+    const [userId, setUserId] = useState('');
     useEffect(()=>{
         if(account == ""){
             getAccount();
@@ -52,9 +54,18 @@ const MyNFT = ({account, getAccount}) => {
             console.log(error)
         }
     }
-
+    const getUser = async() => {
+        try{
+            await userApi.getUser().then((response) => {
+                setUserId(response.id);
+            })
+        } catch(error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         getToken();
+        getUser();
       }, []);
 
     return (
@@ -89,7 +100,7 @@ const MyNFT = ({account, getAccount}) => {
             return(
             <Grid key={i} item xs={3}>
                 <Item>
-                    <NFTinfo v={v} account={account} getToken={getToken}></NFTinfo>
+                    <NFTinfo v={v} account={account} getToken={getToken} userId={userId}></NFTinfo>
                 </Item>
             </Grid>
             )

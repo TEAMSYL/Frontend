@@ -21,6 +21,18 @@ async function setStoreInfo(userId: string, data: FormData){
     }
 }
 
+async function setStoreButton(userId: string, data: FormData){
+    try{
+        await axios.post(
+            `http://localhost:8001/store/button/${userId}`,
+            data,
+            {withCredentials: true }
+            )
+    }catch(error){
+        console.log(error);
+    }
+}
+
 async function plusSellCount(userId: string){
     try{
         await axios.patch(
@@ -34,6 +46,7 @@ async function plusSellCount(userId: string){
 const storeApi = {
     setStoreInfo,
     getStoreInfo,
+    setStoreButton,
     plusSellCount
 };
 

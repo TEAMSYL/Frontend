@@ -25,6 +25,7 @@ import NFT from './components/NFT/CreateNFT';
 import MyNFT from './components/NFT/MyNFT';
 import SellNFT from './components/NFT/SellNFTs';
 import Chat from "./components/Chat/Chat";
+import Honor from "./components/Honor/Honor";
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -45,8 +46,8 @@ function App() {
           method: "eth_requestAccounts",
         });
         setAccount(accounts[0]);
-        alert('로그인 중...')
-        alert('현재 계정 : ' + accounts[0])
+        // alert('로그인 중...')
+        // alert('현재 계정 : ' + accounts[0])
       }
     } catch (error) {
       console.error(error);
@@ -56,7 +57,6 @@ function App() {
   useEffect(() => {
     if(isLogin){
       getAccount();
-      console.log(account)
     }
   }, [isLogin]);
 
@@ -122,11 +122,12 @@ function App() {
             path="/mystore/:userId"
             element={
               <PrivateRoute isLogin={isLogin}>
-                <Mystore />
+                <Mystore account={account}/>
               </PrivateRoute>
             }
           />
           <Route exact path="/chat" element={<Chat />} />
+          <Route exact path="/Honor" element={<Honor />} />
           <Route exact path='/nft' element={<NFT account={account} getAccount={getAccount}/>}></Route>
           <Route exact path='/mynft' element={<MyNFT account={account} getAccount={getAccount}/>}></Route>
           <Route exact path='/sellnft' element={<SellNFT account={account} getAccount={getAccount}/>}></Route>

@@ -43,7 +43,11 @@ const Room = ({ room : {roomId, sellerId, buyerId, other, productId}, name, nick
     chatApi.getLastChat(roomId).then((data) => {
         if(data['lastMsg'] != null){
           var lastS = data['lastSender']
-          setLastMsg(data['lastMsg'])
+          if(data['lastMsg'].substr(0, (process.env.REACT_APP_S3_BUKET_NAME).length + 8) == "https://" + process.env.REACT_APP_S3_BUKET_NAME){
+            setLastMsg('사진');
+          }else{
+            setLastMsg(data['lastMsg'])
+          }
           setLastTime(data['lastTime'].substr(0,5))
           if(lastS == other){
             setLastNotReadCnt(data['isReadCnt'])

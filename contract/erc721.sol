@@ -51,18 +51,46 @@ contract mintNFTs is ERC721URIStorage, Ownable, ERC721Enumerable {
     {
         return super.tokenURI(tokenId);
     }
-
-    function mintNFT(address recipient, string memory _tokenURI)
+    
+    // 명예의 전당 배열
+    uint256[] public onHonorArray;
+    // struct
+    struct hornerTokenData{
+        uint256 TokenId;
+        string TokenURI;
+    }
+    function mintNFT(address recipient, string memory _tokenURI, bool res)
         public
         returns (uint256)
     {
         _tokenIds.increment();
-
         uint256 newItemId = _tokenIds.current();
         _mint(recipient, newItemId);
         _setTokenURI(newItemId, _tokenURI);
-
+        if(res == true){
+            onHonorArray.push(newItemId);
+        }
         return newItemId;
+    }
+    // 현재 tokenId
+    function getCurrentTokenId() view public returns(uint256){
+        return _tokenIds.current();
+    }
+
+    function getOnHonerTokenArrayLength() view public returns(uint256){
+        return onHonorArray.length;
+    }
+
+    // 명예전당 nft 확인
+    function getHonerTokens() view public returns (hornerTokenData[] memory){
+        uint256 honerLength = getOnHonerTokenArrayLength();
+        hornerTokenData[] memory tokenData = new hornerTokenData[](honerLength); 
+        for(uint256 i = 0; i < honerLength; i++){
+            uint256 TokenId = onHonorArray[i];
+            string memory TokenURI = tokenURI(TokenId);
+            tokenData[i] = hornerTokenData(TokenId, TokenURI);
+        }
+        return tokenData;
     }
 
 
@@ -167,5 +195,8 @@ contract mintNFTs is ERC721URIStorage, Ownable, ERC721Enumerable {
         return tokenData;
     }
 
-
+    function getTokenURI(uint256 tokenId) view public returns(string memory){
+        
+        return tokenURI(tokenId);
+    }
 }

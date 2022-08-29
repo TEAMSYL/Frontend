@@ -61,7 +61,7 @@ const CreateNFT = ({account, getAccount}) => {
             let Erc721Contract = await new web3.eth.Contract(erc721Abi, erc721Address, {
                 from: account,
               });
-            let newTokenId = await Erc721Contract.methods.mintNFT(account, JsonURL).send();
+            let newTokenId = await Erc721Contract.methods.mintNFT(account, JsonURL, false).send();
             const name = await Erc721Contract.methods.name().call();
             const symbol = await Erc721Contract.methods.symbol().call();
             const totalSupply = await Erc721Contract.methods.totalSupply().call();

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import userApi from '../api/User.tsx';
 import MetaIcon from '../images/MetaMask_Fox.png'
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",
@@ -96,6 +97,14 @@ const Header = (props) => {
             >
               <img src="/images/MetaMask_Fox.svg.png" />
               메타마스크
+            </Button>
+            <Button
+              onClick={()=>{
+                navigate('/honor')
+              }}
+            >
+              <MilitaryTechIcon sx={{color:'black'}}/>
+              명예의전당
             </Button>
           </ButtonGroup>
           <ButtonGroup>
