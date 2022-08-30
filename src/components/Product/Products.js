@@ -16,7 +16,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import React from "react";
+import { useState, useEffect } from "react";
 import {
   ProductImg,
   ProductName,
@@ -48,11 +48,11 @@ const StyledBox = styled(Box)`
 
 export const ManageTab = (props) => {
   const navigate = useNavigate();
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [clickedProduct, setClickedProduct] = React.useState();
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [clickedProduct, setClickedProduct] = useState();
 
   const handleDialogOpen = (product) => {
     console.log(product);
@@ -64,7 +64,7 @@ export const ManageTab = (props) => {
     setDialogOpen(false);
   };
 
-  const [myProducts, setMyProducts] = React.useState([]);
+  const [myProducts, setMyProducts] = useState([]);
   const RowCell = styled(TableCell)`
     text-align: center;
   `;
@@ -83,7 +83,7 @@ export const ManageTab = (props) => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchProducts();
   }, []);
 
@@ -368,20 +368,11 @@ export const ManageTab = (props) => {
 export const RegistTab = (props) => {
   const formdata = new FormData();
   const navigate = useNavigate();
-  const [imgFiles, setImgFiles] = React.useState([]); // 업로드한 이미지 파일들
-  let name = "";
-  const setName = (_name) => {
-    name = _name;
-  };
-  const [category, setCategory] = React.useState(""); // 카테고리
-  let price = ""; // 가격
-  const setPrice = (_price) => {
-    price = _price;
-  };
-  let description = ""; // 설명
-  const setDescription = (_description) => {
-    description = _description;
-  };
+  const [imgFiles, setImgFiles] = useState([]); // 업로드한 이미지 파일들
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState(""); // 카테고리
+  const [price, setPrice] = useState();
+  const [description, setDescription] = useState();
 
   const handleSubmit = async () => {
     // 등록하기 버튼 누를 경우 실행되는 함수
@@ -536,7 +527,6 @@ export const RegistTab = (props) => {
 
 const RegistTabContent = (props) => {
   const rowNames = ["상품 이미지", "제목", "카테고리", "가격", "설명"];
-  console.log("이미지 파일들", props.imgFiles);
   const rowContents = [
     <ProductImg imgFiles={props.imgFiles} setImgFiles={props.setImgFiles} />,
     <ProductName name={props.name} setName={props.setName} />,
