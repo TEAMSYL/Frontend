@@ -8,6 +8,7 @@ import TrackingNumModal from './TrackingNumModal';
 import CompleteModal from './CompleteModal';
 import ReturnModal from './ReturnModal';
 import ShipmentModal from './ShipmentModal';
+import ReviewModal from './ReviewModal';
 
 export const Container = ({ children}) => {
     return (
@@ -418,10 +419,20 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
     const [ completeModalOpen, setCompleteModalOpen ] = React.useState(false);
     const [ returnModalOpen, setReturnModalOpen ] = React.useState(false);
     const [ ShipmentModalOpen, setShipmentModalOpen ] = React.useState(false);
+    const [ reviewModalOpen, setReviewModalOpen ] = React.useState(false);
     const [ requestToModal, setReqeustToModal ] = React.useState(requests[0]);
 
 
     const navigate = useNavigate();
+
+    const openReviewModal = (request) => {
+        setReqeustToModal(request);
+        setReviewModalOpen(true);
+    };
+    
+    const closeReviewModal = () => {
+        setReviewModalOpen(false);
+    }
 
     const openInfoModal = (request) => {
         setReqeustToModal(request);
@@ -750,7 +761,7 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                                                             },
                                                         }}
                                                         disableTouchRipple
-                                                        //onClick={() => openCompleteModal(request)}
+                                                        onClick={() => openReviewModal(request)}
                                                     >후기 등록
                                                     </Button>
                                                 }
@@ -788,6 +799,11 @@ export const PurchaseTable = ({ requests, fetchProducts }) => {
                         onClose={closeShipmentModal}
                         request={requestToModal}
                         //fetchRequests={fetchRequests}
+                    />
+                    <ReviewModal
+                        open={reviewModalOpen}
+                        onClose={closeReviewModal}
+                        request={requestToModal}
                     />
                     </>
                 }

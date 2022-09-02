@@ -26,6 +26,7 @@ import NFT from "./components/NFT/CreateNFT";
 import MyNFT from "./components/NFT/MyNFT";
 import SellNFT from "./components/NFT/SellNFTs";
 import Chat from "./components/Chat/Chat";
+import Honor from './components/Honor/Honor';
 const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans CJK KR",

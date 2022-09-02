@@ -136,6 +136,38 @@ async function searchProducts(keyWord: string) {
   }
 }
 
+async function getReviews() {
+  try {
+    const response = await axios.get(
+      'http://localhost:8001/product/review',
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function postReview(productId: number, rate: number, text: string) {
+  try {
+    const response = await axios.post(
+      `http://localhost:8001/product/review`,
+      {
+        productId: productId,
+        rate: rate,
+        text: text
+      },
+      {
+        withCredentials: true
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
 const productApi = {
   getProducts,
   getCategoryProducts,
@@ -147,6 +179,8 @@ const productApi = {
   getProductDetail,
   searchProducts,
   getProductsByUserId,
+  postReview,
+  getReviews,
 };
 
 export default productApi;
