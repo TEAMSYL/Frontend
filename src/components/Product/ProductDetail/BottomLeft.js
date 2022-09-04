@@ -1,62 +1,57 @@
-import { Box } from "@mui/system";
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import ProductCall from "./Section/ProductCall";
-import ProductInfo from "./Section/ProductInfo";
+import { Box } from '@mui/system';
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import ProductCall from './Section/ProductCall';
+import ProductInfo from './Section/ProductInfo';
 
-
-const BottomLeft = ({product}) => {
-  const tabMenuList = [
-    "상품정보",
-    "상품문의",
-  ];
+const BottomLeft = ({ product, user }) => {
+  const tabMenuList = ['상품정보', '상품문의'];
   const [tabMenu, setTabMenu] = useState(0);
-  const onClickTabMenu = (e) => {
-      const tabIndex = e.target.value;
-      setTabMenu(tabIndex);
-    };
+  const onClickTabMenu = e => {
+    const tabIndex = e.target.value;
+    setTabMenu(tabIndex);
+  };
 
-
-return (
+  return (
     <Box>
       <TabMenu>
-          <ul>
+        <ul>
           {tabMenuList &&
-              tabMenuList.map((menu, index) => (
+            tabMenuList.map((menu, index) => (
               <>
-                  {true ? (
+                {true ? (
                   <li
-                      className={tabMenu === index && "active"}
-                      onClick={onClickTabMenu}
-                      value={index}
+                    className={tabMenu === index && 'active'}
+                    onClick={onClickTabMenu}
+                    value={index}
                   >
-                      {menu}
+                    {menu}
                   </li>
-                  ) : (
+                ) : (
                   index !== 1 && (
-                      <li
-                      className={tabMenu === index && "active"}
+                    <li
+                      className={tabMenu === index && 'active'}
                       onClick={onClickTabMenu}
                       value={index}
-                      >
+                    >
                       {menu}
-                      </li>
+                    </li>
                   )
-                  )}
+                )}
               </>
-              ))}
-          </ul>
+            ))}
+        </ul>
       </TabMenu>
       <TabContent>
-        {tabMenu === 0 && <ProductInfo product={product}/>}
-        {tabMenu === 1 && <ProductCall product={product}/>}
+        {tabMenu === 0 && <ProductInfo product={product} />}
+        {tabMenu === 1 && <ProductCall product={product} user={user} />}
       </TabContent>
     </Box>
-);
+  );
 };
 const TabMenu = styled.div`
   //border: 1px solid black;
-  width: 700px;
+  width: 1024px;
   & ul {
     padding-left: 0px;
     height: 45px;

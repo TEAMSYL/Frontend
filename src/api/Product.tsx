@@ -223,6 +223,7 @@ const productApi = {
   getReviews,
   postComment,
   getComment,
+  getRelatedProducts,
 };
 
 export default productApi;

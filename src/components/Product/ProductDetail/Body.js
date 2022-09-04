@@ -32,13 +32,11 @@ const Body = ({ product, user }) => {
     let createdTime = new Date(product['createdAt']);
     let currentTime = new Date();
     let storeTime = currentTime.getTime() - createdTime.getTime();
-    // setHourTime(storeTime / 6000);
     setAgoTime(Number(storeTime) / 60000);
     setCreateTime(createdTime.toLocaleDateString());
   }, [product]);
 
   useEffect(() => {
-    console.log(agoTime);
     if (agoTime < 1) setResTime('몇 초 전');
     else if (agoTime < 60) setResTime(`${Math.floor(agoTime)}분 전`);
     else if (agoTime < 60 * 24)

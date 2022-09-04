@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import DetailInfo from './DetailInfo';
-import Top from './Top';
 import Bottom from './Bottom';
 import Body from './Body';
 import productApi from '../../../api/Product.tsx';
@@ -42,10 +41,11 @@ const DetailProduct = () => {
 
   return (
     <Box>
-      <Top product={product}></Top>
       <Body product={product} user={user}></Body>
       <Bottom product={product}></Bottom>
-      <DetailInfo product={product}></DetailInfo>
+      <DetailInfo product={product} user={user}></DetailInfo>
     </Box>
   );
 };
+
+export default DetailProduct;

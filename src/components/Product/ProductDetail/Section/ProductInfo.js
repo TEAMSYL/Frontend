@@ -1,56 +1,62 @@
 import { Box } from '@mui/material';
-import styled from "styled-components";
-const ProductInfo = ({product : {id, status, productName, price, category, content} }) => {
-
-    return (
+import styled from 'styled-components';
+const CATEGORY = [
+  'ix',
+  '디지털기기',
+  '가구',
+  '책',
+  '티켓/음반',
+  '의류',
+  '스포츠용품',
+  '반려동물용품',
+  '생활용품',
+  '식물',
+  '뷰티/미용',
+  '게임',
+  '기타',
+];
+const ProductInfo = ({
+  product: { id, status, productName, price, category, content },
+}) => {
+  return (
     <div>
-        <ProductInfoBody>
-            <InfoTitle>상품정보</InfoTitle>
-            <InfoContnet>{content}</InfoContnet>
-            <Blank />
-            <ProductInfoContent>
-            </ProductInfoContent>
-            <ProductInfoMore>
-            <Location>
-                <ProductInfoMoreTtitle>
-                    거래지역
-                </ProductInfoMoreTtitle>
-                <ProductInfoMoreDetail>
-                    어디서?
-                </ProductInfoMoreDetail>
-            </Location>
-            <Category>
-                <ProductInfoMoreTtitle>
-                    카테고리
-                </ProductInfoMoreTtitle>
-                <ProductInfoMoreDetail>
-                <span>{category}</span>
-                </ProductInfoMoreDetail>
-            </Category>
-            <Tag>
-                <ProductInfoMoreTtitle>
-                    상품태그
-                </ProductInfoMoreTtitle>
-                <ProductInfoMoreDetail>
-                <span>어떤 태그?</span>
-                </ProductInfoMoreDetail>
-            </Tag>
-            </ProductInfoMore>
-        </ProductInfoBody>
+      <ProductInfoBody>
+        <InfoTitle>상품정보</InfoTitle>
+        <InfoContnet>{content}</InfoContnet>
+        <Blank />
+        <ProductInfoContent></ProductInfoContent>
+        <ProductInfoMore>
+          <Location>
+            <ProductInfoMoreTtitle>거래지역</ProductInfoMoreTtitle>
+            <ProductInfoMoreDetail>부산대학교</ProductInfoMoreDetail>
+          </Location>
+          <Category>
+            <ProductInfoMoreTtitle>카테고리</ProductInfoMoreTtitle>
+            <ProductInfoMoreDetail>
+              <span>{CATEGORY[category]}</span>
+            </ProductInfoMoreDetail>
+          </Category>
+          <Tag>
+            <ProductInfoMoreTtitle>상품태그</ProductInfoMoreTtitle>
+            <ProductInfoMoreDetail>
+              <span>어떤 태그?</span>
+            </ProductInfoMoreDetail>
+          </Tag>
+        </ProductInfoMore>
+      </ProductInfoBody>
     </div>
   );
 };
 
 const InfoTitle = styled.div`
-font-size: 18px;
+  font-size: 18px;
   padding: 24px 0px 16px;
   border-bottom: 1px solid rgb(238, 238, 238);
 `;
 
 const InfoContnet = styled.div`
-    font-size: 20px;
-    font-style: solid;
-
+  font-size: 20px;
+  font-style: solid;
 `;
 
 const ProductInfoBody = styled.div``;
@@ -69,7 +75,7 @@ const ProductInfoMore = styled.div`
   display: flex;
 `;
 const Location = styled.div`
-  width: 221px;
+  width: 341px;
   border-right: 1px solid rgb(238, 238, 238);
 `;
 const ProductInfoMoreTtitle = styled.div`
@@ -95,11 +101,11 @@ const ProductInfoMoreDetail = styled.div`
 `;
 
 const Category = styled.div`
-  width: 221px;
+  width: 341px;
   border-right: 1px solid rgb(238, 238, 238);
 `;
 const Tag = styled.div`
   border-right: 0px;
-  width: 221px;
+  width: 341px;
 `;
 export default ProductInfo;
