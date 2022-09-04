@@ -20,8 +20,7 @@ const Review = ({userId}) => {
   React.useEffect(() => {
     const fetchReviews = async () => {
       try {
-        await productApi.getReviews();
-        await productApi.getReviews().then((data) => {
+        await productApi.getReviews(userId).then((data) => {
           console.log(data);
           setReviews(data);
           setTotalPage(Math.ceil(data.length/PRODUCTS_PER_PAGE));

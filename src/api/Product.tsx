@@ -144,9 +144,9 @@ async function searchProducts(keyWord: string) {
   }
 }
 
-async function getReviews() {
+async function getReviews(userId: number) {
   try {
-    const response = await axios.get("http://localhost:8001/product/review", {
+    const response = await axios.get(`http://localhost:8001/product/review/${userId}`, {
       withCredentials: true,
     });
     return response.data;
