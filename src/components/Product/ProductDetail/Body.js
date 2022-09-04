@@ -65,8 +65,6 @@ const Body = ({ product, user }) => {
     navigate(`/mystore/${user.id}`);
   };
 
-  useEffect(() => {}, []);
-
   const Buttons = () => {
     if (user === undefined) {
       return (
@@ -115,13 +113,10 @@ const Body = ({ product, user }) => {
             height="400px"
             showBullets={true}
             showNavs={true}
-          ></SimpleImageSlider>
+          />
         ) : (
           ""
         )}
-        {/* <Avatar sx={{ width: "428px", height: "428px" }} variant="square">
-          <img alt="상품 사진" src={product.thumbnail} />
-        </Avatar> */}
         <Info>
           <TitleInfo>
             <Title>{product.productName}</Title>

@@ -10,7 +10,7 @@ async function getProducts() {
   }
 }
 
-async function getCategoryProducts({ categoryId }) {
+async function getCategoryProducts(categoryId) {
   try {
     const response = await axios.get(
       `http://localhost:8001/product/category/${categoryId}`
@@ -23,8 +23,6 @@ async function getCategoryProducts({ categoryId }) {
 
 async function getRelatedProducts({ categoryId, productId, page, size }) {
   try {
-    console.log("카테고리 id: ", categoryId);
-    console.log("카테고리 id: ", productId);
     const response = await axios.get(
       `http://localhost:8001/product/category/${categoryId}/relations`,
       { params: { productId: String(productId), page: page, size: size } }

@@ -6,7 +6,7 @@ const ImageCard = ({ product }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/detail/${product.id}`);
+    window.location.href = `/detail/${product.id}`;
   };
 
   return (
