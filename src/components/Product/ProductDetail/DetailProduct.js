@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Box, Container, Avatar, InputLabel, FormControl, Stack } from '@mui/material';
+import { Box } from '@mui/material';
 import { useParams } from "react-router-dom";
 import DetailInfo from './DetailInfo'
-import Top from './Top'
 import Bottom from './Bottom'
 import Body from './Body'
 import productApi from '../../../api/Product.tsx'
@@ -29,7 +28,6 @@ const DetailProduct = () => {
       const getUserInfo = async () => {
         try {
           await userApi.getUser().then((data) => {
-            console.log('user:', data);
             setUser(data);
           });
         } catch (error) {
@@ -42,7 +40,6 @@ const DetailProduct = () => {
     
     return (
         <Box>
-            <Top product = {product}></Top>
             <Body product = {product} user={user}></Body>
             <Bottom product = {product}></Bottom>
             <DetailInfo product = {product}></DetailInfo>

@@ -121,7 +121,6 @@ async function cancel(txId: string) {
     const response = await axios.delete(`http://localhost:8001/transaction/cancel/${txId}`,
       { withCredentials: true}
     );
-    console.log("cancel function response: ", response);
     return response;
   } catch (error) {
     console.log(error);

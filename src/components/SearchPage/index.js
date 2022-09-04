@@ -46,7 +46,6 @@ const SearchPage = () => {
 
 
     React.useEffect(() => {
-        console.log('렌더링! ', location.state.searchKeyword);
         setSearchKeyword(location.state.searchKeyword);
         fetchproducts()
         .then((data) => {

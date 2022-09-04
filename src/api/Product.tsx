@@ -9,12 +9,26 @@ async function getProducts() {
     console.log(error);
   }
 }
-async function getCategoryProducts(categoryId) {
+
+async function getCategoryProducts({ categoryId }) {
   try {
     const response = await axios.get(
       `http://localhost:8001/product/category/${categoryId}`
     );
-    console.log("상품 목록:", response.data);
+    return await response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getRelatedProducts({ categoryId, productId, page, size }) {
+  try {
+    console.log("카테고리 id: ", categoryId);
+    console.log("카테고리 id: ", productId);
+    const response = await axios.get(
+      `http://localhost:8001/product/category/${categoryId}/relations`,
+      { params: { productId: String(productId), page: page, size: size } }
+    );
     return await response.data;
   } catch (error) {
     console.log(error);
@@ -26,7 +40,6 @@ async function getUserProducts() {
     const response = await axios.get(`http://localhost:8001/product/seller`, {
       withCredentials: true,
     });
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -39,7 +52,6 @@ async function getProductsByUserId(userId: string) {
       `http://localhost:8001/product/user/${userId}`,
       { withCredentials: true }
     );
-    console.log("getProductsByUserId response: ", response);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -93,7 +105,6 @@ async function setProductImages(data: FormData, productId) {
         withCredentials: true,
       }
     );
-    console.log("이미지 api 응답", response);
     if (response.status == 201) {
       return true;
     } else {
@@ -110,7 +121,6 @@ async function deleteProduct(id: string | undefined) {
     const response = await axios.delete(`http://localhost:8001/product/${id}`, {
       withCredentials: true,
     });
-    console.log("상품 삭제 response: ", response);
     if (response.data == "완료" && response.status == 200) {
       // 삭제에 성공한 경우
       return true;
@@ -138,10 +148,9 @@ async function searchProducts(keyWord: string) {
 
 async function getReviews() {
   try {
-    const response = await axios.get(
-      'http://localhost:8001/product/review',
-      { withCredentials: true }
-    );
+    const response = await axios.get("http://localhost:8001/product/review", {
+      withCredentials: true,
+    });
     return response.data;
   } catch (error) {
     console.log(error);
@@ -155,10 +164,10 @@ async function postReview(productId: number, rate: number, text: string) {
       {
         productId: productId,
         rate: rate,
-        text: text
+        text: text,
       },
       {
-        withCredentials: true
+        withCredentials: true,
       }
     );
     return response.data;
@@ -169,6 +178,7 @@ async function postReview(productId: number, rate: number, text: string) {
 }
 
 const productApi = {
+  getRelatedProducts,
   getProducts,
   getCategoryProducts,
   getProduct,

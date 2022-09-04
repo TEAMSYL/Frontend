@@ -1,116 +1,89 @@
-import { Box, Container, Avatar, InputLabel, FormControl, Stack } from '@mui/material';
-import React from 'react';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import styled from "styled-components";
-const  Bottom = () => {
+import { Stack, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { grey } from "@mui/material/colors";
+import { CATEGORY } from "../../Category/CategoryInfo";
+import {
+  Divider,
+  Typography,
+} from "../../../../node_modules/@mui/material/index";
+import ImageCard from "../../Card";
+import productApi from "../../../api/Product.tsx";
 
-    return (
-        <div>
-            <Box sx={{width:'1024px', margin: '0 auto 100px', height: '235px'}}>
-                <Box sx={{display: 'flex',alignItems: 'center', marginBottom:'30px', justifyContent: 'space-between'}}>
-                    <div style={{display:'flex'}}>
-                        <RelatedText>연관상품</RelatedText>
-                    </div>
-                </Box>
-                <Box sx = {{display:'flex', margin:'0x auto 100px', width: '1024px'}}>
-                    <ArrowBackIosNewIcon sx={{justifyContent: 'center',display: 'flex', fonsize: 18, opacity: 0.6, backgroundColor: '#f3f3f3', position: 'relative',top: '60px', left: '10px', border: 'none'}}></ArrowBackIosNewIcon>
-                    <ImageBox1>
-                        <Avatar sx={{ width:"155px", height:"159px" }} variant="square" alt='info'>
-                            X
-                        </Avatar>
-                        <ImageText>언더마이카</ImageText>
-                    </ImageBox1>
-                    <ImageBox>
-                        <Avatar sx={{ width:"155px", height:"159px" }} variant="square" alt='info'>
-                            X
-                        </Avatar>
-                        <ImageText>마르지엘라 스치티 코트</ImageText>
-                    </ImageBox>
-                    <ImageBox>
-                        <Avatar sx={{ width:"155px", height:"159px" }} variant="square" alt='info'>
-                            X
-                        </Avatar>
-                        <ImageText>발렌시아가 코트</ImageText>
-                    </ImageBox>
-                    <ImageBox>
-                        <Avatar sx={{ width:"155px", height:"159px" }} variant="square" alt='info'>
-                            X
-                        </Avatar>
-                        <ImageText>블랭크룸 발마칸 코트 차콜</ImageText>
-                    </ImageBox>
-                    <ImageBox>
-                        <Avatar sx={{ width:"155px", height:"159px" }} variant="square" alt='info'>
-                            X
-                        </Avatar>
-                        <ImageText>cos 올 후드 코트46</ImageText>
-                    </ImageBox>
-                    <ImageBox>
-                        <Avatar sx={{ width:"155px", height:"159px" }} variant="square" alt='info'>
-                            X
-                        </Avatar>
-                        <ImageText>인사일런스 솔리스트 캐시미어 코트 블렉</ImageText>
-                    </ImageBox>
-                    <ArrowForwardIosIcon sx={{display: 'flex', fonsize: 18, opacity: 0.6, backgroundColor: '#f3f3f3', position: 'relative',top: '60px', right: '10px', border: 'none'}}></ArrowForwardIosIcon>
-                </Box>
+const Bottom = ({ product }) => {
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLastPage, setIsLastPage] = useState();
+  const getNextPage = () => {
+    if (!isLastPage) setPage(page + 1);
+  };
 
-            </Box>
-        </div>
-      );
+  const getPrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
+
+  useEffect(() => {
+    const fetchproducts = async () => {
+      const { products, isLastPage } = await productApi.getRelatedProducts({
+        categoryId: product.category,
+        productId: product.id,
+        page: page,
+        size: 5,
+      });
+      return { products, isLastPage };
+    };
+    fetchproducts().then((data) => {
+      setIsLastPage(data.isLastPage);
+      setRelatedProducts(data.products);
+    });
+  }, [product, page, isLastPage]);
+
+  return (
+    <Stack sx={{ maxWidth: "1024px", margin: "0 auto 10px" }} spacing={2}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        spacing={1}
+        style={{ width: "1024px", margin: "10px auto 0", lineHeight: 1.4 }}
+      >
+        {product.category ? CATEGORY[Number(product.category) - 1].icon : ""}
+        {product.category ? (
+          <Typography sx={{ fontSize: 15 }}>
+            {CATEGORY[Number(product.category) - 1].name} 카테고리 연관상품
+          </Typography>
+        ) : (
+          ""
+        )}
+      </Stack>
+      <Divider />
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        minHeight="150px"
+      >
+        <Button onClick={getPrevPage}>
+          <ArrowBackIosNewIcon sx={{ color: grey[500] }} />
+        </Button>
+        <Stack
+          width="900px"
+          justifyContent="left"
+          direction="row"
+          spacing="auto"
+        >
+          {relatedProducts
+            ? relatedProducts.map((product) => (
+                <ImageCard key={product.id} product={product} />
+              ))
+            : "연관상품 없음"}
+        </Stack>
+        <Button onClick={getNextPage}>
+          <ArrowForwardIosIcon sx={{ color: grey[500] }} />
+        </Button>
+      </Stack>
+      <Divider />
+    </Stack>
+  );
 };
-
-
-// const ArrowBackIosNewIcon = styled.button`
-//     width: 50px;
-//     padding: 20px;
-//     height: 50px;
-//     background: rgb(255, 255, 255);
-//     opacity: 0.6;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     position:relative;
-//     top:60px;
-//     left: 48px;
-//     border:none;
-// `;
-const Buttonnext = styled.button`
-    width: 50px;
-    height: 50px;
-    padding: 20px;
-    background: rgb(255, 255, 255);
-    opacity: 0.6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position:relative;
-    top: 60px;
-    right: 48px;
-    border:none;
-`;
-const RelatedText = styled.div`
-    font-size: 18px;
-    font-weight: 600;
-    color: #212121;
-`;
-const ImageBox1 = styled.div`
-    width: 159px;
-    margin-left: 0px;
-`;
-
-const ImageBox = styled.div`
-    width: 159px;
-    margin-left: 16px;
-`;
-
-const ImageText = styled.div`
-    margin-top: 5px;
-    width: 100%;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
-    line-height: 1.4;
-    font-size: 13px;
-`;
 export default Bottom;

@@ -108,9 +108,7 @@ const LoginModal = (props) => {
       email: String(data.get("email")),
       password: String(data.get("password")),
     }).then((data) => {
-      console.log(data);
       if (data) {
-        console.log("success!");
         navigate("/");
       } else {
         alert("일치하는 회원정보가 없습니다.");
