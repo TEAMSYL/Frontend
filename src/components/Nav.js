@@ -55,7 +55,6 @@ const Nav = (props) => {
   },[sc])
 
   userApi.getUser().then((data) => {
-    // console.log(data);
     if(data["id"] != "undefined"){
       setName(String(data["id"]));
     }
@@ -70,7 +69,6 @@ const Nav = (props) => {
 
   useEffect(() => {
     chatApi.getLastCnt(Number(name)).then((data) => {
-      console.log(data);
       if (data) {
         setAlarm(true);
       }else{

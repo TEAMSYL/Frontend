@@ -7,6 +7,7 @@ import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import styled from 'styled-components';
 import transactionApi from '../../../api/Transaction.tsx';
 import chatApi from '../../../api/Chat.tsx';
+import SimpleImageSlider from 'react-simple-image-slider';
 
 const Body = ({ product, user }) => {
   //const location = useLocation();
@@ -136,9 +137,17 @@ const Body = ({ product, user }) => {
           padding: '30px 0px;',
         }}
       >
-        <Avatar sx={{ width: '428px', height: '428px' }} variant="square">
-          <img src={product.thumbnail} />
-        </Avatar>
+        {product.ProductImgs ? (
+          <SimpleImageSlider
+            images={product.ProductImgs.map(img => img.imgUrl)}
+            width="400px"
+            height="400px"
+            showBullets={true}
+            showNavs={true}
+          />
+        ) : (
+          ''
+        )}
         <Info>
           <TitleInfo>
             <Title>{product.productName}</Title>
@@ -233,9 +242,6 @@ const Pricing = styled.div`
 const StateInfo = styled.div`
   width: 100%;
   margin-left: 40px;
-`;
-const Btngap = styled.span`
-  margin-left: 5px;
 `;
 const ListName = styled.div`
   position: relative;

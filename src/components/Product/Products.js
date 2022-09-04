@@ -123,6 +123,7 @@ export const ManageTab = (props) => {
 
   const handleMoveToManage = (product) => {
     // 거래 상세 페이지로 이동시킴
+    navigate("/transaction/manage/sell");
   };
 
   const getProductState = (state) => {
@@ -131,6 +132,8 @@ export const ManageTab = (props) => {
       status = "판매중";
     } else if (state === "permitted") {
       status = "거래중";
+    } else if (state === "complete") {
+      status = "거래완료";
     }
     return status;
   };
@@ -283,7 +286,7 @@ export const ManageTab = (props) => {
                       <RowCell>{product.updatedAt.slice(0, 10)}</RowCell>
                       <RowCell>
                         <Stack spacing={1}>
-                          {product.status !== "permitted" && (
+                          {product.status !== "permitted" && product.status !== "complete" && (
                             <>
                               <Button
                                 sx={{
@@ -328,7 +331,7 @@ export const ManageTab = (props) => {
                               </Button>
                             </>
                           )}
-                          {product.status === "permitted" && (
+                          {product.status === "permitted" && product.status !== "complete" && (
                             <>
                               <Button
                                 sx={{
