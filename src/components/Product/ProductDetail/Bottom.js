@@ -70,7 +70,7 @@ const Bottom = ({ product }) => {
           width="900px"
           justifyContent="left"
           direction="row"
-          spacing="auto"
+          spacing={4.5}
         >
           {relatedProducts
             ? relatedProducts.map((product) => (
