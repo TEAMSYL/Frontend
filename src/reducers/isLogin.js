@@ -18,7 +18,6 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN: {
             newState.isLogin = true;
-            console.log('로그인 함!!');
             return newState;
         }
         case LOGOUT: {

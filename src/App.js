@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from "react";
-import Main from "./components/Main";
-import LoginModal from "./components/LoginModal";
-import { createTheme, ThemeProvider } from "@mui/material";
-import Menu from "./components/Menu";
-import "./App.css";
-import { Route, Routes } from "react-router-dom";
-import { Products, ManageTab, RegistTab } from "./components/Product/Products";
-import Footer from "./components/Footer";
-import Signup from "./components/Signup";
-import Signin from "./components/Signin";
-import PrivateRoute from "./routers/PrivateRoute";
-import PublicRoute from "./routers/PublicRoute";
-import { useDispatch, useSelector } from "react-redux";
-import SearchPage from "./components/SearchPage";
-import ProductModify from "./components/ProductModify";
-import TxManagePage from "./components/TxMangePage";
-import Purchase from "./components/TxMangePage/Purchase";
-import Sell from "./components/TxMangePage/Sell";
-import Mystore from "./components/Mystore/MyStore";
-import DetailProduct from "./components/Product/ProductDetail/DetailProduct";
-import userApi from "../src/api/User.tsx";
-import CategoryPage from "./components/Category/CategoryPage";
-import { QueryClientProvider, QueryClient } from "react-query";
-import NFT from "./components/NFT/CreateNFT";
-import MyNFT from "./components/NFT/MyNFT";
-import SellNFT from "./components/NFT/SellNFTs";
-import Chat from "./components/Chat/Chat";
+import React, { useState, useEffect } from 'react';
+import Main from './components/Main';
+import LoginModal from './components/LoginModal';
+import { createTheme, ThemeProvider } from '@mui/material';
+import Menu from './components/Menu';
+import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import { Products, ManageTab, RegistTab } from './components/Product/Products';
+import Footer from './components/Footer';
+import Signup from './components/Signup';
+import Signin from './components/Signin';
+import PrivateRoute from './routers/PrivateRoute';
+import PublicRoute from './routers/PublicRoute';
+import { useDispatch, useSelector } from 'react-redux';
+import SearchPage from './components/SearchPage';
+import ProductModify from './components/ProductModify';
+import TxManagePage from './components/TxMangePage';
+import Purchase from './components/TxMangePage/Purchase';
+import Sell from './components/TxMangePage/Sell';
+import Mystore from './components/Mystore/MyStore';
+import DetailProduct from './components/Product/ProductDetail/DetailProduct';
+import userApi from '../src/api/User.tsx';
+import CategoryPage from './components/Category/CategoryPage';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import NFT from './components/NFT/CreateNFT';
+import MyNFT from './components/NFT/MyNFT';
+import SellNFT from './components/NFT/SellNFTs';
+import Chat from './components/Chat/Chat';
 import Honor from './components/Honor/Honor';
 const theme = createTheme({
   typography: {
-    fontFamily: "Noto Sans CJK KR",
+    fontFamily: 'Noto Sans CJK KR',
   },
 });
 
@@ -38,13 +38,13 @@ function App() {
   const handleOpenLoginModalOpen = () => setOpenLoginModal(true);
   const handleOpenLoginModalClose = () => setOpenLoginModal(false);
   const dispatch = useDispatch();
-  const { isLogin } = useSelector((state) => state.isLogin);
-  const [account, setAccount] = useState("");
+  const { isLogin } = useSelector(state => state.isLogin);
+  const [account, setAccount] = useState('');
   const getAccount = async () => {
     try {
       if (window.ethereum) {
         const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
+          method: 'eth_requestAccounts',
         });
         setAccount(accounts[0]);
         // alert("로그인 중...");
@@ -66,7 +66,7 @@ function App() {
     async function fetchUser() {
       const user = await userApi.getUser();
       if (user) {
-        dispatch({ type: "LOGIN" });
+        dispatch({ type: 'LOGIN' });
       }
       // ...
     }
@@ -77,7 +77,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <Menu openModal={handleOpenLoginModalOpen} getAccount={getAccount} />
-        <div style={{ paddingTop: "190px" }}>
+        <div style={{ paddingTop: '190px' }}>
           <Routes>
             <Route exact path="/" element={<Main />} />
             <Route
@@ -122,9 +122,9 @@ function App() {
               exact
               path="/mystore/:userId"
               element={
-                <PrivateRoute isLogin={isLogin}>
-                  <Mystore account={account}/>
-                </PrivateRoute>
+                // <PrivateRoute isLogin={isLogin}>
+                <Mystore account={account} />
+                // {/* </PrivateRoute> */}
               }
             />
             <Route exact path="/chat" element={<Chat />} />

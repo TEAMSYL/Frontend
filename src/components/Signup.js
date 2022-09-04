@@ -67,7 +67,6 @@ const Signup = () => {
         if (!idRegExp.test(id)) {
             setIdStateText('올바르지 않은 아이디 형식입니다!');
             setIdError(true);
-            console.log('형식 오류')
             return;
         } else { // 서버로 중복확인 요청
             ApiAuth.EmailDuplicateCheck(id)
