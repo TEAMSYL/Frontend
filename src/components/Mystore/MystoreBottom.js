@@ -1,62 +1,63 @@
 import { Box } from '@mui/material';
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import MyProducts from "./Section/MyProducts.js";
-import Review from "./Section/Review";
-import BlockButton from "./Section/BlockButton";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import MyProducts from './Section/MyProducts.js';
+import Review from './Section/Review';
+import BlockButton from './Section/BlockButton';
 
-
-const  MystoreBottom = ({userId, account}) => {
-    const tabMenuList = [
-        "상품",
-        "상점후기",
-        "블록버튼",
-      ];
-    const [tabMenu, setTabMenu] = useState(0);
-    const onClickTabMenu = (e) => {
-        const tabIndex = e.target.value;
-        setTabMenu(tabIndex);
-      };
-
-    return (
-        <Box sx={{width:'1024px', margin:'0 auto 100px', padding:'0px'}}>
-            <TabMenu>
-                <ul>
-                {tabMenuList &&
-                    tabMenuList.map((menu, index) => (
-                    <>
-                        {true ? (
-                        <li
-                            className={tabMenu === index && "active"}
-                            onClick={onClickTabMenu}
-                            value={index}
-                        >
-                            {menu}
-                        </li>
-                        ) : (
-                        index !== 2 && (
-                            <li
-                            className={tabMenu === index && "active"}
-                            onClick={onClickTabMenu}
-                            value={index}
-                            >
-                            {menu}
-                            </li>
-                        )
-                        )}
-                    </>
-                    ))}
-                </ul>
-            </TabMenu>
-            <TabContent>
-                {tabMenu === 0 && <MyProducts userId={userId}/>}
-                {tabMenu === 1 && <Review userId={userId}/>}
-                {tabMenu === 2 && <BlockButton userId={userId} account={account}/>}
-            </TabContent>
-        </Box>
-    );
+const MystoreBottom = ({ userId, account, isSame }) => {
+  // const tabMenuList = ['상품', '상점후기', '블록버튼'];
+  const [tabMenu, setTabMenu] = useState(0);
+  const [tabMenuList, setTabMenuList] = useState(0);
+  const onClickTabMenu = e => {
+    const tabIndex = e.target.value;
+    setTabMenu(tabIndex);
+  };
+  useEffect(() => {
+    if (isSame) {
+      setTabMenuList(['상품', '상점후기', '블록버튼']);
+    } else {
+      setTabMenuList(['상품', '상점후기']);
+    }
+  }, [isSame]);
+  return (
+    <Box sx={{ width: '1024px', margin: '0 auto 100px', padding: '0px' }}>
+      <TabMenu>
+        <ul>
+          {tabMenuList &&
+            tabMenuList.map((menu, index) => (
+              <>
+                {true ? (
+                  <li
+                    className={tabMenu === index && 'active'}
+                    onClick={onClickTabMenu}
+                    value={index}
+                  >
+                    {menu}
+                  </li>
+                ) : (
+                  index !== 2 && (
+                    <li
+                      className={tabMenu === index && 'active'}
+                      onClick={onClickTabMenu}
+                      value={index}
+                    >
+                      {menu}
+                    </li>
+                  )
+                )}
+              </>
+            ))}
+        </ul>
+      </TabMenu>
+      <TabContent>
+        {tabMenu === 0 && <MyProducts userId={userId} />}
+        {tabMenu === 1 && <Review userId={userId} />}
+        {tabMenu === 2 && <BlockButton userId={userId} account={account} />}
+      </TabContent>
+    </Box>
+  );
 };
-
 
 const TabMenu = styled.div`
   //border: 1px solid black;
