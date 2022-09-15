@@ -18,6 +18,7 @@ const DetailProduct = () => {
       try {
         await productApi.getProductDetail(String(productId)).then(data => {
           const productsData = data;
+          console.log('상품정보:', productsData);
           setProduct(productsData);
         });
       } catch (error) {

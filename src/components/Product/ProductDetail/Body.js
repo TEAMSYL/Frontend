@@ -102,7 +102,11 @@ const Body = ({ product, user }) => {
   }, []);
 
   const Buttons = () => {
-    if (user === undefined) {
+    if (product.status == "complete") {
+      return (
+        <CompleteBtn>판매 완료</CompleteBtn>
+      )
+    } else if (user === undefined) {
       console.log('로그인 안함');
       return (
         <>
@@ -171,22 +175,22 @@ const Body = ({ product, user }) => {
           </Grayinfo>
           <StateInfo>
             <Stack>
-              <Box sx={{ display: 'flex', marginBottom: '20px' }}>
+              {/* <Box sx={{ display: 'flex', marginBottom: '20px' }}>
                 <ListName>상품상태</ListName>
                 <ListValue>중고</ListValue>
               </Box>
               <Box sx={{ display: 'flex', marginBottom: '20px' }}>
                 <ListName>교환여부</ListName>
                 <ListValue>교환불가능</ListValue>
-              </Box>
-              <Box sx={{ display: 'flex', marginBottom: '20px' }}>
+              </Box> */}
+              <Box sx={{ display: 'flex', marginBottom: '108px' }}>
                 <ListName>생성날짜</ListName>
                 <ListDelivery>{createTime}</ListDelivery>
               </Box>
-              <Box sx={{ display: 'flex', marginBottom: '20px' }}>
+              {/* <Box sx={{ display: 'flex', marginBottom: '20px' }}>
                 <ListName>거래지역</ListName>
                 <ListValue>부산대학교</ListValue>
-              </Box>
+              </Box> */}
             </Stack>
           </StateInfo>
           <BottomInfo>
@@ -290,6 +294,19 @@ const ContactBtn = styled.button`
   font-weight: 600;
   line-height: 20.7px;
   margin-right: 2px;
+`;
+
+const CompleteBtn = styled.button`
+background: #666666;
+border: none;
+color: rgb(255, 255, 255);
+width: 100%;
+cursor: pointer;
+height: 56px;
+font-size: 18px;
+font-weight: 600;
+line-height: 20.7px;
+//   margin: 0 0 0 40px;
 `;
 
 const BuyBtn = styled.button`
