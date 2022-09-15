@@ -26,10 +26,10 @@ const ProductInfo = ({
         <Blank />
         <ProductInfoContent></ProductInfoContent>
         <ProductInfoMore>
-          <Location>
+          {/* <Location>
             <ProductInfoMoreTtitle>거래지역</ProductInfoMoreTtitle>
             <ProductInfoMoreDetail>부산대학교</ProductInfoMoreDetail>
-          </Location>
+          </Location> */}
           <Category>
             <ProductInfoMoreTtitle>카테고리</ProductInfoMoreTtitle>
             <ProductInfoMoreDetail>
@@ -55,7 +55,8 @@ const InfoTitle = styled.div`
 `;
 
 const InfoContnet = styled.div`
-  font-size: 20px;
+  margin-top: 30px;
+  font-size: 16px;
   font-style: solid;
 `;
 
@@ -101,11 +102,11 @@ const ProductInfoMoreDetail = styled.div`
 `;
 
 const Category = styled.div`
-  width: 341px;
+  width: 50%;
   border-right: 1px solid rgb(238, 238, 238);
 `;
 const Tag = styled.div`
   border-right: 0px;
-  width: 341px;
+  width: 50%;
 `;
 export default ProductInfo;
