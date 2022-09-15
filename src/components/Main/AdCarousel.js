@@ -8,14 +8,11 @@ import { Paper, Button } from '@mui/material'
 const AdCarousel = () => {
     const items = [
         {
-            src: "/images/img1.png",
+            src: "/images/infoBanner.png",
         },
         {
-            src: "/images/img2.png",
+            src: "/images/userGuideBanner.png",
         },
-        {
-            src: "/images/img3.png",
-        }
     ];
 
     return (
